@@ -4,3 +4,4 @@
 *.spim
 *.tocs
 *.mips
+*lex.yy.c
