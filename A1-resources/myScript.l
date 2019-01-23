@@ -7,7 +7,7 @@
 #include <string.h>
 #include "parser.tab.h"
 #include "storetokens.hh"
-int linecount = 1;
+yylineno=1;
 %}
 
 char 			[a-zA-Z_]
@@ -20,43 +20,43 @@ meta			[,\{\}\(\)\;]
 comment 		[/][/].*	
 
 %%
-int 				{store_token_name("INTEGER", yytext, linecount);
+int 				{store_token_name("INTEGER", yytext, yylineno);
 					yylval.string_value = new string(yytext);
 									
 					return INTEGER;}
-float 				{store_token_name("FLOAT", yytext, linecount);
+float 				{store_token_name("FLOAT", yytext, yylineno);
 					yylval.string_value = new string(yytext);												
 					return FLOAT;}
 					
-void		 		{store_token_name("VOID", yytext, linecount);
+void		 		{store_token_name("VOID", yytext, yylineno);
 					yylval.string_value = new string(yytext);								
 					return VOID;}
 
 {comment}			{/*printf("comment %s\n",yytext)*/;}
 					
-{identifier} 		{store_token_name("NAME", yytext, linecount);
+{identifier} 		{store_token_name("NAME", yytext, yylineno);
 					yylval.string_value = new string(yytext);								
 					return NAME;}
 					
 
-{operator}  		{store_token_name("ARITHOP", yytext, linecount);
+{operator}  		{store_token_name("ARITHOP", yytext, yylineno);
 					yylval.string_value = new string(yytext);								
 					return yytext[0];}
 					
-{assignment} 		{store_token_name("ASSIGN_OP", yytext, linecount);
+{assignment} 		{store_token_name("ASSIGN_OP", yytext, yylineno);
 					yylval.string_value = new string(yytext);							
 					return ASSIGN;}
 					
-{meta}				{store_token_name("META CHAR", yytext, linecount); 
+{meta}				{store_token_name("META CHAR", yytext, yylineno); 
 					yylval.string_value = new string(yytext);								
 					return yytext[0];}
 
-{digit}+			{store_token_name("NUM", yytext, linecount);
+{digit}+			{store_token_name("NUM", yytext, yylineno);
 					yylval.integer_value = atoi(yytext);				
 					return INTEGER_NUMBER;}					
 					
-{float}				{store_token_name("FNUM", yytext, linecount);
+{float}				{store_token_name("FNUM", yytext, yylineno);
 					yylval.double_value = atof(yytext);					
 					return DOUBLE_NUMBER;}
-\n 					{linecount++;}
+\n 					{yylineno++;}
 .           		;
