@@ -3,8 +3,6 @@ void main()
 	int a;
 	float b;
 	float c;
-
-	a = 34;
-	b = 2.4;
-	c = 3.0007;
+	// ! @
+	a = (4 * (3 + 3) + 9;
 }
