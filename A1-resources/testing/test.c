@@ -1,6 +1,10 @@
 void main()
 {
-	int integer;
-	integer = 0;
-}
+	int a;
+	float b;
+	float c;
 
+	a = 3;
+	b = 2.4;
+	c = 3;
+}

@@ -88,6 +88,6 @@ void		 	{
 
 .           		{
 				printf("%s\n", yytext);
-				printf("error! unrecognized token\n");
+				printf("Error\n");
 				return -1;
 			}
