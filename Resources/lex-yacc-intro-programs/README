@@ -1,0 +1,27 @@
+      Sample introductory programs for lex and yacc
+      ---------------------------------------------
+
+- num.l is used only to demonstrate token identification. 
+  exp.l should be used for exp*.y.
+
+- exp1.y merely shows reduction of a number to an expression.
+
+- exp2.y shows the construction of plus expression.
+
+  on input 1 + 2 + 3 + 4 + 5, it first reads all the numbers 
+  and then starts constructing the expression.
+
+- exp3.y fixes the above problem by making + left associative.
+
+- exp4.y includes + and *.
+
+  On input 1 + 2 * 3 it seems fine.
+  On input 1 * 2 + 3 it does not seem fine.
+
+- exp5.y fixes the above problem.
+
+- unambiguous-exp.y shows how an unambiguous grammar can be used
+  to avoid using precedences and associativities.
+
+- sim-calc program in an outside directory evaluates 
+  the expression.
