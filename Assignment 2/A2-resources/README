@@ -1,0 +1,46 @@
+This directory contains the following files:
+
+- allheaders.h.gch which is a pre-compiled header file.
+- libsclpshared.so which is a shared object file.
+- sclp which is the reference implementstion
+- test1.c is a simple test file.
+- Makefile which contains the commands to build your implementation.
+- Besides, the following header files are provided ONLY for telling you the
+  class structure and the member functions whose implementation is provided
+  in the library. YOU DO NOT NEED TO INCLUDE ANY OF THESE FILES IN YOUR IMPLEMENTATION.
+  . storetokens.hh contains the declaration of the function which you can call to 
+    store tokens and print them.
+  . ast.hh
+  . Makefile
+  . procedure.hh
+  . program.hh
+  . symbol-table.hh
+
+You need to write a scanner, a parser, and actions within the scanner and parser
+to construct Abstract Syntax Trees for the input program. A high level description
+of the classes can be found on the sclp web page https://www.cse.iitb.ac.in/~uday/web-source/.
+You need to create the top level object for program. 
+
+You should work in the following steps:
+
+1. Enhance your scanner from assignment A1 and get it working by using the -parse -tokens options.
+2. Write the parser script without any actions and get it working by using the -parse option.
+   This will not produce any output but if you grammar misses an construct, you will find errors on
+   valid programs. The parsing may still not be right because your grammar may be too general and
+   may accept invalid programs too.
+3. Add actions to the parser script and get it working by using the -ast option. Your compiler is 
+   complete and you should check the dumps of other options too.
+
+For ease of working on small programs, you can use the -d option to produce the dump on the screen 
+instead of having to open the dump files.
+
+For the AST you need to create objects of the following classes:
+
+	- Assignment_Ast, 
+	- Name_Ast, 
+	- Number_Ast, 
+	- Arithmetic_Expr_Ast (and its derived classes)
+
+You will need to submit ONLY the scanner.l and parser.y files.
+
+
