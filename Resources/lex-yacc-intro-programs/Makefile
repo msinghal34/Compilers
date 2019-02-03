@@ -1,9 +1,9 @@
 #PARSE= left-recursion-removed
-PARSE= exp4
+PARSE= exp2
 SCAN = exp
 
 exp: lex.yy.o y.tab.o
-	gcc -o exp lex.yy.o y.tab.o -ly -ll
+	gcc -o $(PARSE) lex.yy.o y.tab.o -ly -ll
 
 y.tab.o y.tab.h: $(PARSE).y
 	yacc -dv $(PARSE).y
@@ -14,4 +14,4 @@ lex.yy.o : $(SCAN).l y.tab.h
 	gcc -c lex.yy.c
 
 clean:
-	rm -f lex.yy.* y.tab.* y.output exp a.out
+	rm -f lex.yy.* y.tab.* y.output exp a.out $(PARSE)

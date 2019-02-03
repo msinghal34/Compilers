@@ -2,7 +2,8 @@
 #include <stdio.h>
 %}
 %token NUM
-%left '+'
+%left '+' 
+%left '*' 
 %%
 E : NUM    
 	{ printf("found an expression consisting of a number\n");}

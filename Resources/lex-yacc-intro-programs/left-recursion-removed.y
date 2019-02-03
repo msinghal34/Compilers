@@ -9,7 +9,7 @@
 E : F T
   ;
 T : '*' F T
-  | 
+  | F
   ;
 
 F : NUM

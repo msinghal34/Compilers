@@ -5,6 +5,6 @@
 digit [0-9]
 operator [-+*/]
 %%
-{digit}+    { return NUM; }
+{digit}+    { yylval = atoi(yytext); return NUM; }
 {operator}  { return yytext[0]; }
 
