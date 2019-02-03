@@ -22,8 +22,8 @@ comment 		[/][/].*
 				
 			}
 
-\n 			{
-				yylineno++;
+\n 				{
+
 			}
 
 int 			{

@@ -1,4 +1,3 @@
-
 int c,d,e,f;
 void main()
 {
@@ -12,4 +11,3 @@ void main()
     e=a*b;
     f=a/b;
 }
-

@@ -2,6 +2,7 @@
 #include <stdio.h>
 extern "C" void yyerror(const char *s);
 extern int yylex(void);
+extern int yylineno;
 %}
 %token INTEGER FLOAT VOID NAME ASSIGN INTEGER_NUMBER DOUBLE_NUMBER
 %right '='
@@ -11,7 +12,9 @@ extern int yylex(void);
 %%
 
 PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
-							{printf("HI\n");}
+							{
+								printf("%d",yylineno);
+							}
 
 GLOBAL_DECLARATIONS		: /* epsilon */
 						| GLOBAL_DECLARATIONS GLOBAL_DECL

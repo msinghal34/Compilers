@@ -67,8 +67,9 @@
 #include <stdio.h>
 extern "C" void yyerror(const char *s);
 extern int yylex(void);
+extern int yylineno;
 
-#line 72 "parser.tab.c" /* yacc.c:339  */
+#line 73 "parser.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -129,7 +130,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 133 "parser.tab.c" /* yacc.c:358  */
+#line 134 "parser.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -427,10 +428,10 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    13,    13,    16,    17,    19,    21,    21,    23,    24,
-      26,    28,    30,    31,    33,    35,    35,    37,    38,    40,
-      42,    44,    46,    48,    50,    52,    54,    57,    59,    61,
-      63,    65,    67
+       0,    14,    14,    19,    20,    22,    24,    24,    26,    27,
+      29,    31,    33,    34,    36,    38,    38,    40,    41,    43,
+      45,    47,    49,    51,    53,    55,    57,    60,    62,    64,
+      66,    68,    70
 };
 #endif
 
@@ -1236,91 +1237,93 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 14 "parser.y" /* yacc.c:1646  */
-    {printf("HI\n");}
-#line 1242 "parser.tab.c" /* yacc.c:1646  */
+#line 15 "parser.y" /* yacc.c:1646  */
+    {
+								printf("%d",yylineno);
+							}
+#line 1245 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 41 "parser.y" /* yacc.c:1646  */
+#line 44 "parser.y" /* yacc.c:1646  */
     {printf("found a statement\n");}
-#line 1248 "parser.tab.c" /* yacc.c:1646  */
+#line 1251 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 45 "parser.y" /* yacc.c:1646  */
+#line 48 "parser.y" /* yacc.c:1646  */
     {printf("found an expression consisting of a number\n");}
-#line 1254 "parser.tab.c" /* yacc.c:1646  */
+#line 1257 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 47 "parser.y" /* yacc.c:1646  */
+#line 50 "parser.y" /* yacc.c:1646  */
     {printf("found an expression consisting of a identifier\n");}
-#line 1260 "parser.tab.c" /* yacc.c:1646  */
+#line 1263 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 49 "parser.y" /* yacc.c:1646  */
+#line 52 "parser.y" /* yacc.c:1646  */
     { printf("found a PLUS expression\n");}
-#line 1266 "parser.tab.c" /* yacc.c:1646  */
+#line 1269 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 51 "parser.y" /* yacc.c:1646  */
+#line 54 "parser.y" /* yacc.c:1646  */
     { printf("found a MULT expression\n");}
-#line 1272 "parser.tab.c" /* yacc.c:1646  */
+#line 1275 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 53 "parser.y" /* yacc.c:1646  */
+#line 56 "parser.y" /* yacc.c:1646  */
     { printf("found a SUB expression\n");}
-#line 1278 "parser.tab.c" /* yacc.c:1646  */
+#line 1281 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 55 "parser.y" /* yacc.c:1646  */
+#line 58 "parser.y" /* yacc.c:1646  */
     { printf("found a DIV expression\n");}
-#line 1284 "parser.tab.c" /* yacc.c:1646  */
+#line 1287 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 58 "parser.y" /* yacc.c:1646  */
+#line 61 "parser.y" /* yacc.c:1646  */
     {printf("found an expression consisting of a float number\n");}
-#line 1290 "parser.tab.c" /* yacc.c:1646  */
+#line 1293 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 60 "parser.y" /* yacc.c:1646  */
+#line 63 "parser.y" /* yacc.c:1646  */
     {printf("found an expression consisting of a identifier\n");}
-#line 1296 "parser.tab.c" /* yacc.c:1646  */
+#line 1299 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 62 "parser.y" /* yacc.c:1646  */
+#line 65 "parser.y" /* yacc.c:1646  */
     { printf("found a PLUS expression\n");}
-#line 1302 "parser.tab.c" /* yacc.c:1646  */
+#line 1305 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 64 "parser.y" /* yacc.c:1646  */
+#line 67 "parser.y" /* yacc.c:1646  */
     { printf("found a MULT expression\n");}
-#line 1308 "parser.tab.c" /* yacc.c:1646  */
+#line 1311 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 66 "parser.y" /* yacc.c:1646  */
+#line 69 "parser.y" /* yacc.c:1646  */
     { printf("found a SUB expression\n");}
-#line 1314 "parser.tab.c" /* yacc.c:1646  */
+#line 1317 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 68 "parser.y" /* yacc.c:1646  */
+#line 71 "parser.y" /* yacc.c:1646  */
     { printf("found a DIV expression\n");}
-#line 1320 "parser.tab.c" /* yacc.c:1646  */
+#line 1323 "parser.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1324 "parser.tab.c" /* yacc.c:1646  */
+#line 1327 "parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
