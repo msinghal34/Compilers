@@ -19,29 +19,29 @@ extern int yylineno;
 	Procedure * procedure;
 };
 %token <string_value> INTEGER  FLOAT VOID NAME 
-%token ASSIGN 
 %token <double_value> DOUBLE_NUMBER
 %token <integer_value> INTEGER_NUMBER 
 %right '='
 %left '+' '-'
 %left '*' '/'
-%start PROGRAM
+%start PROGRAM 
 %nterm <symbol_table> GLOBAL_DECLARATIONS
 %nterm <symbol_entry> GLOBAL_DECL
-%nterm <>
+%nterm <symbol_table> GLOBAL_NAME_LIST
+//%nterm <>
 //%nterm <procedure> MAIN_FUNCTION
 %%
 
 PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
 							{
-								//program_object.set_global_table(*$1);
-								//program_object.set_procedure($2,yylineno);
+								program_object.set_global_table(*$1);
+								// program_object.set_procedure($2,yylineno);
 								printf("%d",yylineno);
 							}
 
 GLOBAL_DECLARATIONS		: /* epsilon */
 							{
-								$$ = new Symbol_Table();
+								// $$ = new Symbol_Table();
 							}
 						| GLOBAL_DECLARATIONS GLOBAL_DECL
 							{
@@ -51,13 +51,28 @@ GLOBAL_DECLARATIONS		: /* epsilon */
 
 GLOBAL_DECL 			: TYPE GLOBAL_NAME_LIST ';'
 							{
-
+								
 							}
 
-GLOBAL_NAME_LIST		: NAME | GLOBAL_NAME_LIST ',' NAME
-
-TYPE					: INTEGER
+GLOBAL_NAME_LIST		: NAME
+							{
+								$$ = new Symbol_Table();
+								$$->push_symbol(new Symbol_Table_Entry(*$1,void_data_type,yylineno));
+								
+							}
+						| GLOBAL_NAME_LIST ',' NAME
+							{
+								$1->push_symbol(new Symbol_Table_Entry(*$2,void_data_type,yylineno));
+								$$ = $1;
+							}
+TYPE					: INTEGER 
+							{
+								$$ = $1;
+							}
 						| FLOAT
+							{
+								$$ = $1;
+							}
 
 MAIN_FUNCTION			: VOID NAME '(' ')' '{' PROCEDURE '}'
 
@@ -71,16 +86,17 @@ LOCAL_DECL 				: TYPE LOCAL_NAME_LIST ';'
 LOCAL_NAME_LIST			: NAME | LOCAL_NAME_LIST ',' NAME
 
 STATEMENT_LIST			: /* epsilon */
-						| STATEMENT_LIST STATEMENT
+ 						| STATEMENT_LIST STATEMENT
 
-STATEMENT				: NAME '=' EXPRESSION  ';'
+STATEMENT				: NAME '=' EXPRESSION  ';' 
 							{printf("found a statement\n");}
-						| NAME '=' FLOAT_EXPRESSION  ';'
 
 EXPRESSION 				: INTEGER_NUMBER
 							{printf("found an expression consisting of a number\n");}
 						| NAME
-							{printf("found an expression consisting of a identifier\n");}		
+							{printf("found an expression consisting of a identifier\n");}
+						| DOUBLE_NUMBER
+							{printf("found an expression consisting of a number\n");}		
 						| EXPRESSION  '+' EXPRESSION 
 							{ printf("found a PLUS expression\n");}
 						| EXPRESSION  '*' EXPRESSION 
@@ -90,20 +106,7 @@ EXPRESSION 				: INTEGER_NUMBER
 						| EXPRESSION  '/' EXPRESSION 
 							{ printf("found a DIV expression\n");}
 
-FLOAT_EXPRESSION 		: DOUBLE_NUMBER
-							{printf("found an expression consisting of a float number\n");}
-						| NAME
-							{printf("found an expression consisting of a identifier\n");}		
-						| FLOAT_EXPRESSION  '+' FLOAT_EXPRESSION 
-							{ printf("found a PLUS expression\n");}
-						| FLOAT_EXPRESSION  '*' FLOAT_EXPRESSION 
-							{ printf("found a MULT expression\n");}
-						| FLOAT_EXPRESSION  '-' FLOAT_EXPRESSION 
-							{ printf("found a SUB expression\n");}
-						| FLOAT_EXPRESSION  '/' FLOAT_EXPRESSION 
-							{ printf("found a DIV expression\n");}
-
-
+ 
 %%
 
 extern YYSTYPE yylval;
