@@ -5,6 +5,7 @@ extern "C" void yyerror(const char *s);
 extern int yylex(void);
 extern int yylineno;
 
+Data_Type curr_data_type;
 
 %}
 %union{
@@ -26,55 +27,61 @@ extern int yylineno;
 %left '*' '/'
 %start PROGRAM 
 %nterm <symbol_table> GLOBAL_DECLARATIONS
-%nterm <symbol_entry> GLOBAL_DECL
+%nterm <symbol_table> GLOBAL_DECL
 %nterm <symbol_table> GLOBAL_NAME_LIST
-//%nterm <>
-//%nterm <procedure> MAIN_FUNCTION
+%nterm <string_value> TYPE
+%nterm <procedure> MAIN_FUNCTION
 %%
 
 PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
 							{
 								program_object.set_global_table(*$1);
-								// program_object.set_procedure($2,yylineno);
-								printf("%d",yylineno);
+								program_object.set_procedure($2,yylineno);
+								// printf("%d",yylineno);
 							}
 
 GLOBAL_DECLARATIONS		: /* epsilon */
 							{
-								// $$ = new Symbol_Table();
+								$$ = new Symbol_Table();
 							}
 						| GLOBAL_DECLARATIONS GLOBAL_DECL
 							{
-								$1->push_symbol($2);
+								$1->append_list(*$2,yylineno);
 								$$ = $1;
+								$$->set_table_scope(global);
 							}
 
 GLOBAL_DECL 			: TYPE GLOBAL_NAME_LIST ';'
 							{
-								
+								$$ = $2;
 							}
 
 GLOBAL_NAME_LIST		: NAME
 							{
 								$$ = new Symbol_Table();
-								$$->push_symbol(new Symbol_Table_Entry(*$1,void_data_type,yylineno));
+								$$->push_symbol(new Symbol_Table_Entry(*$1,curr_data_type,yylineno));
 								
 							}
 						| GLOBAL_NAME_LIST ',' NAME
 							{
-								$1->push_symbol(new Symbol_Table_Entry(*$2,void_data_type,yylineno));
+								$1->push_symbol(new Symbol_Table_Entry(*$3,curr_data_type,yylineno));
 								$$ = $1;
 							}
 TYPE					: INTEGER 
 							{
+								curr_data_type = int_data_type;
 								$$ = $1;
 							}
 						| FLOAT
 							{
+								curr_data_type = double_data_type;
 								$$ = $1;
 							}
 
 MAIN_FUNCTION			: VOID NAME '(' ')' '{' PROCEDURE '}'
+							{
+
+							}
 
 PROCEDURE				: LOCAL_DECLARATIONS STATEMENT_LIST
 
