@@ -48,7 +48,6 @@ PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
 							{
 								program_object.set_global_table(*$1);
 								program_object.set_procedure($2,yylineno);
-								// printf("%d",yylineno);
 							}
 
 GLOBAL_DECLARATIONS		: /* epsilon */
@@ -71,7 +70,6 @@ DECLARATION				: TYPE NAME_LIST ';'
 
 NAME_LIST				: NAME
 							{
-
 								$$ = new Symbol_Table();
 								Symbol_Table_Entry *ste = new Symbol_Table_Entry(*$1,curr_data_type,yylineno);
 								ste->set_symbol_scope(curr_table_scope);
@@ -103,9 +101,7 @@ DEF						: VOID NAME
 
 MAIN_FUNCTION			: DEF '(' ')' '{' PROCEDURE '}'
 							{
-								// if(*$2!="main") yyerror("Error : Main not recognized");
-								$$ = $5;
-								
+								$$ = $5;	
 							}
 
 PROCEDURE				: LOCAL_DECLARATIONS STATEMENT_LIST
@@ -113,7 +109,6 @@ PROCEDURE				: LOCAL_DECLARATIONS STATEMENT_LIST
 								$$ = new Procedure(curr_proc_type, curr_proc_name, yylineno);
 								$$->set_local_list(*$1);
 								$$->set_ast_list(*$2);
-
 							}
 
 LOCAL_DECLARATIONS		: /* epsilon */
@@ -142,11 +137,20 @@ STATEMENT_LIST			: /* epsilon */
 
 STATEMENT				: NAME '=' EXPRESSION  ';' 
 							{
-								Symbol_Table_Entry &v = local_symbol_table->get_symbol_table_entry(*$1);
-								if(&v==0){
-									v = global_symbol_table->get_symbol_table_entry(*$1);
+								Symbol_Table_Entry *v;
+								if (local_symbol_table->variable_in_symbol_list_check(*$1))
+								{
+									v = &(local_symbol_table->get_symbol_table_entry(*$1));
 								}
-								Name_Ast * name_ast = new Name_Ast(*$1,v,yylineno);
+								else if (global_symbol_table->variable_in_symbol_list_check(*$1))
+								{
+									v = &(global_symbol_table->get_symbol_table_entry(*$1));
+								}
+								else
+								{
+									printf("%s\n", "Name Error \n");
+								}
+								Name_Ast * name_ast = new Name_Ast(*$1, *v, yylineno);
 								$$ = new Assignment_Ast(name_ast, $3, yylineno);								
 							}
 
@@ -157,12 +161,21 @@ EXPRESSION 				: INTEGER_NUMBER
 							}
 						| NAME
 							{
-								Symbol_Table_Entry &v = local_symbol_table->get_symbol_table_entry(*$1);
-								if(&v==0){
-									v = global_symbol_table->get_symbol_table_entry(*$1);
+								Symbol_Table_Entry *v;
+								if (local_symbol_table->variable_in_symbol_list_check(*$1))
+								{
+									v = &(local_symbol_table->get_symbol_table_entry(*$1));
 								}
-								$$ = new Name_Ast(*$1,v,yylineno);
-								$$->set_data_type(v.get_data_type()); 
+								else if (global_symbol_table->variable_in_symbol_list_check(*$1))
+								{
+									v = &(global_symbol_table->get_symbol_table_entry(*$1));
+								}
+								else
+								{
+									printf("%s\n", "Name Error \n");
+								}
+								$$ = new Name_Ast(*$1, *v, yylineno);
+								$$->set_data_type(v->get_data_type()); 
 							}
 						| DOUBLE_NUMBER
 							{
@@ -193,6 +206,10 @@ EXPRESSION 				: INTEGER_NUMBER
 							{
 								$$ = new UMinus_Ast($2,NULL, yylineno);
 								$$->set_data_type($2->get_data_type());
+							}
+						| '(' EXPRESSION ')'
+							{
+								$$ = $2;
 							}
 
  

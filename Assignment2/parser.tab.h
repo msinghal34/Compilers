@@ -49,15 +49,32 @@ extern int yydebug;
     FLOAT = 259,
     VOID = 260,
     NAME = 261,
-    ASSIGN = 262,
-    INTEGER_NUMBER = 263,
-    DOUBLE_NUMBER = 264
+    DOUBLE_NUMBER = 262,
+    INTEGER_NUMBER = 263
   };
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 20 "parser.y" /* yacc.c:1909  */
+
+	int integer_value;
+	double double_value;
+	std::string * string_value;
+	list<Ast *> * ast_list;
+	Ast * ast;
+	Symbol_Table * symbol_table;
+	Symbol_Table_Entry * symbol_entry;
+	Basic_Block * basic_block;
+	Procedure * procedure;
+
+#line 75 "parser.tab.h" /* yacc.c:1909  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

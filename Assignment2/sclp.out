@@ -1,0 +1,85 @@
+	Token Name: VOID 	Token: void 	 Lineno: 1
+	Token Name: NAME 	Token: main 	 Lineno: 1
+	Token Name: META CHAR 	Token: ( 	 Lineno: 1
+	Token Name: META CHAR 	Token: ) 	 Lineno: 1
+	Token Name: META CHAR 	Token: { 	 Lineno: 2
+	Token Name: INTEGER 	Token: int 	 Lineno: 3
+	Token Name: NAME 	Token: a 	 Lineno: 3
+	Token Name: META CHAR 	Token: ; 	 Lineno: 3
+	Token Name: INTEGER 	Token: int 	 Lineno: 4
+	Token Name: NAME 	Token: f 	 Lineno: 4
+	Token Name: META CHAR 	Token: , 	 Lineno: 4
+	Token Name: NAME 	Token: g 	 Lineno: 4
+	Token Name: META CHAR 	Token: ; 	 Lineno: 4
+	Token Name: NAME 	Token: f 	 Lineno: 6
+	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 6
+	Token Name: NUM 	Token: 2 	 Lineno: 6
+	Token Name: META CHAR 	Token: ; 	 Lineno: 6
+	Token Name: NAME 	Token: g 	 Lineno: 6
+	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 6
+	Token Name: NUM 	Token: 8 	 Lineno: 6
+	Token Name: META CHAR 	Token: ; 	 Lineno: 6
+	Token Name: NAME 	Token: a 	 Lineno: 7
+	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 7
+	Token Name: NUM 	Token: 1111111111 	 Lineno: 7
+	Token Name: META CHAR 	Token: ; 	 Lineno: 7
+	Token Name: NAME 	Token: a 	 Lineno: 9
+	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 9
+	Token Name: NAME 	Token: a 	 Lineno: 9
+	Token Name: ARITHOP 	Token: + 	 Lineno: 9
+	Token Name: NAME 	Token: f 	 Lineno: 9
+	Token Name: ARITHOP 	Token: - 	 Lineno: 9
+	Token Name: NAME 	Token: g 	 Lineno: 9
+	Token Name: META CHAR 	Token: ; 	 Lineno: 9
+	Token Name: META CHAR 	Token: } 	 Lineno: 10
+Program:
+   Procedure: main, Return Type: void
+
+         Asgn:
+            LHS (Name : f)
+            RHS (Num : 2)
+         Asgn:
+            LHS (Name : g)
+            RHS (Num : 8)
+         Asgn:
+            LHS (Name : a)
+            RHS (Num : 1111111111)
+         Asgn:
+            LHS (Name : a)
+            RHS (
+            Arith: MINUS
+               LHS (
+            Arith: PLUS
+               LHS (Name : a)
+               RHS (Name : f))
+               RHS (Name : g))
+	.text 			# The .text assembler directive indicates
+	.globl main		# The following is the code (as oppose to data)
+main:				# .globl makes main know to the 
+				# outside of the program.
+# Prologue begins 
+	sw $fp, 0($sp)		# Save the frame pointer
+	sub $fp, $sp, 4		# Update the frame pointer
+
+	sub $sp, $sp, 16		# Make space for the locals
+# Prologue ends
+
+	li $v0, 2
+	sw $v0, -4($fp)
+	li $v0, 8
+	sw $v0, -8($fp)
+	li $v0, 1111111111
+	sw $v0, 0($fp)
+	lw $v0, 0($fp)
+	lw $t0, -4($fp)
+	add $t1, $v0, $t0
+	lw $v0, -8($fp)
+	sub $t0, $t1, $v0
+	sw $t0, 0($fp)
+
+# Epilogue Begins
+	add $sp, $sp, 16
+	lw $fp, 0($sp)  
+	jr        $31		# Jump back to the operating system.
+# Epilogue Ends
+
