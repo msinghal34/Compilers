@@ -1,5 +1,5 @@
 float a, b, c;
-void main1()
+void main()
 {
 	int a;
 	float aa;

@@ -149,6 +149,7 @@ STATEMENT				: NAME '=' EXPRESSION  ';'
 								else
 								{
 									printf("%d, Error Name Error \n", yylineno);
+									exit(0);
 								}
 								Name_Ast * name_ast = new Name_Ast(*$1, *v, yylineno);
 								if (name_ast->get_data_type() == $3->get_data_type())
@@ -180,7 +181,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									printf("Error Name Error \n");
+									printf("%d, Error Name Error \n", yylineno);
 									exit(0);
 								}
 								$$ = new Name_Ast(*$1, *v, yylineno);

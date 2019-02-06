@@ -1,10 +1,18 @@
+int a, b, c;
+float d, e, f;
+int x;
 void main()
 {
-	int a;
-	float b;
-	float c;
+	float x, y;
+	int b;
+	int CAT;
+	CAT = 7; // = 9;
 
-	a = 3;
-	b = 2.4;
-	c = 3.0;
+	// void alpha;
+	// x = -0.0 + 0.0;
+	// a = 3/2 + 3 - 4 * (56 + 6326492 - 478473 / 612381 * - 4);
+	// c = 3 + b + ((1+ 3) * 4)+ (-((8- 9) -9));
+	// b = 2 / 3;
+	// int _askaska;
 }
+// djqkwdhqwid qiwo 

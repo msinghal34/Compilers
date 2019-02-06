@@ -1,10 +1,10 @@
 void main()
 {
 	int a;
-	float b;
-	float c;
+	int b;
+	int c;
 
 	a = 3;
-	b = 2.4;
-	c = 3.0;
+	b = 2;
+	c = 3 + b + ((1+ 3) * 4)+ (-((8- 9) -9));
 }
