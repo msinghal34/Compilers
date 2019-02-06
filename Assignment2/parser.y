@@ -135,7 +135,7 @@ STATEMENT_LIST			: /* epsilon */
  								$$ = $1;
  							}
 
-STATEMENT				: NAME '=' EXPRESSION  ';' 
+STATEMENT				: NAME '=' EXPRESSION  ';'
 							{
 								Symbol_Table_Entry *v;
 								if (local_symbol_table->variable_in_symbol_list_check(*$1))
@@ -148,10 +148,18 @@ STATEMENT				: NAME '=' EXPRESSION  ';'
 								}
 								else
 								{
-									printf("%s\n", "Name Error \n");
+									yyerror("Error Name Error \n");
 								}
 								Name_Ast * name_ast = new Name_Ast(*$1, *v, yylineno);
-								$$ = new Assignment_Ast(name_ast, $3, yylineno);								
+								if (name_ast->get_data_type() == $3->get_data_type())
+								{
+									$$ = new Assignment_Ast(name_ast, $3, yylineno);								
+								}
+								else
+								{
+									yyerror("Error Assignment statement data type not compatible \n");
+									exit(0);
+								}
 							}
 
 EXPRESSION 				: INTEGER_NUMBER
@@ -172,7 +180,8 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									printf("%s\n", "Name Error \n");
+									yyerror("Error Name Error \n");
+									exit(0);
 								}
 								$$ = new Name_Ast(*$1, *v, yylineno);
 								$$->set_data_type(v->get_data_type()); 
@@ -184,27 +193,62 @@ EXPRESSION 				: INTEGER_NUMBER
 							}		
 						| EXPRESSION '+' EXPRESSION 
 							{
-								$$ = new Plus_Ast($1, $3, yylineno);
-								$$->set_data_type($1->get_data_type());
+								if ($1->get_data_type() == $3->get_data_type())
+								{
+									$$ = new Plus_Ast($1, $3, yylineno);
+									$$->set_data_type($1->get_data_type());								
+								}
+								else
+								{
+									yyerror("Error Assignment statement data type not compatible \n");
+									exit(0);
+								}
 							}
 						| EXPRESSION  '*' EXPRESSION 
 							{
-								$$ = new Mult_Ast($1, $3, yylineno);
-								$$->set_data_type($1->get_data_type());
+								if ($1->get_data_type() == $3->get_data_type())
+								{
+									$$ = new Mult_Ast($1, $3, yylineno);
+									$$->set_data_type($1->get_data_type());								
+								}
+								else
+								{
+									yyerror("Error Assignment statement data type not compatible \n");
+									exit(0);
+								}
+
 							}
 						| EXPRESSION  '-' EXPRESSION 
 							{
-								$$ = new Minus_Ast($1, $3, yylineno);
-								$$->set_data_type($1->get_data_type());
+								if ($1->get_data_type() == $3->get_data_type())
+								{
+									$$ = new Minus_Ast($1, $3, yylineno);
+									$$->set_data_type($1->get_data_type());								
+								}
+								else
+								{
+									yyerror("Error Assignment statement data type not compatible \n");
+									exit(0);
+								}
+
 							}
 						| EXPRESSION  '/' EXPRESSION 
 							{
-								$$ = new Divide_Ast($1, $3, yylineno);
-								$$->set_data_type($1->get_data_type());
+								if ($1->get_data_type() == $3->get_data_type())
+								{
+									$$ = new Divide_Ast($1, $3, yylineno);
+									$$->set_data_type($1->get_data_type());								
+								}
+								else
+								{
+									yyerror("Error Assignment statement data type not compatible \n");
+									exit(0);
+									
+								}
 							}
 						| '-'  EXPRESSION %prec '*'
 							{
-								$$ = new UMinus_Ast($2,NULL, yylineno);
+								$$ = new UMinus_Ast($2, NULL, yylineno);
 								$$->set_data_type($2->get_data_type());
 							}
 						| '(' EXPRESSION ')'

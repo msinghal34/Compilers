@@ -459,8 +459,8 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    47,    47,    54,    59,    66,    71,    78,    85,    90,
-      96,   102,   107,   115,   120,   129,   132,   138,   157,   162,
-     180,   185,   190,   195,   200,   205,   210
+      96,   102,   107,   115,   120,   129,   132,   138,   165,   170,
+     188,   193,   205,   218,   231,   244,   249
 };
 #endif
 
@@ -1411,25 +1411,33 @@ yyreduce:
 								}
 								else
 								{
-									printf("%s\n", "Name Error \n");
+									yyerror("Name Error \n");
 								}
 								Name_Ast * name_ast = new Name_Ast(*(yyvsp[-3].string_value), *v, yylineno);
-								(yyval.ast) = new Assignment_Ast(name_ast, (yyvsp[-1].ast), yylineno);								
+								if (name_ast->get_data_type() == (yyvsp[-1].ast)->get_data_type())
+								{
+									(yyval.ast) = new Assignment_Ast(name_ast, (yyvsp[-1].ast), yylineno);								
+								}
+								else
+								{
+									yyerror("Unmatched lhs & rhs type Error \n");
+									exit(0);
+								}
 							}
-#line 1420 "parser.tab.c" /* yacc.c:1646  */
+#line 1428 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 158 "parser.y" /* yacc.c:1646  */
+#line 166 "parser.y" /* yacc.c:1646  */
     {
 								(yyval.ast) = new Number_Ast<int>((yyvsp[0].integer_value), int_data_type, yylineno);
 								(yyval.ast)->set_data_type(int_data_type);
 							}
-#line 1429 "parser.tab.c" /* yacc.c:1646  */
+#line 1437 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 163 "parser.y" /* yacc.c:1646  */
+#line 171 "parser.y" /* yacc.c:1646  */
     {
 								Symbol_Table_Entry *v;
 								if (local_symbol_table->variable_in_symbol_list_check(*(yyvsp[0].string_value)))
@@ -1447,73 +1455,104 @@ yyreduce:
 								(yyval.ast) = new Name_Ast(*(yyvsp[0].string_value), *v, yylineno);
 								(yyval.ast)->set_data_type(v->get_data_type()); 
 							}
-#line 1451 "parser.tab.c" /* yacc.c:1646  */
+#line 1459 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 181 "parser.y" /* yacc.c:1646  */
+#line 189 "parser.y" /* yacc.c:1646  */
     {
 								(yyval.ast) = new Number_Ast<double>((yyvsp[0].double_value), double_data_type, yylineno);
 								(yyval.ast)->set_data_type(int_data_type);
 							}
-#line 1460 "parser.tab.c" /* yacc.c:1646  */
+#line 1468 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 186 "parser.y" /* yacc.c:1646  */
+#line 194 "parser.y" /* yacc.c:1646  */
     {
-								(yyval.ast) = new Plus_Ast((yyvsp[-2].ast), (yyvsp[0].ast), yylineno);
-								(yyval.ast)->set_data_type((yyvsp[-2].ast)->get_data_type());
+								if ((yyvsp[-2].ast)->get_data_type() == (yyvsp[0].ast)->get_data_type())
+								{
+									(yyval.ast) = new Plus_Ast((yyvsp[-2].ast), (yyvsp[0].ast), yylineno);
+									(yyval.ast)->set_data_type((yyvsp[-2].ast)->get_data_type());								
+								}
+								else
+								{
+									yyerror("Unmatched lhs & rhs type Error \n");
+								}
 							}
-#line 1469 "parser.tab.c" /* yacc.c:1646  */
+#line 1484 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 191 "parser.y" /* yacc.c:1646  */
+#line 206 "parser.y" /* yacc.c:1646  */
     {
-								(yyval.ast) = new Mult_Ast((yyvsp[-2].ast), (yyvsp[0].ast), yylineno);
-								(yyval.ast)->set_data_type((yyvsp[-2].ast)->get_data_type());
+								if ((yyvsp[-2].ast)->get_data_type() == (yyvsp[0].ast)->get_data_type())
+								{
+									(yyval.ast) = new Mult_Ast((yyvsp[-2].ast), (yyvsp[0].ast), yylineno);
+									(yyval.ast)->set_data_type((yyvsp[-2].ast)->get_data_type());								
+								}
+								else
+								{
+									yyerror("Unmatched lhs & rhs type Error \n");
+								}
+
 							}
-#line 1478 "parser.tab.c" /* yacc.c:1646  */
+#line 1501 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 196 "parser.y" /* yacc.c:1646  */
+#line 219 "parser.y" /* yacc.c:1646  */
     {
-								(yyval.ast) = new Minus_Ast((yyvsp[-2].ast), (yyvsp[0].ast), yylineno);
-								(yyval.ast)->set_data_type((yyvsp[-2].ast)->get_data_type());
+								if ((yyvsp[-2].ast)->get_data_type() == (yyvsp[0].ast)->get_data_type())
+								{
+									(yyval.ast) = new Minus_Ast((yyvsp[-2].ast), (yyvsp[0].ast), yylineno);
+									(yyval.ast)->set_data_type((yyvsp[-2].ast)->get_data_type());								
+								}
+								else
+								{
+									yyerror("Unmatched lhs & rhs type Error \n");
+								}
+
 							}
-#line 1487 "parser.tab.c" /* yacc.c:1646  */
+#line 1518 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 201 "parser.y" /* yacc.c:1646  */
+#line 232 "parser.y" /* yacc.c:1646  */
     {
-								(yyval.ast) = new Divide_Ast((yyvsp[-2].ast), (yyvsp[0].ast), yylineno);
-								(yyval.ast)->set_data_type((yyvsp[-2].ast)->get_data_type());
+								if ((yyvsp[-2].ast)->get_data_type() == (yyvsp[0].ast)->get_data_type())
+								{
+									(yyval.ast) = new Divide_Ast((yyvsp[-2].ast), (yyvsp[0].ast), yylineno);
+									(yyval.ast)->set_data_type((yyvsp[-2].ast)->get_data_type());								
+								}
+								else
+								{
+									yyerror("Unmatched lhs & rhs type Error \n");
+									
+								}
 							}
-#line 1496 "parser.tab.c" /* yacc.c:1646  */
+#line 1535 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 206 "parser.y" /* yacc.c:1646  */
+#line 245 "parser.y" /* yacc.c:1646  */
     {
-								(yyval.ast) = new UMinus_Ast((yyvsp[0].ast),NULL, yylineno);
+								(yyval.ast) = new UMinus_Ast((yyvsp[0].ast), NULL, yylineno);
 								(yyval.ast)->set_data_type((yyvsp[0].ast)->get_data_type());
 							}
-#line 1505 "parser.tab.c" /* yacc.c:1646  */
+#line 1544 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 211 "parser.y" /* yacc.c:1646  */
+#line 250 "parser.y" /* yacc.c:1646  */
     {
 								(yyval.ast) = (yyvsp[-1].ast);
 							}
-#line 1513 "parser.tab.c" /* yacc.c:1646  */
+#line 1552 "parser.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1517 "parser.tab.c" /* yacc.c:1646  */
+#line 1556 "parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1741,7 +1780,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 216 "parser.y" /* yacc.c:1906  */
+#line 255 "parser.y" /* yacc.c:1906  */
 
 
 extern YYSTYPE yylval;

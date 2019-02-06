@@ -2,8 +2,9 @@ int c,d,e,f;
 void main()
 {
 	int a,b,c;
+	float d;
 
 	a=2;
-	b=3;
+	d = 2;
 	c=a+b;
 }
