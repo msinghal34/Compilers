@@ -1,15 +1,8 @@
-
 int c,d,e,f;
 void main()
 {
-	int a,b;
-
-	a=2;
-	b=3;
-
-	c=a+b;
-    d=a-b;
-    e=a*b;
-    f=a/b;
+	int a,b,c;
+	float d;
+	c = 2;
+	b = -2 * (9+0) + (9*(9*(8)));
 }
-

@@ -15,13 +15,13 @@ os.chdir('..')
 
 for file in files:
 	print(file + "\n")
-	file = "testing/" + file;
+	file = mainDirectory + "/" + file;
 	print("SCLP")
-	os.system("./sclp -tokens -ast -d " + file + " > sclp.out")
+	os.system("./sclp -tokens -ast -symtab -eval -d " + file + " > sclp.out")
 	print("\nGIVENSCLP")
-	os.system("./givensclp -tokens -ast -d " + file + " > givensclp.out")
+	os.system("./givensclp -tokens -ast -symtab -eval -d " + file + " > givensclp.out")
 	print("\nDIFF\n")
 	os.system("diff sclp.out givensclp.out")
-
+os.system("rm *.out")
 os.chdir(mainDirectory)
 print("\n")

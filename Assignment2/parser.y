@@ -148,7 +148,7 @@ STATEMENT				: NAME '=' EXPRESSION  ';'
 								}
 								else
 								{
-									yyerror("Error Name Error \n");
+									printf("%d, Error Name Error \n", yylineno);
 								}
 								Name_Ast * name_ast = new Name_Ast(*$1, *v, yylineno);
 								if (name_ast->get_data_type() == $3->get_data_type())
@@ -157,7 +157,7 @@ STATEMENT				: NAME '=' EXPRESSION  ';'
 								}
 								else
 								{
-									yyerror("Error Assignment statement data type not compatible \n");
+									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 							}
@@ -180,7 +180,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									yyerror("Error Name Error \n");
+									printf("Error Name Error \n");
 									exit(0);
 								}
 								$$ = new Name_Ast(*$1, *v, yylineno);
@@ -189,7 +189,7 @@ EXPRESSION 				: INTEGER_NUMBER
 						| DOUBLE_NUMBER
 							{
 								$$ = new Number_Ast<double>($1, double_data_type, yylineno);
-								$$->set_data_type(int_data_type);
+								$$->set_data_type(double_data_type);
 							}		
 						| EXPRESSION '+' EXPRESSION 
 							{
@@ -200,7 +200,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									yyerror("Error Assignment statement data type not compatible \n");
+									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 							}
@@ -213,7 +213,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									yyerror("Error Assignment statement data type not compatible \n");
+									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 
@@ -227,7 +227,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									yyerror("Error Assignment statement data type not compatible \n");
+									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 
@@ -241,9 +241,8 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									yyerror("Error Assignment statement data type not compatible \n");
+									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
 									exit(0);
-									
 								}
 							}
 						| '-'  EXPRESSION %prec '*'
@@ -255,8 +254,6 @@ EXPRESSION 				: INTEGER_NUMBER
 							{
 								$$ = $2;
 							}
-
- 
 %%
 
 extern YYSTYPE yylval;
