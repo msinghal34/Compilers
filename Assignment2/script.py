@@ -1,19 +1,15 @@
 import os
-mainDirectory = 'testing'
+mainDirectory = 'mytesting'
 
 
 os.system("make")
 os.chdir(mainDirectory)
 
-os.system("rm *.ast")
-os.system("rm *.spim")
-os.system("rm *.toks")
-
-
 files = next(os.walk('.'))[2]
 os.chdir('..')
 
 for file in files:
+	print("---------------------------------------------------------------------------------------------------------")
 	print(file + "\n")
 	file = mainDirectory + "/" + file;
 	print("SCLP")

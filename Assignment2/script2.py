@@ -1,4 +1,4 @@
 import os
 
-for i in range(20):
+for i in range(10):
 	os.system("cp test.c mytesting/" + str(i) + ".c")
