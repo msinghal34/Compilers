@@ -1,58 +1,94 @@
-	Token Name: VOID 	Token: void 	 Lineno: 1
-	Token Name: NAME 	Token: main 	 Lineno: 1
-	Token Name: META CHAR 	Token: ( 	 Lineno: 1
-	Token Name: META CHAR 	Token: ) 	 Lineno: 1
-	Token Name: META CHAR 	Token: { 	 Lineno: 2
-	Token Name: INTEGER 	Token: int 	 Lineno: 3
-	Token Name: NAME 	Token: a 	 Lineno: 3
-	Token Name: META CHAR 	Token: ; 	 Lineno: 3
-	Token Name: INTEGER 	Token: int 	 Lineno: 4
-	Token Name: NAME 	Token: f 	 Lineno: 4
-	Token Name: META CHAR 	Token: , 	 Lineno: 4
-	Token Name: NAME 	Token: g 	 Lineno: 4
-	Token Name: META CHAR 	Token: ; 	 Lineno: 4
-	Token Name: NAME 	Token: f 	 Lineno: 6
-	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 6
-	Token Name: NUM 	Token: 2 	 Lineno: 6
-	Token Name: META CHAR 	Token: ; 	 Lineno: 6
-	Token Name: NAME 	Token: g 	 Lineno: 6
-	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 6
-	Token Name: NUM 	Token: 8 	 Lineno: 6
-	Token Name: META CHAR 	Token: ; 	 Lineno: 6
+	Token Name: INTEGER 	Token: int 	 Lineno: 2
+	Token Name: NAME 	Token: c 	 Lineno: 2
+	Token Name: META CHAR 	Token: , 	 Lineno: 2
+	Token Name: NAME 	Token: d 	 Lineno: 2
+	Token Name: META CHAR 	Token: , 	 Lineno: 2
+	Token Name: NAME 	Token: e 	 Lineno: 2
+	Token Name: META CHAR 	Token: , 	 Lineno: 2
+	Token Name: NAME 	Token: f 	 Lineno: 2
+	Token Name: META CHAR 	Token: ; 	 Lineno: 2
+	Token Name: VOID 	Token: void 	 Lineno: 3
+	Token Name: NAME 	Token: main 	 Lineno: 3
+	Token Name: META CHAR 	Token: ( 	 Lineno: 3
+	Token Name: META CHAR 	Token: ) 	 Lineno: 3
+	Token Name: META CHAR 	Token: { 	 Lineno: 4
+	Token Name: INTEGER 	Token: int 	 Lineno: 5
+	Token Name: NAME 	Token: a 	 Lineno: 5
+	Token Name: META CHAR 	Token: , 	 Lineno: 5
+	Token Name: NAME 	Token: b 	 Lineno: 5
+	Token Name: META CHAR 	Token: ; 	 Lineno: 5
 	Token Name: NAME 	Token: a 	 Lineno: 7
 	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 7
-	Token Name: NUM 	Token: 1111111111 	 Lineno: 7
+	Token Name: NUM 	Token: 2 	 Lineno: 7
 	Token Name: META CHAR 	Token: ; 	 Lineno: 7
-	Token Name: NAME 	Token: a 	 Lineno: 9
-	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 9
-	Token Name: NAME 	Token: a 	 Lineno: 9
-	Token Name: ARITHOP 	Token: + 	 Lineno: 9
-	Token Name: NAME 	Token: f 	 Lineno: 9
-	Token Name: ARITHOP 	Token: - 	 Lineno: 9
-	Token Name: NAME 	Token: g 	 Lineno: 9
-	Token Name: META CHAR 	Token: ; 	 Lineno: 9
-	Token Name: META CHAR 	Token: } 	 Lineno: 10
+	Token Name: NAME 	Token: b 	 Lineno: 8
+	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 8
+	Token Name: NUM 	Token: 3 	 Lineno: 8
+	Token Name: META CHAR 	Token: ; 	 Lineno: 8
+	Token Name: NAME 	Token: c 	 Lineno: 10
+	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 10
+	Token Name: NAME 	Token: a 	 Lineno: 10
+	Token Name: ARITHOP 	Token: + 	 Lineno: 10
+	Token Name: NAME 	Token: b 	 Lineno: 10
+	Token Name: META CHAR 	Token: ; 	 Lineno: 10
+	Token Name: NAME 	Token: d 	 Lineno: 11
+	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 11
+	Token Name: NAME 	Token: a 	 Lineno: 11
+	Token Name: ARITHOP 	Token: - 	 Lineno: 11
+	Token Name: NAME 	Token: b 	 Lineno: 11
+	Token Name: META CHAR 	Token: ; 	 Lineno: 11
+	Token Name: NAME 	Token: e 	 Lineno: 12
+	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 12
+	Token Name: NAME 	Token: a 	 Lineno: 12
+	Token Name: ARITHOP 	Token: * 	 Lineno: 12
+	Token Name: NAME 	Token: b 	 Lineno: 12
+	Token Name: META CHAR 	Token: ; 	 Lineno: 12
+	Token Name: NAME 	Token: f 	 Lineno: 13
+	Token Name: ASSIGN_OP 	Token: = 	 Lineno: 13
+	Token Name: NAME 	Token: a 	 Lineno: 13
+	Token Name: ARITHOP 	Token: / 	 Lineno: 13
+	Token Name: NAME 	Token: b 	 Lineno: 13
+	Token Name: META CHAR 	Token: ; 	 Lineno: 13
+	Token Name: META CHAR 	Token: } 	 Lineno: 14
 Program:
    Procedure: main, Return Type: void
 
          Asgn:
-            LHS (Name : f)
+            LHS (Name : a)
             RHS (Num : 2)
          Asgn:
-            LHS (Name : g)
-            RHS (Num : 8)
+            LHS (Name : b)
+            RHS (Num : 3)
          Asgn:
-            LHS (Name : a)
-            RHS (Num : 1111111111)
-         Asgn:
-            LHS (Name : a)
+            LHS (Name : c)
             RHS (
-            Arith: MINUS
-               LHS (
             Arith: PLUS
                LHS (Name : a)
-               RHS (Name : f))
-               RHS (Name : g))
+               RHS (Name : b))
+         Asgn:
+            LHS (Name : d)
+            RHS (
+            Arith: MINUS
+               LHS (Name : a)
+               RHS (Name : b))
+         Asgn:
+            LHS (Name : e)
+            RHS (
+            Arith: MULT
+               LHS (Name : a)
+               RHS (Name : b))
+         Asgn:
+            LHS (Name : f)
+            RHS (
+            Arith: DIV
+               LHS (Name : a)
+               RHS (Name : b))
+	.data
+f:	.word 0
+e:	.word 0
+d:	.word 0
+c:	.word 0
+
 	.text 			# The .text assembler directive indicates
 	.globl main		# The following is the code (as oppose to data)
 main:				# .globl makes main know to the 
@@ -61,24 +97,32 @@ main:				# .globl makes main know to the
 	sw $fp, 0($sp)		# Save the frame pointer
 	sub $fp, $sp, 4		# Update the frame pointer
 
-	sub $sp, $sp, 16		# Make space for the locals
+	sub $sp, $sp, 12		# Make space for the locals
 # Prologue ends
 
 	li $v0, 2
 	sw $v0, -4($fp)
-	li $v0, 8
-	sw $v0, -8($fp)
-	li $v0, 1111111111
+	li $v0, 3
 	sw $v0, 0($fp)
-	lw $v0, 0($fp)
-	lw $t0, -4($fp)
+	lw $v0, -4($fp)
+	lw $t0, 0($fp)
 	add $t1, $v0, $t0
-	lw $v0, -8($fp)
-	sub $t0, $t1, $v0
-	sw $t0, 0($fp)
+	sw $t1, c
+	lw $v0, -4($fp)
+	lw $t0, 0($fp)
+	sub $t1, $v0, $t0
+	sw $t1, d
+	lw $v0, -4($fp)
+	lw $t0, 0($fp)
+	mul $t1, $v0, $t0
+	sw $t1, e
+	lw $v0, -4($fp)
+	lw $t0, 0($fp)
+	div $t1, $v0, $t0
+	sw $t1, f
 
 # Epilogue Begins
-	add $sp, $sp, 16
+	add $sp, $sp, 12
 	lw $fp, 0($sp)  
 	jr        $31		# Jump back to the operating system.
 # Epilogue Ends
