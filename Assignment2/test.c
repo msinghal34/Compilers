@@ -1,3 +1,5 @@
+int a,b;
+int a,b;
 void main()
 {
 	int a;
