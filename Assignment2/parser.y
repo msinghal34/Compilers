@@ -75,12 +75,12 @@ NAME_LIST				: NAME
 								ste->set_symbol_scope(curr_table_scope);
 								$$->push_symbol(ste);
 							}
-						| NAME_LIST ',' NAME
+						| NAME ',' NAME_LIST
 							{
-								Symbol_Table_Entry *ste = new Symbol_Table_Entry(*$3,curr_data_type,yylineno);
+								Symbol_Table_Entry *ste = new Symbol_Table_Entry(*$1,curr_data_type,yylineno);
 								ste->set_symbol_scope(curr_table_scope);
-								$1->push_symbol(ste);
-								$$ = $1;
+								$3->push_symbol(ste);
+								$$ = $3;
 							}
 TYPE					: INTEGER 
 							{

@@ -402,7 +402,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  10
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   41
+#define YYLAST   42
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  20
@@ -502,9 +502,9 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -26,    16,    30,   -26,   -26,    26,   -26,    27,   -26,    15,
-     -26,   -26,   -26,   -11,    17,   -26,    29,    18,   -26,   -26,
-      25,    19,   -26,    31,   -26,    32,   -26,    -6,   -26,   -26,
+     -26,    16,    28,   -26,   -26,    23,   -26,    24,   -26,    15,
+     -26,   -26,    17,    19,    18,    24,   -26,    20,   -26,   -26,
+       0,    21,   -26,    30,   -26,    25,   -26,    -6,   -26,   -26,
      -26,    -6,    -6,    13,   -26,     5,    -6,    -6,    -6,    -6,
      -26,   -26,    -4,    -4,   -26,   -26
 };
@@ -515,7 +515,7 @@ static const yytype_int8 yypact[] =
 static const yytype_uint8 yydefact[] =
 {
        3,     0,     0,     8,     9,     0,     4,     0,     2,     0,
-       1,    10,     6,     0,     0,     5,     0,     0,     7,    13,
+       1,    10,     6,     0,     0,     0,     5,     0,     7,    13,
       15,     0,    14,    12,    11,     0,    16,     0,    19,    20,
       18,     0,     0,     0,    25,     0,     0,     0,     0,     0,
       17,    26,    21,    23,    22,    24
@@ -524,7 +524,7 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -26,   -26,   -26,    20,   -26,   -26,   -26,   -26,   -26,   -26,
+     -26,   -26,   -26,    22,    26,   -26,   -26,   -26,   -26,   -26,
      -25,   -26,   -26
 };
 
@@ -540,20 +540,20 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      28,    29,    30,    15,    16,    31,    34,    35,    38,    39,
+      28,    29,    30,     3,     4,    31,    34,    35,    38,    39,
       32,    42,    43,    44,    45,    36,    37,    38,    39,     3,
-       4,     5,    41,    36,    37,    38,    39,    40,     3,     4,
-      10,    14,    11,    12,    17,    18,    19,    25,    24,     0,
-      22,    27
+       4,     5,    41,    36,    37,    38,    39,    40,    10,    11,
+      12,    14,    15,    16,    27,    17,    25,     0,    19,     0,
+      24,    18,    22
 };
 
 static const yytype_int8 yycheck[] =
 {
-       6,     7,     8,    14,    15,    11,    31,    32,    12,    13,
+       6,     7,     8,     3,     4,    11,    31,    32,    12,    13,
       16,    36,    37,    38,    39,    10,    11,    12,    13,     3,
-       4,     5,    17,    10,    11,    12,    13,    14,     3,     4,
-       0,    16,     6,     6,    17,     6,    18,     6,    19,    -1,
-      20,     9
+       4,     5,    17,    10,    11,    12,    13,    14,     0,     6,
+       6,    16,    15,    14,     9,    17,     6,    -1,    18,    -1,
+      19,    15,    20
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -561,7 +561,7 @@ static const yytype_int8 yycheck[] =
 static const yytype_uint8 yystos[] =
 {
        0,    21,    31,     3,     4,     5,    23,    25,    26,    32,
-       0,     6,     6,    24,    16,    14,    15,    17,     6,    18,
+       0,     6,     6,    24,    16,    15,    14,    17,    24,    18,
       22,    27,    23,    28,    19,     6,    29,     9,     6,     7,
        8,    11,    16,    30,    30,    30,    10,    11,    12,    13,
       14,    17,    30,    30,    30,    30
@@ -1307,10 +1307,10 @@ yyreduce:
   case 7:
 #line 79 "parser.y" /* yacc.c:1646  */
     {
-								Symbol_Table_Entry *ste = new Symbol_Table_Entry(*(yyvsp[0].string_value),curr_data_type,yylineno);
+								Symbol_Table_Entry *ste = new Symbol_Table_Entry(*(yyvsp[-2].string_value),curr_data_type,yylineno);
 								ste->set_symbol_scope(curr_table_scope);
-								(yyvsp[-2].symbol_table)->push_symbol(ste);
-								(yyval.symbol_table) = (yyvsp[-2].symbol_table);
+								(yyvsp[0].symbol_table)->push_symbol(ste);
+								(yyval.symbol_table) = (yyvsp[0].symbol_table);
 							}
 #line 1316 "parser.tab.c" /* yacc.c:1646  */
     break;
