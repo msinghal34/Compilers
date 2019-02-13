@@ -1411,7 +1411,7 @@ yyreduce:
 								}
 								else
 								{
-									printf("\ncs316: Error %d,  Name Error \n", yylineno);
+									printf("%d, Error Name Error \n", yylineno);
 									exit(0);
 								}
 								Name_Ast * name_ast = new Name_Ast(*(yyvsp[-3].string_value), *v, yylineno);
@@ -1421,7 +1421,7 @@ yyreduce:
 								}
 								else
 								{
-									printf("\ncs316: Error %d,  Assignment statement data type not compatible \n", yylineno);
+									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 							}
@@ -1451,7 +1451,7 @@ yyreduce:
 								}
 								else
 								{
-									printf("\ncs316: Error %d,  Name Error \n", yylineno);
+									printf("%d, Error Name Error \n", yylineno);
 									exit(0);
 								}
 								(yyval.ast) = new Name_Ast(*(yyvsp[0].string_value), *v, yylineno);
@@ -1479,7 +1479,7 @@ yyreduce:
 								}
 								else
 								{
-									printf("\ncs316: Error %d,  Assignment statement data type not compatible \n", yylineno);
+									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 							}
@@ -1496,7 +1496,7 @@ yyreduce:
 								}
 								else
 								{
-									printf("\ncs316: Error %d,  Assignment statement data type not compatible \n", yylineno);
+									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 
@@ -1514,7 +1514,7 @@ yyreduce:
 								}
 								else
 								{
-									printf("\ncs316: Error %d,  Assignment statement data type not compatible \n", yylineno);
+									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 
@@ -1532,7 +1532,7 @@ yyreduce:
 								}
 								else
 								{
-									printf("\ncs316: Error %d,  Assignment statement data type not compatible \n", yylineno);
+									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 							}
