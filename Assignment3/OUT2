@@ -1,6 +1,6 @@
 Program:
    Procedure: main, Return Type: void
-   
+
          Asgn:
             LHS (Name : a)
             RHS (
@@ -14,7 +14,7 @@ Program:
             RHS (
             Arith: PLUS
                LHS (Name : a)
-               RHS (Name : a))
+               RHS (Name : b))
          Asgn:
             LHS (Name : d)
             RHS (
@@ -22,24 +22,20 @@ Program:
                LHS (
             Arith: MINUS
                LHS (Name : a)
-               RHS (Name : a))
-               RHS (
-            Arith: MINUS
-               LHS (Name : a)
-               RHS (Name : a)))
+               RHS (Name : b))
+               RHS (Name : c))
          Asgn:
             LHS (Name : e)
             RHS (
             Arith: MULT
                LHS (Name : a)
-               RHS (Name : a))
+               RHS (Name : b))
          Asgn:
             LHS (Name : f)
             RHS (
-            Arith: DIVIDE
+            Arith: DIV
                LHS (Name : a)
-               RHS (Name : a))
-
+               RHS (Name : b))
 	.data
 f:	.word 0
 e:	.word 0

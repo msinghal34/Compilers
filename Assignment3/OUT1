@@ -1,44 +1,44 @@
 Program:
    Procedure: main, Return Type: void
    
-         Asgn:
-            LHS (Name : a)
-            RHS (
-            Arith: UMINUS
-               LHS (Num : 2))
-         Asgn:
-            LHS (Name : b)
-            RHS (Num : 3)
-         Asgn:
-            LHS (Name : c)
+         Assgn:
+            LHS (Name: a)
             RHS (
             Arith: PLUS
-               LHS (Name : a)
-               RHS (Name : a))
-         Asgn:
-            LHS (Name : d)
+               LHS (Num: 2))
+         Assgn:
+            LHS (Name: b)
+            RHS (Num: 3)
+         Assgn:
+            LHS (Name: c)
+            RHS (
+            Arith: PLUS
+               LHS (Name: a)
+               RHS (Name: a))
+         Assgn:
+            LHS (Name: d)
             RHS (
             Arith: MINUS
                LHS (
             Arith: MINUS
-               LHS (Name : a)
-               RHS (Name : a))
+               LHS (Name: a)
+               RHS (Name: a))
                RHS (
             Arith: MINUS
-               LHS (Name : a)
-               RHS (Name : a)))
-         Asgn:
-            LHS (Name : e)
+               LHS (Name: a)
+               RHS (Name: a)))
+         Assgn:
+            LHS (Name: e)
             RHS (
             Arith: MULT
-               LHS (Name : a)
-               RHS (Name : a))
-         Asgn:
-            LHS (Name : f)
+               LHS (Name: a)
+               RHS (Name: a))
+         Assgn:
+            LHS (Name: f)
             RHS (
             Arith: DIVIDE
-               LHS (Name : a)
-               RHS (Name : a))
+               LHS (Name: a)
+               RHS (Name: a))
 
 	.data
 f:	.word 0

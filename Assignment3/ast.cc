@@ -32,6 +32,10 @@ Symbol_Table_Entry & Ast::get_symbol_entry(){
 	return s;
 }
 
+void Ast::print(ostream & file_buffer){
+	file_buffer<<"\n";
+}
+
 ///////////////////////////////////////////////////////////////////
 Assignment_Ast::Assignment_Ast(Ast * temp_lhs, Ast * temp_rhs, int line){
 	lhs = temp_lhs;
@@ -40,8 +44,8 @@ Assignment_Ast::Assignment_Ast(Ast * temp_lhs, Ast * temp_rhs, int line){
 }
 
 Assignment_Ast::~Assignment_Ast(){
-	// free(lhs);
-	// free(rhs);
+	free(lhs);
+	free(rhs);
 }
 
 bool Assignment_Ast::check_ast(){
@@ -49,8 +53,12 @@ bool Assignment_Ast::check_ast(){
 }
 
 void Assignment_Ast::print(ostream & file_buffer){
-	// SEE LATER
-	file_buffer<<"Hi"<<endl;
+	file_buffer<<AST_SPACE<<"Asgn:\n";
+	file_buffer<<AST_NODE_SPACE<<"LHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")\n"<<AST_NODE_SPACE<<"RHS (";
+	rhs->print(file_buffer);
+	file_buffer<<")\n";
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -78,8 +86,7 @@ void Name_Ast::set_data_type(Data_Type dt){
 }
 
 void Name_Ast::print(ostream & file_buffer){
-	// SEE LATER
-	file_buffer<<"Hi"<<endl;
+	file_buffer<<"Name : "<<variable_symbol_entry->get_variable_name();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -113,8 +120,7 @@ bool Number_Ast<T>::is_value_zero(){
 
 template <class T>
 void Number_Ast<T>::print(ostream & file_buffer){
-	//SEE LATER
-	file_buffer<<constant<<endl;
+	file_buffer<<"Num : "<<constant;
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -133,8 +139,7 @@ bool Arithmetic_Expr_Ast::check_ast(){
 }
 
 void Arithmetic_Expr_Ast::print(ostream & file_buffer){
-	//SEE LATER
-	file_buffer<<"Hi"<<endl;
+	
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -146,8 +151,13 @@ Plus_Ast::Plus_Ast(Ast * l, Ast * r, int line){
 
 
 void Plus_Ast::print(ostream & file_buffer){
-	//SEE LATER
-	file_buffer<<"Hi"<<endl;
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Arith: PLUS\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")";
 }
 
 // Eval_Result &  Plus_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){
@@ -163,8 +173,13 @@ Minus_Ast::Minus_Ast(Ast * l, Ast * r, int line){
 
 
 void Minus_Ast::print(ostream & file_buffer){
-	//SEE LATER
-	file_buffer<<"Hi"<<endl;
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Arith: MINUS\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")";
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -176,8 +191,13 @@ Mult_Ast::Mult_Ast(Ast * l, Ast * r, int line){
 
 
 void Mult_Ast::print(ostream & file_buffer){
-	//SEE LATER
-	file_buffer<<"Hi"<<endl;
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Arith: MULT\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")";
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -189,8 +209,13 @@ Divide_Ast::Divide_Ast(Ast * l, Ast * r, int line){
 
 
 void Divide_Ast::print(ostream & file_buffer){
-	//SEE LATER
-	file_buffer<<"Hi"<<endl;
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Arith: DIVIDE\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")";
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -202,8 +227,10 @@ UMinus_Ast::UMinus_Ast(Ast * l, Ast * r, int line){
 
 
 void UMinus_Ast::print(ostream & file_buffer){
-	//SEE LATER
-	file_buffer<<"Hi"<<endl;
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Arith: UMINUS\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")";
 }
 
 // ///////////////////////////////////////////////////////////////////
