@@ -112,31 +112,24 @@ void Number_Ast<T>::print(ostream & file_buffer){
 }
 
 // ///////////////////////////////////////////////////////////////////
-// Arithmetic_Expr_Ast::Arithmetic_Expr_Ast(){
 
-// }
 
-// Arithmetic_Expr_Ast::~Arithmetic_Expr_Ast(){
-// 	free(lhs);
-// 	free(rhs);
-// }
+Data_Type Arithmetic_Expr_Ast::get_data_type(){
+	return node_data_type;
+}
 
-// Data_Type Arithmetic_Expr_Ast::get_data_type(){
-// 	return node_data_type;
-// }
+void Arithmetic_Expr_Ast::set_data_type(Data_Type dt){
+	node_data_type = dt;
+}
 
-// Arithmetic_Expr_Ast::set_data_type(Data_Type dt){
-// 	node_data_type = dt;
-// }
+bool Arithmetic_Expr_Ast::check_ast(){
+	return ((lhs->get_data_type() == rhs->get_data_type()) && lhs->check_ast() && rhs->check_ast()); 
+}
 
-// bool Arithmetic_Expr_Ast::check_ast(){
-// 	return ((lhs->get_data_type() == rhs->get_data_type()) && lhs->check_ast() && rhs->check_ast()); 
-// }
-
-// void Arithmetic_Expr_Ast::print(ostream & file_buffer){
-// 	//SEE LATER
-// 	file_buffer<<"Hi"<<endl;
-// }
+void Arithmetic_Expr_Ast::print(ostream & file_buffer){
+	//SEE LATER
+	file_buffer<<"Hi"<<endl;
+}
 
 // ///////////////////////////////////////////////////////////////////
 Plus_Ast::Plus_Ast(Ast * l, Ast * r, int line){
@@ -145,14 +138,14 @@ Plus_Ast::Plus_Ast(Ast * l, Ast * r, int line){
 	rhs = r;
 }
 
-// Plus_Ast::~Plus_Ast(){
-// 	free(lhs);
-// 	free(rhs);
-// }
 
-// void Plus_Ast::print(ostream & file_buffer){
-// 	//SEE LATER
-// 	file_buffer<<"Hi"<<endl;
+void Plus_Ast::print(ostream & file_buffer){
+	//SEE LATER
+	file_buffer<<"Hi"<<endl;
+}
+
+// Eval_Result &  Plus_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){
+// 	return 
 // }
 
 // ///////////////////////////////////////////////////////////////////
@@ -162,15 +155,11 @@ Minus_Ast::Minus_Ast(Ast * l, Ast * r, int line){
 	rhs = r;
 }
 
-// Minus_Ast::~Minus_Ast(){
-// 	free(lhs);
-// 	free(rhs);
-// }
 
-// void Minus_Ast::print(ostream & file_buffer){
-// 	//SEE LATER
-// 	file_buffer<<"Hi"<<endl;
-// }
+void Minus_Ast::print(ostream & file_buffer){
+	//SEE LATER
+	file_buffer<<"Hi"<<endl;
+}
 
 // ///////////////////////////////////////////////////////////////////
 Mult_Ast::Mult_Ast(Ast * l, Ast * r, int line){
@@ -179,15 +168,11 @@ Mult_Ast::Mult_Ast(Ast * l, Ast * r, int line){
 	rhs = r;
 }
 
-// Mult_Ast::~Mult_Ast(){
-// 	free(lhs);
-// 	free(rhs);
-// }
 
-// void Mult_Ast::print(ostream & file_buffer){
-// 	//SEE LATER
-// 	file_buffer<<"Hi"<<endl;
-// }
+void Mult_Ast::print(ostream & file_buffer){
+	//SEE LATER
+	file_buffer<<"Hi"<<endl;
+}
 
 // ///////////////////////////////////////////////////////////////////
 Divide_Ast::Divide_Ast(Ast * l, Ast * r, int line){
@@ -196,15 +181,11 @@ Divide_Ast::Divide_Ast(Ast * l, Ast * r, int line){
 	rhs = r;
 }
 
-// Divide_Ast::~Divide_Ast(){
-// 	free(lhs);
-// 	free(rhs);
-// }
 
-// void Divide_Ast::print(ostream & file_buffer){
-// 	//SEE LATER
-// 	file_buffer<<"Hi"<<endl;
-// }
+void Divide_Ast::print(ostream & file_buffer){
+	//SEE LATER
+	file_buffer<<"Hi"<<endl;
+}
 
 // ///////////////////////////////////////////////////////////////////
 UMinus_Ast::UMinus_Ast(Ast * l, Ast * r, int line){
@@ -213,14 +194,10 @@ UMinus_Ast::UMinus_Ast(Ast * l, Ast * r, int line){
 	rhs = r;
 }
 
-// UMinus_Ast::~UMinus_Ast(){
-// 	free(lhs);
-// 	free(rhs);
-// }
 
-// void UMinus_Ast::print(ostream & file_buffer){
-// 	//SEE LATER
-// 	file_buffer<<"Hi"<<endl;
-// }
+void UMinus_Ast::print(ostream & file_buffer){
+	//SEE LATER
+	file_buffer<<"Hi"<<endl;
+}
 
 // ///////////////////////////////////////////////////////////////////
