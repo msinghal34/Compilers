@@ -1,6 +1,6 @@
 Program:
    Procedure: main, Return Type: void
-   
+
          Asgn:
             LHS (Name : a)
             RHS (
@@ -14,7 +14,7 @@ Program:
             RHS (
             Arith: PLUS
                LHS (Name : a)
-               RHS (Name : a))
+               RHS (Name : b))
          Asgn:
             LHS (Name : d)
             RHS (
@@ -22,68 +22,101 @@ Program:
                LHS (
             Arith: MINUS
                LHS (Name : a)
-               RHS (Name : a))
-               RHS (
-            Arith: MINUS
-               LHS (Name : a)
-               RHS (Name : a)))
+               RHS (Name : b))
+               RHS (Name : c))
          Asgn:
             LHS (Name : e)
             RHS (
             Arith: MULT
                LHS (Name : a)
-               RHS (Name : a))
+               RHS (Name : b))
          Asgn:
             LHS (Name : f)
             RHS (
-            Arith: DIVIDE
+            Arith: DIV
                LHS (Name : a)
-               RHS (Name : a))
+               RHS (Name : b))Program:
 
-	.data
-f:	.word 0
-e:	.word 0
-d:	.word 0
-c:	.word 0
+Global Declarations:
+   Name: f Type: INT Entity Type: VAR (No offset assigned yet)
+   Name: e Type: INT Entity Type: VAR (No offset assigned yet)
+   Name: d Type: INT Entity Type: VAR (No offset assigned yet)
+   Name: c Type: INT Entity Type: VAR (No offset assigned yet)
+   Procedure: main, Return Type: void
+   Local Declarartions
+   Name: b Type: INT Entity Type: VAR (No offset assigned yet)
+   Name: a Type: INT Entity Type: VAR (No offset assigned yet)
+Evaluating Program
+   Global Variables (before evaluating):
+         c : 0
+         d : 0
+         e : 0
+         f : 0
+   Evaluating Procedure main
+      Local Variables (before evaluating):
+         a : undefined
+         b : undefined
 
-	.text 			# The .text assembler directive indicates
-	.globl main		# The following is the code (as oppose to data)
-main:				# .globl makes main know to the 
-				# outside of the program.
-# Prologue begins 
-	sw $fp, 0($sp)		# Save the frame pointer
-	sub $fp, $sp, 4		# Update the frame pointer
 
-	sub $sp, $sp, 12		# Make space for the locals
-# Prologue ends
+         Asgn:
+            LHS (Name : a)
+            RHS (
+            Arith: UMINUS
+               LHS (Num : 2))
+         a : -2
 
-	li $v0, 2
-	neg $t0, $v0
-	sw $t0, -4($fp)
-	li $v0, 3
-	sw $v0, 0($fp)
-	lw $v0, -4($fp)
-	lw $t0, 0($fp)
-	add $t1, $v0, $t0
-	sw $t1, c
-	lw $v0, -4($fp)
-	lw $t0, 0($fp)
-	sub $t1, $v0, $t0
-	lw $v0, c
-	sub $t0, $t1, $v0
-	sw $t0, d
-	lw $v0, -4($fp)
-	lw $t0, 0($fp)
-	mul $t1, $v0, $t0
-	sw $t1, e
-	lw $v0, -4($fp)
-	lw $t0, 0($fp)
-	div $t1, $v0, $t0
-	sw $t1, f
 
-# Epilogue Begins
-	add $sp, $sp, 12
-	lw $fp, 0($sp)  
-	jr        $31		# Jump back to the operating system.
-# Epilogue Ends
+         Asgn:
+            LHS (Name : b)
+            RHS (Num : 3)
+         b : 3
 
+
+         Asgn:
+            LHS (Name : c)
+            RHS (
+            Arith: PLUS
+               LHS (Name : a)
+               RHS (Name : b))
+         c : 1
+
+
+         Asgn:
+            LHS (Name : d)
+            RHS (
+            Arith: MINUS
+               LHS (
+            Arith: MINUS
+               LHS (Name : a)
+               RHS (Name : b))
+               RHS (Name : c))
+         d : -6
+
+
+         Asgn:
+            LHS (Name : e)
+            RHS (
+            Arith: MULT
+               LHS (Name : a)
+               RHS (Name : b))
+         e : -6
+
+
+         Asgn:
+            LHS (Name : f)
+            RHS (
+            Arith: DIV
+               LHS (Name : a)
+               RHS (Name : b))
+         f : 0
+
+
+
+      Local Variables (after evaluating):
+         a : -2
+         b : 3
+   Global Variables (after evaluating):
+         c : 1
+         d : -6
+         e : -6
+         f : 0

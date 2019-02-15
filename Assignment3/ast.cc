@@ -53,12 +53,12 @@ bool Assignment_Ast::check_ast(){
 }
 
 void Assignment_Ast::print(ostream & file_buffer){
-	file_buffer<<AST_SPACE<<"Asgn:\n";
+	file_buffer<<"\n"<<AST_SPACE<<"Asgn:\n";
 	file_buffer<<AST_NODE_SPACE<<"LHS (";
 	lhs->print(file_buffer);
 	file_buffer<<")\n"<<AST_NODE_SPACE<<"RHS (";
 	rhs->print(file_buffer);
-	file_buffer<<")\n";
+	file_buffer<<")";
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -156,7 +156,7 @@ void Plus_Ast::print(ostream & file_buffer){
 	lhs->print(file_buffer);
 	file_buffer<<")\n";
 	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
-	lhs->print(file_buffer);
+	rhs->print(file_buffer);
 	file_buffer<<")";
 }
 
@@ -178,7 +178,7 @@ void Minus_Ast::print(ostream & file_buffer){
 	lhs->print(file_buffer);
 	file_buffer<<")\n";
 	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
-	lhs->print(file_buffer);
+	rhs->print(file_buffer);
 	file_buffer<<")";
 }
 
@@ -196,7 +196,7 @@ void Mult_Ast::print(ostream & file_buffer){
 	lhs->print(file_buffer);
 	file_buffer<<")\n";
 	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
-	lhs->print(file_buffer);
+	rhs->print(file_buffer);
 	file_buffer<<")";
 }
 
@@ -209,12 +209,12 @@ Divide_Ast::Divide_Ast(Ast * l, Ast * r, int line){
 
 
 void Divide_Ast::print(ostream & file_buffer){
-	file_buffer<<"\n"<<AST_NODE_SPACE<<"Arith: DIVIDE\n";
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Arith: DIV\n";
 	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
 	lhs->print(file_buffer);
 	file_buffer<<")\n";
 	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
-	lhs->print(file_buffer);
+	rhs->print(file_buffer);
 	file_buffer<<")";
 }
 
