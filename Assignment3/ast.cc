@@ -27,6 +27,11 @@ bool Ast::check_ast(){
 	return true;
 }
 
+Symbol_Table_Entry & Ast::get_symbol_entry(){
+	Symbol_Table_Entry& s = *static_cast<Symbol_Table_Entry*>(NULL);
+	return s;
+}
+
 ///////////////////////////////////////////////////////////////////
 Assignment_Ast::Assignment_Ast(Ast * temp_lhs, Ast * temp_rhs, int line){
 	lhs = temp_lhs;
@@ -35,8 +40,8 @@ Assignment_Ast::Assignment_Ast(Ast * temp_lhs, Ast * temp_rhs, int line){
 }
 
 Assignment_Ast::~Assignment_Ast(){
-	free(lhs);
-	free(rhs);
+	// free(lhs);
+	// free(rhs);
 }
 
 bool Assignment_Ast::check_ast(){
@@ -52,11 +57,12 @@ void Assignment_Ast::print(ostream & file_buffer){
 Name_Ast::Name_Ast(string & name, Symbol_Table_Entry & var_entry, int line){
 	variable_symbol_entry = &var_entry;
 	lineno = line;
+	set_data_type(var_entry.get_data_type());
 	// SEE LATER for name
 }
 
 Name_Ast::~Name_Ast(){
-	free(variable_symbol_entry);
+	// free(variable_symbol_entry);
 }
 
 Data_Type Name_Ast::get_data_type(){
@@ -201,3 +207,14 @@ void UMinus_Ast::print(ostream & file_buffer){
 }
 
 // ///////////////////////////////////////////////////////////////////
+
+Return_Ast::Return_Ast(int line){
+	lineno = line;
+}
+
+Return_Ast::~Return_Ast(){
+
+}
+void Return_Ast::print(ostream & file_buffer){
+
+}
