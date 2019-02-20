@@ -148,18 +148,17 @@ STATEMENT				: NAME '=' EXPRESSION  ';'
 								}
 								else
 								{
-									printf("%d, Error Name Error \n", yylineno);
+									printf("\ncs316: Error %d,  Name Error \n", yylineno);
 									exit(0);
 								}
 								Name_Ast * name_ast = new Name_Ast(*$1, *v, yylineno);
-
 								if (name_ast->get_data_type() == $3->get_data_type())
 								{
 									$$ = new Assignment_Ast(name_ast, $3, yylineno);								
 								}
 								else
 								{
-									printf("%d, Error Assignment Assignment statement data type not compatible \n", yylineno);
+									printf("\ncs316: Error %d,  Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 							}
@@ -182,7 +181,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									printf("%d, Error Name Error \n", yylineno);
+									printf("\ncs316: Error %d,  Name Error \n", yylineno);
 									exit(0);
 								}
 								$$ = new Name_Ast(*$1, *v, yylineno);
@@ -202,7 +201,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
+									printf("\ncs316: Error %d,  Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 							}
@@ -215,7 +214,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
+									printf("\ncs316: Error %d,  Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 
@@ -229,7 +228,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
+									printf("\ncs316: Error %d,  Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 
@@ -243,7 +242,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 								else
 								{
-									printf("%d, Error Assignment statement data type not compatible \n", yylineno);
+									printf("\ncs316: Error %d,  Assignment statement data type not compatible \n", yylineno);
 									exit(0);
 								}
 							}
