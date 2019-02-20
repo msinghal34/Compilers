@@ -13,10 +13,10 @@ for file in files:
 	print(file + "\n")
 	file = mainDirectory + "/" + file;
 	print("SCLP")
-	os.system("./sclp -ast -symtab -eval -d " + file + " > sclp.out")
+	os.system("./sclp -ast -tokens -symtab -eval -d " + file + " > sclp.out")
 	os.system("./sclp -ast -symtab -icode -d " + file + " > sclp1.out")
 	print("\nGIVENSCLP")
-	os.system("./givensclp -ast -symtab -icode -d " + file + " > givensclp1.out")
+	os.system("./givensclp -ast -tokens -symtab -icode -d " + file + " > givensclp1.out")
 	os.system("./givensclp -ast -symtab -eval -d " + file + " > givensclp.out")
 	print("\nDIFF\n")
 	os.system("diff sclp.out givensclp.out")
