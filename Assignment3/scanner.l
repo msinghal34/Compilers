@@ -85,6 +85,6 @@ void		 	{
 
 .           		{
 				printf("%s\n", yytext);
-				printf("Error\n");
+				printf("\ncs316: Error\n");
 				return -1;
 			}

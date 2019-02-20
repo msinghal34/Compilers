@@ -66,7 +66,7 @@ Name_Ast::Name_Ast(string & name, Symbol_Table_Entry & var_entry, int line){
 	variable_symbol_entry = &var_entry;
 	lineno = line;
 	set_data_type(var_entry.get_data_type());
-	// SEE LATER for name
+	// SEE LATER for name NOT NEEDED
 }
 
 Name_Ast::~Name_Ast(){
