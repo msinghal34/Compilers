@@ -28,10 +28,14 @@ Symbol_Table* local_symbol_table;
 	Basic_Block * basic_block;
 	Procedure * procedure;
 };
-%token <string_value> INTEGER FLOAT VOID NAME 
+%token <string_value> INTEGER FLOAT VOID NAME IF ELSE DO WHILE RELOP EQOP AND OR NOT
 %token <double_value> DOUBLE_NUMBER
 %token <integer_value> INTEGER_NUMBER 
-%right '='
+%right '=' ':' 
+%left  OR
+%left  AND
+%left  EQOP
+%left  RELOP
 %left '+' '-'
 %left '*' '/'
 %start PROGRAM 
@@ -41,7 +45,7 @@ Symbol_Table* local_symbol_table;
 %nterm <string_value> TYPE
 %nterm <procedure> MAIN_FUNCTION PROCEDURE
 %nterm <ast_list> STATEMENT_LIST 
-%nterm <ast> STATEMENT EXPRESSION
+%nterm <ast> ASSIGN_STATEMENT ARITH_EXP COND_EXP
 %%
 
 PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
@@ -135,7 +139,13 @@ STATEMENT_LIST			: /* epsilon */
  								$$ = $1;
  							}
 
-STATEMENT				: NAME '=' EXPRESSION  ';'
+STATEMENT 				: ASSIGN_STATEMENT
+						| DO_WHILE_STATEMENT
+						| WHILE_STATEMENT
+						| IF_ELSE_STATEMENT
+						| IF_STATEMENT
+
+ASSIGN_STATEMENT		: NAME '=' ARITH_EXP  ';'
 							{
 								Symbol_Table_Entry *v;
 								if (local_symbol_table->variable_in_symbol_list_check(*$1))
@@ -163,7 +173,15 @@ STATEMENT				: NAME '=' EXPRESSION  ';'
 								}
 							}
 
-EXPRESSION 				: INTEGER_NUMBER
+COND_EXP				: ARITH_EXP RELOP ARITH_EXP
+						| ARITH_EXP EQOP ARITH_EXP
+						| COND_EXP AND COND_EXP
+						| COND_EXP OR COND_EXP
+						| NOT COND_EXP %prec '*'
+						| COND_EXP '?' COND_EXP ':' COND_EXP
+						| '(' COND_EXP ')'
+
+ARITH_EXP 				: INTEGER_NUMBER
 							{
 								$$ = new Number_Ast<int>($1, int_data_type, yylineno);
 								$$->set_data_type(int_data_type);
@@ -192,7 +210,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								$$ = new Number_Ast<double>($1, double_data_type, yylineno);
 								$$->set_data_type(double_data_type);
 							}		
-						| EXPRESSION '+' EXPRESSION 
+						| ARITH_EXP '+' ARITH_EXP 
 							{
 								if ($1->get_data_type() == $3->get_data_type())
 								{
@@ -205,7 +223,7 @@ EXPRESSION 				: INTEGER_NUMBER
 									exit(0);
 								}
 							}
-						| EXPRESSION  '*' EXPRESSION 
+						| ARITH_EXP  '*' ARITH_EXP 
 							{
 								if ($1->get_data_type() == $3->get_data_type())
 								{
@@ -219,7 +237,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 
 							}
-						| EXPRESSION  '-' EXPRESSION 
+						| ARITH_EXP  '-' ARITH_EXP 
 							{
 								if ($1->get_data_type() == $3->get_data_type())
 								{
@@ -233,7 +251,7 @@ EXPRESSION 				: INTEGER_NUMBER
 								}
 
 							}
-						| EXPRESSION  '/' EXPRESSION 
+						| ARITH_EXP  '/' ARITH_EXP 
 							{
 								if ($1->get_data_type() == $3->get_data_type())
 								{
@@ -246,15 +264,16 @@ EXPRESSION 				: INTEGER_NUMBER
 									exit(0);
 								}
 							}
-						| '-'  EXPRESSION %prec '*'
+						| '-'  ARITH_EXP %prec '*'
 							{
 								$$ = new UMinus_Ast($2, NULL, yylineno);
 								$$->set_data_type($2->get_data_type());
 							}
-						| '(' EXPRESSION ')'
+						| '(' ARITH_EXP ')'
 							{
 								$$ = $2;
 							}
+						| COND_EXP '?' ARITH_EXP ':' ARITH_EXP 
 %%
 
 extern YYSTYPE yylval;

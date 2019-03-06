@@ -104,31 +104,31 @@ void		 	{
 "=="			{
 					store_token_name("EQUAL", yytext, yylineno);
 					yylval.string_value = new string(yytext);
-					return RELOP;
+					return EQOP;
 				}
 
 "!="			{
 					store_token_name("NOT_EQUAL", yytext, yylineno);
 					yylval.string_value = new string(yytext);
-					return RELOP;
+					return EQOP;
 				}
 
 "&&"			{
 					store_token_name("AND", yytext, yylineno);
 					yylval.string_value = new string(yytext);
-					return LOGOP;
+					return AND;
 				}
 
 "||"			{
 					store_token_name("OR", yytext, yylineno);
 					yylval.string_value = new string(yytext);
-					return LOGOP;
+					return OR;
 				}
 
 "!"				{
 					store_token_name("NOT", yytext, yylineno);
 					yylval.string_value = new string(yytext);
-					return LOGOP;
+					return NOT;
 				}
 
 {operator}  	{

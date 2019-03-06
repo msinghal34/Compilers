@@ -49,8 +49,17 @@ extern int yydebug;
     FLOAT = 259,
     VOID = 260,
     NAME = 261,
-    DOUBLE_NUMBER = 262,
-    INTEGER_NUMBER = 263
+    IF = 262,
+    ELSE = 263,
+    DO = 264,
+    WHILE = 265,
+    RELOP = 266,
+    EQOP = 267,
+    AND = 268,
+    OR = 269,
+    NOT = 270,
+    DOUBLE_NUMBER = 271,
+    INTEGER_NUMBER = 272
   };
 #endif
 
@@ -71,7 +80,7 @@ union YYSTYPE
 	Basic_Block * basic_block;
 	Procedure * procedure;
 
-#line 75 "parser.tab.h" /* yacc.c:1909  */
+#line 84 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
