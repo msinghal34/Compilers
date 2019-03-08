@@ -14,6 +14,7 @@ void Ast::set_value_of_evaluation(Local_Environment &eval_env, Eval_Result &resu
 }
 void Ast::print_value(Local_Environment &eval_env, ostream &file_buffer)
 {
+    // file_buffer<<"Hi"<<endl;
 }
 ////////////////////////////////////////////////////////////
 Eval_Result &Assignment_Ast::evaluate(Local_Environment &eval_env, ostream &file_buffer)
@@ -29,14 +30,16 @@ void Name_Ast::print_value(Local_Environment &eval_env, ostream &file_buffer)
 {
     string name = variable_symbol_entry->get_variable_name();
     Eval_Result *evalResult = eval_env.get_variable_value(name);
+    // cout<<"Hello"<<endl;
     Result_Enum resultEnum = evalResult->get_result_enum();
+    // cout<<resultEnum<<endl;
     if (resultEnum == int_result)
     {
-        file_buffer << AST_NODE_SPACE << name << " : " << evalResult->get_int_value() << "\n";
+        file_buffer <<"\n"<< AST_SPACE << name << " : " << evalResult->get_int_value() << "\n";
     }
     else if (resultEnum == double_result)
     {
-        file_buffer << AST_NODE_SPACE << name << " : " << evalResult->get_double_value() << "\n";
+        file_buffer <<"\n"<< AST_SPACE << name << " : " << evalResult->get_double_value() << "\n";
     }
     else
     {
@@ -69,12 +72,14 @@ Eval_Result &Number_Ast<T>::evaluate(Local_Environment &eval_env, ostream &file_
     {
         Eval_Result_Value_Int *num_eval = new Eval_Result_Value_Int();
         num_eval->set_value(constant);
+        num_eval->set_result_enum(int_result);
         return *num_eval;
     }
     else if (dt == double_data_type)
     {
         Eval_Result_Value_Double *num_eval = new Eval_Result_Value_Double();
         num_eval->set_value(constant);
+        num_eval->set_result_enum(double_result);
         return *num_eval;
     }
 }
@@ -96,12 +101,14 @@ Eval_Result &Plus_Ast::evaluate(Local_Environment &eval_env, ostream &file_buffe
     {
         Eval_Result_Value_Int *num_eval = new Eval_Result_Value_Int();
         num_eval->set_value(lhsEval.get_int_value() + rhsEval.get_int_value());
+        num_eval->set_result_enum(int_result);
         return *num_eval;
     }
     else if (dt == double_data_type)
     {
         Eval_Result_Value_Double *num_eval = new Eval_Result_Value_Double();
         num_eval->set_value(lhsEval.get_double_value() + rhsEval.get_double_value());
+        num_eval->set_result_enum(double_result);
         return *num_eval;
     }
 }
@@ -115,12 +122,14 @@ Eval_Result &Minus_Ast::evaluate(Local_Environment &eval_env, ostream &file_buff
     {
         Eval_Result_Value_Int *num_eval = new Eval_Result_Value_Int();
         num_eval->set_value(lhsEval.get_int_value() - rhsEval.get_int_value());
+        num_eval->set_result_enum(int_result);
         return *num_eval;
     }
     else if (dt == double_data_type)
     {
         Eval_Result_Value_Double *num_eval = new Eval_Result_Value_Double();
         num_eval->set_value(lhsEval.get_double_value() - rhsEval.get_double_value());
+        num_eval->set_result_enum(double_result);
         return *num_eval;
     }
 }
@@ -134,12 +143,14 @@ Eval_Result &Mult_Ast::evaluate(Local_Environment &eval_env, ostream &file_buffe
     {
         Eval_Result_Value_Int *num_eval = new Eval_Result_Value_Int();
         num_eval->set_value(lhsEval.get_int_value() * rhsEval.get_int_value());
+        num_eval->set_result_enum(int_result);
         return *num_eval;
     }
     else if (dt == double_data_type)
     {
         Eval_Result_Value_Double *num_eval = new Eval_Result_Value_Double();
         num_eval->set_value(lhsEval.get_double_value() * rhsEval.get_double_value());
+        num_eval->set_result_enum(double_result);
         return *num_eval;
     }
 }
@@ -153,12 +164,14 @@ Eval_Result &Divide_Ast::evaluate(Local_Environment &eval_env, ostream &file_buf
     {
         Eval_Result_Value_Int *num_eval = new Eval_Result_Value_Int();
         num_eval->set_value(lhsEval.get_int_value() / rhsEval.get_int_value());
+        num_eval->set_result_enum(int_result);
         return *num_eval;
     }
     else if (dt == double_data_type)
     {
         Eval_Result_Value_Double *num_eval = new Eval_Result_Value_Double();
         num_eval->set_value(lhsEval.get_double_value() / rhsEval.get_double_value());
+        num_eval->set_result_enum(double_result);
         return *num_eval;
     }
 }
@@ -171,12 +184,14 @@ Eval_Result &UMinus_Ast::evaluate(Local_Environment &eval_env, ostream &file_buf
     {
         Eval_Result_Value_Int *num_eval = new Eval_Result_Value_Int();
         num_eval->set_value(-lhsEval.get_int_value());
+        num_eval->set_result_enum(int_result);
         return *num_eval;
     }
     else if (dt == double_data_type)
     {
         Eval_Result_Value_Double *num_eval = new Eval_Result_Value_Double();
         num_eval->set_value(-lhsEval.get_double_value());
+        num_eval->set_result_enum(double_result);
         return *num_eval;
     }
 }
