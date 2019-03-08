@@ -56,11 +56,18 @@ extern int yydebug;
     AND = 266,
     OR = 267,
     NOT = 268,
+<<<<<<< HEAD
     FOR = 269,
     DOUBLE_NUMBER = 270,
     INTEGER_NUMBER = 271,
     RELOP = 272,
     EQOP = 273
+=======
+    DOUBLE_NUMBER = 269,
+    INTEGER_NUMBER = 270,
+    RELOP = 271,
+    EQOP = 272
+>>>>>>> accb7be84200cf8ea2a969a8278ae26de9ce04e8
   };
 #endif
 
@@ -83,7 +90,11 @@ union YYSTYPE
 	Relational_Op relop_value; 
 	Sequence_Ast * seq_ast;
 
+<<<<<<< HEAD
 #line 87 "parser.tab.h" /* yacc.c:1909  */
+=======
+#line 86 "parser.tab.h" /* yacc.c:1909  */
+>>>>>>> accb7be84200cf8ea2a969a8278ae26de9ce04e8
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -1,0 +1,57 @@
+This directory contains the following files:
+
+- allheaders.h.gch which is a pre-compiled header file.
+- libsclpshared.so which is a shared object file.
+- sclp which is the reference implementation.
+- program-eval.cc, procedure-eval.cc to get the flow of interpreter eval option, use of Symbol Table create 
+  function with local environment.
+- Makefile which contains the commands to build your implementation.
+- Besides, the following header files are provided ONLY for telling you the
+  class structure and the member functions whose implementation is provided
+  in the library. YOU DO NOT NEED TO INCLUDE ANY OF THESE FILES IN YOUR IMPLEMENTATION.
+  . storetokens.hh contains the declaration of the function which you can call to 
+    store tokens and print them.
+  . ast.hh
+  . procedure.hh
+  . program.hh
+  . symbol-table.hh
+  . local-environment.hh
+
+You need to write 
+   - a scanner, 
+   - a parser, 
+   - actions within the scanner and parser to construct Abstract Syntax Trees, 
+   - ast functions, and
+   - an interperter 
+   for the input program. 
+
+   You need to understand the local environment used for evaluation.
+
+   A high level description of the classes can be found on the sclp web page 
+   https://www.cse.iitb.ac.in/~uday/web-source/.
+   You need to create the top level object for program. 
+
+You should work in the following steps:
+
+  1. Enhance your implementation of A3 by adding new rules in the scanner and parser.
+  2. Add code to construct the ASTs for the new constructs.
+  3. Add code to evaluate ASTs. For your convenience, the code for evaluating a program and 
+     a procedure has been provided to you.
+
+For ease of working on small programs, you can use the -d option to produce the dump on the screen 
+instead of having to open the dump files.
+
+For the AST you need to create objects of the following classes:
+
+	- Assignment_Ast, 
+	- Name_Ast, 
+	- Number_Ast, 
+	- Arithmetic_Expr_Ast (and its derived classes)
+	- Selection_Statement_Ast
+	- Relational_Expr_Ast
+	- Logical_Expr_Ast
+	- COnditional_Op_Ast
+	- Iterative_Statement_Ast
+        - Sequence_Statement_Ast
+
+You will need to submit ONLY the scanner.l, parser.y, ast.cc, local-environment.cc, and ast-eval.cc files.
