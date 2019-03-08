@@ -9,5 +9,8 @@ void main()
 	{
 		b = 4;
 	}
+	else{
+		b=5;
+	}
 }
 

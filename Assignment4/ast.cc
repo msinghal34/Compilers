@@ -162,6 +162,8 @@ void Arithmetic_Expr_Ast::set_data_type(Data_Type dt)
 
 bool Arithmetic_Expr_Ast::check_ast()
 {
+	if (rhs == NULL)
+		return lhs->check_ast();
 	return ((lhs->get_data_type() == rhs->get_data_type()) && lhs->check_ast() && rhs->check_ast());
 }
 
@@ -188,10 +190,6 @@ void Plus_Ast::print(ostream &file_buffer)
 	rhs->print(file_buffer);
 	file_buffer << ")";
 }
-
-// Eval_Result &  Plus_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){
-// 	return
-// }
 
 // ///////////////////////////////////////////////////////////////////
 Minus_Ast::Minus_Ast(Ast *l, Ast *r, int line)
@@ -285,6 +283,15 @@ Conditional_Expression_Ast::~Conditional_Expression_Ast()
 
 void Conditional_Expression_Ast::print(ostream &file_buffer)
 {
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Cond:\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"IF_ELSE";
+	cond->print(file_buffer);
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"LHS (";
+	lhs->print(file_buffer);
+	file_buffer<<")\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	rhs->print(file_buffer);
+	file_buffer<<")";
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -330,17 +337,17 @@ bool Relational_Expr_Ast::check_ast()
 	return ((lhs_condition->get_data_type() == rhs_condition->get_data_type()) && (lhs_condition->check_ast() && rhs_condition->check_ast()));
 }
 
-string Relop_array[] = {"<=", "<", ">", ">=", "==", "!="};
+string Relop_array[] = {"LE", "LT", "GT", "GE", "EQ", "NE"};
 
 void Relational_Expr_Ast::print(ostream &file_buffer)
 {
-	// file_buffer<<"\n"<<AST_NODE_SPACE<<"Relop: "<<Relop_array[rel_op]<<"Relop\n";
-	// file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
-	// lhs_condition->print(file_buffer);
-	// file_buffer<<")\n";
-	// file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
-	// rhs_condition->print(file_buffer);
-	// file_buffer<<")";
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Condition: "<<Relop_array[rel_op]<<"\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	lhs_condition->print(file_buffer);
+	file_buffer<<")\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	rhs_condition->print(file_buffer);
+	file_buffer<<")";
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -369,20 +376,22 @@ void Logical_Expr_Ast::set_data_type(Data_Type dt)
 
 bool Logical_Expr_Ast::check_ast()
 {
+	if (rhs_op == NULL)
+		return lhs_op->check_ast();
 	return ((lhs_op->get_data_type() == rhs_op->get_data_type()) && (lhs_op->check_ast() && rhs_op->check_ast()));
 }
 
-string logicOp_array[] = {"!", "||", "&&"};
+string logicOp_array[] = {"NOT", "OR", "AND"};
 
 void Logical_Expr_Ast::print(ostream &file_buffer)
 {
-	// file_buffer<<"\n"<<AST_NODE_SPACE<<"Relop: "<<logicOp_array[bool_op]<<"Relop\n";
-	// file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
-	// lhs_op->print(file_buffer);
-	// file_buffer<<")\n";
-	// file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
-	// rhs_op->print(file_buffer);
-	// file_buffer<<")";
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Condition: "<<logicOp_array[bool_op]<<"\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	lhs_op->print(file_buffer);
+	file_buffer<<")\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	rhs_op->print(file_buffer);
+	file_buffer<<")";
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -419,15 +428,17 @@ bool Selection_Statement_Ast::check_ast()
 
 void Selection_Statement_Ast::print(ostream &file_buffer)
 {
-	// file_buffer<<"\n"<<AST_NODE_SPACE<<"Relop: "<<logicOp_array[bool_op]<<"Relop\n";
-	// file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
-	// lhs_op->print(file_buffer);
-	// file_buffer<<")\n";
-	// file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
-	// rhs_op->print(file_buffer);
-	// file_buffer<<")";
-
-	// To be done
+	file_buffer<<"\n"<<AST_SPACE<<"IF : \n"<<AST_SPACE<<"CONDITION (";
+	cond->print(file_buffer);
+	file_buffer<<")\n";
+	file_buffer<<AST_SPACE<<"THEN (";
+	then_part->print(file_buffer);
+	file_buffer<<")";
+	if(else_part!=NULL){
+		file_buffer<<AST_SPACE<<"\n"<<AST_SPACE<<"ELSE (";
+		else_part->print(file_buffer);
+		file_buffer<<")";
+	}
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -461,14 +472,23 @@ bool Iteration_Statement_Ast::check_ast()
 
 void Iteration_Statement_Ast::print(ostream &file_buffer)
 {
-	// file_buffer<<"\n"<<AST_NODE_SPACE<<"Relop: "<<logicOp_array[bool_op]<<"Relop\n";
-	// file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
-	// lhs_op->print(file_buffer);
-	// file_buffer<<")\n";
-	// file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
-	// rhs_op->print(file_buffer);
-	// file_buffer<<")";
-	// To be done
+	if(is_do_form){
+		file_buffer<<"\n"<<AST_SPACE<<"DO (";
+		body->print(file_buffer);
+		file_buffer<<")\n";
+		file_buffer<<AST_SPACE<<"WHILE CONDITION (";
+		cond->print(file_buffer);
+		file_buffer<<")";
+	}
+	else{
+		file_buffer<<"\n"<<AST_SPACE<<"WHILE : \n"<<AST_SPACE<<"CONDITION (";
+		cond->print(file_buffer);
+		file_buffer<<")\n";
+		file_buffer<<AST_SPACE<<"BODY (";
+		body->print(file_buffer);
+		file_buffer<<")";
+	}
+	
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -489,5 +509,10 @@ void Sequence_Ast::ast_push_back(Ast *ast)
 
 void Sequence_Ast::print(ostream &file_buffer)
 {
-	// To be done
+	list<Ast *>::iterator it;
+    for (it = statement_list.begin(); it != statement_list.end(); ++it)
+    {
+		file_buffer<<"\n";
+        (*it)->print(file_buffer);
+    }
 }

@@ -53,13 +53,13 @@ extern int yydebug;
     ELSE = 263,
     DO = 264,
     WHILE = 265,
-    RELOP = 266,
-    EQOP = 267,
-    AND = 268,
-    OR = 269,
-    NOT = 270,
-    DOUBLE_NUMBER = 271,
-    INTEGER_NUMBER = 272
+    AND = 266,
+    OR = 267,
+    NOT = 268,
+    DOUBLE_NUMBER = 269,
+    INTEGER_NUMBER = 270,
+    RELOP = 271,
+    EQOP = 272
   };
 #endif
 
@@ -79,8 +79,10 @@ union YYSTYPE
 	Symbol_Table_Entry * symbol_entry;
 	Basic_Block * basic_block;
 	Procedure * procedure;
+	Relational_Op relop_value; 
+	Sequence_Ast * seq_ast;
 
-#line 84 "parser.tab.h" /* yacc.c:1909  */
+#line 86 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

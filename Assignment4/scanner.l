@@ -79,39 +79,40 @@ void		 	{
 
 "<="			{
 					store_token_name("LESS_THAN_EQUAL", yytext, yylineno);
-					yylval.string_value = new string(yytext);
+					yylval.relop_value = less_equalto;
 					return RELOP;
 				}
 
 "<"				{
 					store_token_name("LESS_THAN", yytext, yylineno);
-					yylval.string_value = new string(yytext);
+					yylval.relop_value = less_than;
 					return RELOP;
 				}
 
 ">="			{
 					store_token_name("GREATER_THAN_EQUAL", yytext, yylineno);
-					yylval.string_value = new string(yytext);
+					yylval.relop_value = greater_equalto;
 					return RELOP;
 				}
 
 ">"				{
 					store_token_name("GREATER_THAN", yytext, yylineno);
-					yylval.string_value = new string(yytext);
+					yylval.relop_value = greater_than;
 					return RELOP;
 				}
 
 "=="			{
 					store_token_name("EQUAL", yytext, yylineno);
-					yylval.string_value = new string(yytext);
+					yylval.relop_value = equalto;
 					return EQOP;
 				}
 
 "!="			{
 					store_token_name("NOT_EQUAL", yytext, yylineno);
-					yylval.string_value = new string(yytext);
+					yylval.relop_value = not_equalto;
 					return EQOP;
 				}
+
 
 "&&"			{
 					store_token_name("AND", yytext, yylineno);
