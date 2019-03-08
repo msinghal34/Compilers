@@ -24,7 +24,7 @@ for file in files:
 	os.system("mv " + file + ".toks " + file + ".tocs" )
 	os.system("mv " + file + ".spim " + file + ".mips" )
 	print("\nSCLP")
-	os.system("./sclp -tokens " + file)
+	os.system("./givensclp -tokens " + file)
 	os.system("diff "  + file + ".toks " + file + ".tocs")
 	os.system("diff "  + file + ".mips " + file + ".spim")
 
