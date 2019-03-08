@@ -30,7 +30,7 @@ Symbol_Table* local_symbol_table;
 	Relational_Op relop_value; 
 	Sequence_Ast * seq_ast;
 };
-%token <string_value> INTEGER FLOAT VOID NAME IF ELSE DO WHILE AND OR NOT
+%token <string_value> INTEGER FLOAT VOID NAME IF ELSE DO WHILE AND OR NOT FOR
 %token <double_value> DOUBLE_NUMBER
 %token <integer_value> INTEGER_NUMBER 
 %token <relop_value> RELOP EQOP
@@ -51,7 +51,7 @@ Symbol_Table* local_symbol_table;
 %nterm <ast> STATEMENT ASSIGN_STATEMENT ARITH_EXP COND_EXP IF_STATEMENT 
 %nterm <ast> DO_WHILE_STATEMENT WHILE_STATEMENT IF_ELSE_STATEMENT BALANCED_IF_STATEMENT
 %nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED
-%nterm <seq_ast> SEQUENCE_STATEMENT_LIST
+%nterm <seq_ast> SEQUENCE_STATEMENT_LIST  
 %%
 
 PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
@@ -150,11 +150,27 @@ STATEMENT 				: ASSIGN_STATEMENT_VERIFIED
 						| IF_ELSE_STATEMENT
 						| WHILE_STATEMENT
 						| DO_WHILE_STATEMENT
+						// | FOR_STATEMENT
 
 DO_WHILE_STATEMENT		: DO '{' SEQUENCE_STATEMENT_LIST '}' WHILE '(' COND_EXP_VERIFIED ')' ';'
 						{
 							$$ = new Iteration_Statement_Ast($7,$3,yylineno,true);
 						}
+
+// FOR_STATEMENT			: FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' '{' SEQUENCE_STATEMENT_LIST '}' 
+// 						{
+
+// 						}
+// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' STATEMENT '{' SEQUENCE_STATEMENT_LIST '}'
+// 						| FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' '{' SEQUENCE_STATEMENT_LIST '}' 
+// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' '{' SEQUENCE_STATEMENT_LIST '}' 
+// 						| FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' STATEMENT 
+// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' STATEMENT STATEMENT
+// 						| FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' STATEMENT 
+// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' STATEMENT
+
+// STATEMENT_NULLABLE		:  epsilon  
+// 						|STATEMENT
 
 WHILE_STATEMENT			: WHILE '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}'
 						{

@@ -283,13 +283,13 @@ Conditional_Expression_Ast::~Conditional_Expression_Ast()
 
 void Conditional_Expression_Ast::print(ostream &file_buffer)
 {
-	file_buffer<<"\n"<<AST_NODE_SPACE<<"Cond:\n";
-	file_buffer<<AST_SUB_NODE_SPACE<<"IF_ELSE";
+	file_buffer<<"\n"<<AST_SPACE<<"Cond:\n";
+	file_buffer<<AST_NODE_SPACE<<"IF_ELSE";
 	cond->print(file_buffer);
 	file_buffer<<"\n"<<AST_NODE_SPACE<<"LHS (";
 	lhs->print(file_buffer);
 	file_buffer<<")\n";
-	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	file_buffer<<AST_NODE_SPACE<<"RHS (";
 	rhs->print(file_buffer);
 	file_buffer<<")";
 }

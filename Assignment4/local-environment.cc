@@ -1,4 +1,4 @@
-#include "local-environment.hh"
+// #include "local-environment.hh"
 ////////////////////////////////////////////////////////////
 int Eval_Result::get_int_value()
 {
@@ -115,44 +115,55 @@ Local_Environment::~Local_Environment()
 }
 void Local_Environment::print(ostream &file_buffer)
 {
-	//TODO Complete this
+	map<string, Eval_Result *>::iterator it;
+	for (it = variable_table.begin(); it != variable_table.end(); ++it){
+		if(it->second->is_variable_defined()){
+			if(it->second->get_result_enum()==int_result)
+				file_buffer<<VAR_SPACE<<it->first<<" : "<<it->second->get_int_value()<<"\n";
+			else file_buffer<<VAR_SPACE<<it->first<<" : "<<it->second->get_double_value()<<"\n";		
+		}
+		else{
+			file_buffer<<VAR_SPACE<<it->first<<" : undefined\n";
+		}
+	}
 }
 bool Local_Environment::is_variable_defined(string name)
 {
-	if (variable_table.count(name) > 0)
-	{
+	// if (variable_table.count(name) > 0)
+	// {
 		return variable_table[name]->is_variable_defined();
-	}
-	else
-	{
-		return interpreter_global_table.is_variable_defined(name);
-	}
+	// }
+	// else
+	// {
+	// 	return interpreter_global_table.is_variable_defined(name);
+	// }
 }
 Eval_Result *Local_Environment::get_variable_value(string name)
 {
-	if (variable_table.count(name) > 0)
-	{
+	// if (variable_table.count(name) > 0)
+	// {
 		return variable_table[name];
-	}
-	else
-	{
-		return interpreter_global_table.get_variable_value(name);
-	}
+	// }
+	// else
+	// {
+	// 	return interpreter_global_table.get_variable_value(name);
+	// }
 }
 void Local_Environment::put_variable_value(Eval_Result &value, string name)
 {
-	if (variable_table.count(name) > 0)
-	{
+	// if (variable_table.count(name) > 0)
+	// {
 		variable_table[name] = &value;
-	}
-	else
-	{
-		interpreter_global_table.put_variable_value(value, name);
-	}
+	// }
+	// else
+	// {
+	// 	interpreter_global_table.put_variable_value(value, name);
+	// }
 }
 bool Local_Environment::does_variable_exist(string name)
 {
-	return true;
+	return (variable_table.count(name) > 0);
+	
 }
 ////////////////////////////////////////////////////////////
 void Symbol_Table::create(Local_Environment &local_global_variables_table)
@@ -166,12 +177,15 @@ void Symbol_Table::create(Local_Environment &local_global_variables_table)
 		{
 			Eval_Result_Value_Int *evalResult = new Eval_Result_Value_Int();
 			evalResult->set_variable_status(false);
+			evalResult->set_result_enum(int_result);
+			// cout<<"Test "<<evalResult->get_result_enum()<<"\n";
 			local_global_variables_table.put_variable_value(*evalResult, name);
 		}
 		else
 		{
 			Eval_Result_Value_Double *evalResult = new Eval_Result_Value_Double();
 			evalResult->set_variable_status(false);
+			evalResult->set_result_enum(double_result);
 			local_global_variables_table.put_variable_value(*evalResult, name);
 		}
 	}
