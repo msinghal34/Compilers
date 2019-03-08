@@ -1,6 +1,7 @@
 #include <stdlib.h>
 template class Number_Ast<double>;
 template class Number_Ast<int>;
+int Ast::labelCounter;
 
 ///////////////////////////////////////////////////////////////////
 Ast::Ast(){
@@ -244,4 +245,171 @@ Return_Ast::~Return_Ast(){
 }
 void Return_Ast::print(ostream & file_buffer){
 
+}
+
+// ///////////////////////////////////////////////////////////////////
+
+Relational_Expr_Ast::Relational_Expr_Ast(Ast * lhs, Relational_Op rop, Ast * rhs, int line){
+	lineno = line;
+	lhs_condition = lhs;
+	rhs_condition = rhs;
+	rel_op = rop;
+}
+
+Relational_Expr_Ast::~Relational_Expr_Ast(){
+
+}
+
+Data_Type Relational_Expr_Ast::get_data_type(){
+	return node_data_type;
+}
+
+void Relational_Expr_Ast::set_data_type(Data_Type dt){
+	node_data_type = dt;
+}
+
+bool Relational_Expr_Ast::check_ast(){
+	return ((lhs_condition->get_data_type()==rhs_condition->get_data_type())&&(lhs_condition->check_ast()&&rhs_condition->check_ast()));
+}
+
+string Relop_array[] = {"<=","<",">",">=","==","!="};
+
+void Relational_Expr_Ast::print(ostream & file_buffer){
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Relop: "<<Relop_array[rel_op]<<"Relop\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	lhs_condition->print(file_buffer);
+	file_buffer<<")\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	rhs_condition->print(file_buffer);
+	file_buffer<<")";
+}
+
+// ///////////////////////////////////////////////////////////////////
+
+Logical_Expr_Ast::Logical_Expr_Ast(Ast * lhs, Logical_Op bop, Ast * rhs, int line){
+	lineno = line;
+	lhs_op = lhs;
+	rhs_op = rhs;
+	bool_op = bop;
+}
+
+Logical_Expr_Ast::~Logical_Expr_Ast(){
+
+}
+
+Data_Type Logical_Expr_Ast::get_data_type(){
+	return node_data_type;
+}
+
+void Logical_Expr_Ast::set_data_type(Data_Type dt){
+	node_data_type = dt;
+}
+
+bool Logical_Expr_Ast::check_ast(){
+	return ((lhs_op->get_data_type()==rhs_op->get_data_type())&&(lhs_op->check_ast()&&rhs_op->check_ast()));
+}
+
+string logicOp_array[] = {"!","||","&&"};
+
+void Logical_Expr_Ast::print(ostream & file_buffer){
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Relop: "<<logicOp_array[bool_op]<<"Relop\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	lhs_op->print(file_buffer);
+	file_buffer<<")\n";
+	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	rhs_op->print(file_buffer);
+	file_buffer<<")";
+}
+
+// ///////////////////////////////////////////////////////////////////
+
+
+Selection_Statement_Ast::Selection_Statement_Ast(Ast * cond,Ast* then_part, Ast* else_part, int line){
+	lineno = line;
+	this->cond = cond;
+	this->then_part = then_part;
+	this->else_part = else_part;
+}
+
+Selection_Statement_Ast::~Selection_Statement_Ast(){
+
+}
+
+Data_Type Selection_Statement_Ast::get_data_type(){
+	return node_data_type;
+}
+
+void Selection_Statement_Ast::set_data_type(Data_Type dt){
+	node_data_type = dt;
+}
+
+bool Selection_Statement_Ast::check_ast(){
+	if(else_part==NULL) return cond->check_ast()&&then_part->check_ast();
+	else return cond->check_ast()&&(then_part->check_ast()&&else_part->check_ast());
+}
+
+void Selection_Statement_Ast::print(ostream & file_buffer){
+	// file_buffer<<"\n"<<AST_NODE_SPACE<<"Relop: "<<logicOp_array[bool_op]<<"Relop\n";
+	// file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	// lhs_op->print(file_buffer);
+	// file_buffer<<")\n";
+	// file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	// rhs_op->print(file_buffer);
+	// file_buffer<<")";
+
+	// To be done
+}
+
+// ///////////////////////////////////////////////////////////////////
+
+Iteration_Statement_Ast::Iteration_Statement_Ast(Ast * cond, Ast* body, int line, bool do_form){
+	lineno = line;
+	this->cond = cond;
+	this->body = body;
+	is_do_form = do_form;
+}
+
+Iteration_Statement_Ast::~Iteration_Statement_Ast(){
+
+}
+
+Data_Type Iteration_Statement_Ast::get_data_type(){
+	return node_data_type;
+}
+
+void Iteration_Statement_Ast::set_data_type(Data_Type dt){
+	node_data_type = dt;
+}
+
+bool Iteration_Statement_Ast::check_ast(){
+	return cond->check_ast()&&body->check_ast();
+}
+
+void Iteration_Statement_Ast::print(ostream & file_buffer){
+	// file_buffer<<"\n"<<AST_NODE_SPACE<<"Relop: "<<logicOp_array[bool_op]<<"Relop\n";
+	// file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	// lhs_op->print(file_buffer);
+	// file_buffer<<")\n";
+	// file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	// rhs_op->print(file_buffer);
+	// file_buffer<<")";
+	// To be done
+}
+
+// ///////////////////////////////////////////////////////////////////
+
+Sequence_Ast::Sequence_Ast(int line){
+	lineno = line;
+}
+
+Sequence_Ast::~Sequence_Ast(){
+
+}
+
+void Sequence_Ast::ast_push_back(Ast * ast){
+	statement_list.push_back(ast);
+}
+
+void Sequence_Ast::print(ostream & file_buffer){
+	// To be done
 }
