@@ -63,9 +63,14 @@ Eval_Result &Name_Ast::get_value_of_evaluation(Local_Environment &eval_env)
 {
     string name = variable_symbol_entry->get_variable_name();
     if(eval_env.does_variable_exist(name)){
-        //TODO
-        Eval_Result *evalResult = eval_env.get_variable_value(name);
-        return *evalResult;
+        if(eval_env.is_variable_defined(name)){
+            Eval_Result *evalResult = eval_env.get_variable_value(name);
+            return *evalResult;
+        }
+        else{
+            cout<<"\ncs316: Error, using uninitialized variable\n";
+            exit(0);
+        }
     }
     else{
         Eval_Result *evalResult = interpreter_global_table.get_variable_value(name);

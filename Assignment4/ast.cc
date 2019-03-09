@@ -388,10 +388,12 @@ void Logical_Expr_Ast::print(ostream &file_buffer)
 	file_buffer<<"\n"<<AST_NODE_SPACE<<"Condition: "<<logicOp_array[bool_op]<<"\n";
 	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
 	lhs_op->print(file_buffer);
-	file_buffer<<")\n";
-	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
-	rhs_op->print(file_buffer);
 	file_buffer<<")";
+	if(rhs_op!=NULL){
+		file_buffer<<"\n"<<AST_SUB_NODE_SPACE<<"RHS (";
+		rhs_op->print(file_buffer);
+		file_buffer<<")";
+	}
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -435,7 +437,7 @@ void Selection_Statement_Ast::print(ostream &file_buffer)
 	then_part->print(file_buffer);
 	file_buffer<<")";
 	if(else_part!=NULL){
-		file_buffer<<AST_SPACE<<"\n"<<AST_SPACE<<"ELSE (";
+		file_buffer<<"\n"<<AST_SPACE<<"ELSE (";
 		else_part->print(file_buffer);
 		file_buffer<<")";
 	}
@@ -512,7 +514,7 @@ void Sequence_Ast::print(ostream &file_buffer)
 	list<Ast *>::iterator it;
     for (it = statement_list.begin(); it != statement_list.end(); ++it)
     {
-		file_buffer<<"\n";
+		file_buffer<<"\n"<<AST_NODE_SPACE;
         (*it)->print(file_buffer);
     }
 }

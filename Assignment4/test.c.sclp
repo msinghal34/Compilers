@@ -1,74 +1,75 @@
-Evaluating Program
-   Global Variables (before evaluating):
-         c : 0
-         d : 0
-         e : 0
-         f : 0
-   Evaluating Procedure main
-      Local Variables (before evaluating):
-         a : undefined
-         b : undefined
+Program:
+   Procedure: main, Return Type: void
 
-
+         Asgn:
+            LHS (Name : c)
+            RHS (Num : 0)
+         Asgn:
+            LHS (Name : d)
+            RHS (Num : 3)
+         IF : 
+         CONDITION (
+            Condition: EQ
+               LHS (
+            Arith: PLUS
+               LHS (Name : c)
+               RHS (Name : d))
+               RHS (Num : 3))
+         THEN (
+         IF : 
+         CONDITION (
+            Condition: EQ
+               LHS (Name : c)
+               RHS (Num : 0))
+         THEN (
+            
          Asgn:
             LHS (Name : a)
-            RHS (
-            Arith: UMINUS
-               LHS (Num : 2))
-         a : -2
-
-
+            RHS (Num : 1))
+         ELSE (
+         Asgn:
+            LHS (Name : d)
+            RHS (Num : 2)))
+         ELSE (
+            
          Asgn:
             LHS (Name : b)
-            RHS (Num : 3)
-         b : 3
+            RHS (Num : 1)
+            
+         Asgn:
+            LHS (Name : c)
+            RHS (Num : 2))Evaluating Program
+   Global Variables (before evaluating):
+         a : 0
+         b : 0
+   Evaluating Procedure main
+      Local Variables (before evaluating):
+         c : undefined
+         d : undefined
 
 
          Asgn:
             LHS (Name : c)
-            RHS (
-            Arith: PLUS
-               LHS (Name : a)
-               RHS (Name : b))
-         c : 1
+            RHS (Num : 0)
+         c : 0
 
 
          Asgn:
             LHS (Name : d)
-            RHS (
-            Arith: MINUS
-               LHS (
-            Arith: MINUS
-               LHS (Name : a)
-               RHS (Name : b))
-               RHS (Name : c))
-         d : -6
+            RHS (Num : 3)
+         d : 3
 
 
          Asgn:
-            LHS (Name : e)
-            RHS (
-            Arith: MULT
-               LHS (Name : a)
-               RHS (Name : b))
-         e : -6
-
-
-         Asgn:
-            LHS (Name : f)
-            RHS (
-            Arith: DIV
-               LHS (Name : a)
-               RHS (Name : b))
-         f : 0
+            LHS (Name : a)
+            RHS (Num : 1)
+         a : 1
 
 
 
       Local Variables (after evaluating):
-         a : -2
-         b : 3
+         c : 0
+         d : 3
    Global Variables (after evaluating):
-         c : 1
-         d : -6
-         e : -6
-         f : 0
+         a : 1
+         b : 0
