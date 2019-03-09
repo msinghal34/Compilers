@@ -207,6 +207,9 @@ Eval_Result &Divide_Ast::evaluate(Local_Environment &eval_env, ostream &file_buf
     if (dt == int_data_type)
     {
         Eval_Result_Value_Int *num_eval = new Eval_Result_Value_Int();
+        if(rhsEval.get_int_value()==0){
+            cout<<"\ncs316: Error , Divide by zero\n";
+        }
         num_eval->set_value(lhsEval.get_int_value() / rhsEval.get_int_value());
         num_eval->set_result_enum(int_result);
         num_eval->set_variable_status(true);
@@ -330,26 +333,18 @@ Eval_Result &Relational_Expr_Ast::evaluate(Local_Environment &eval_env, ostream 
 ////////////////////////////////////////////////////////////
 Eval_Result &Logical_Expr_Ast::evaluate(Local_Environment &eval_env, ostream &file_buffer)
 {
-
-    Data_Type dt = get_data_type();    
-    int t=0;
-    Eval_Result &lhsEval = lhs_op->evaluate(eval_env, file_buffer);
-    int lhsVal = lhsEval.get_int_value();
-    int rhsVal = 0;
-    if (bool_op != _logical_not){
-        Eval_Result &rhsEval = rhs_op->evaluate(eval_env, file_buffer);
-        rhsVal = rhsEval.get_int_value();
-    }    
+  
+    int t=0;   
     switch (bool_op)
     {
     case _logical_and:
-        t = lhsVal && rhsVal ? 1 : 0;
+        t = lhs_op->evaluate(eval_env, file_buffer).get_int_value() && rhs_op->evaluate(eval_env, file_buffer).get_int_value() ? 1 : 0;
         break;
     case _logical_or:
-        t = lhsVal || rhsVal ? 1 : 0;
+        t = lhs_op->evaluate(eval_env, file_buffer).get_int_value() || rhs_op->evaluate(eval_env, file_buffer).get_int_value() ? 1 : 0;
         break;
     case _logical_not:
-        t = !lhsVal ? 1 : 0;
+        t = !lhs_op->evaluate(eval_env, file_buffer).get_int_value() ? 1 : 0;
         break;
     }    
     Eval_Result_Value_Int *bool_eval = new Eval_Result_Value_Int();

@@ -11,13 +11,13 @@ def foo(mainDirectory):
 		file = mainDirectory + "/" + file;
 		print("SCLP")
 		os.system("./sclp -ast -tokens -symtab -eval -d " + file + " > sclp.out")
-		os.system("./sclp -icode -d " + file + " > sclp1.out")
+		# os.system("./sclp -icode -d " + file + " > sclp1.out")
 		print("\nGIVENSCLP")
 		os.system("./givensclp -ast -tokens -symtab -eval -d " + file + " > givensclp.out")
-		os.system("./givensclp -icode -d " + file + " > givensclp1.out")
+		# os.system("./givensclp -icode -d " + file + " > givensclp1.out")
 		print("\nDIFF\n")
 		os.system("diff sclp.out givensclp.out")
-		os.system("diff sclp1.out givensclp1.out")
+		# os.system("diff sclp1.out givensclp1.out")
 	os.system("rm *.out")
 	print("\n")
 	print("#########################################################################################################")
@@ -27,6 +27,6 @@ def foo(mainDirectory):
 	print("\n")
 
 os.system("make")
-directories = ["testing", "errorTesting"]
+directories = ["mytesting"]
 for dir in directories:
 	foo(dir)

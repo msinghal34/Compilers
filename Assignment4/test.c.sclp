@@ -7,38 +7,53 @@ Program:
          Asgn:
             LHS (Name : d)
             RHS (Num : 3)
-         IF : 
-         CONDITION (
-            Condition: EQ
-               LHS (
-            Arith: PLUS
+         Asgn:
+            LHS (Name : a)
+            RHS (
+         Cond:
+            IF_ELSE
+            Condition: GE
                LHS (Name : c)
-               RHS (Name : d))
-               RHS (Num : 3))
-         THEN (
-         IF : 
-         CONDITION (
+               RHS (Num : 0)
+            LHS (
+         Cond:
+            IF_ELSE
+            Condition: EQ
+               LHS (Name : c)
+               RHS (Name : d)
+            LHS (Name : d)
+            RHS (
+            Arith: PLUS
+               LHS (Num : 1)
+               RHS (Name : d)))
+            RHS (
+         Cond:
+            IF_ELSE
+            Condition: EQ
+               LHS (Name : c)
+               RHS (Num : 0)
+            LHS (Num : 3)
+            RHS (Num : 1)))
+         Asgn:
+            LHS (Name : a)
+            RHS (
+         Cond:
+            IF_ELSE
+         Cond:
+            IF_ELSE
+            Condition: GT
+               LHS (Name : c)
+               RHS (Num : 0)
+            LHS (
             Condition: EQ
                LHS (Name : c)
                RHS (Num : 0))
-         THEN (
-            
-         Asgn:
-            LHS (Name : a)
-            RHS (Num : 1))
-         ELSE (
-         Asgn:
-            LHS (Name : d)
-            RHS (Num : 2)))
-         ELSE (
-            
-         Asgn:
-            LHS (Name : b)
-            RHS (Num : 1)
-            
-         Asgn:
-            LHS (Name : c)
-            RHS (Num : 2))Evaluating Program
+            RHS (
+            Condition: NE
+               LHS (Name : c)
+               RHS (Num : 0))
+            LHS (Num : 0)
+            RHS (Num : 1))Evaluating Program
    Global Variables (before evaluating):
          a : 0
          b : 0
@@ -62,7 +77,54 @@ Program:
 
          Asgn:
             LHS (Name : a)
-            RHS (Num : 1)
+            RHS (
+         Cond:
+            IF_ELSE
+            Condition: GE
+               LHS (Name : c)
+               RHS (Num : 0)
+            LHS (
+         Cond:
+            IF_ELSE
+            Condition: EQ
+               LHS (Name : c)
+               RHS (Name : d)
+            LHS (Name : d)
+            RHS (
+            Arith: PLUS
+               LHS (Num : 1)
+               RHS (Name : d)))
+            RHS (
+         Cond:
+            IF_ELSE
+            Condition: EQ
+               LHS (Name : c)
+               RHS (Num : 0)
+            LHS (Num : 3)
+            RHS (Num : 1)))
+         a : 4
+
+
+         Asgn:
+            LHS (Name : a)
+            RHS (
+         Cond:
+            IF_ELSE
+         Cond:
+            IF_ELSE
+            Condition: GT
+               LHS (Name : c)
+               RHS (Num : 0)
+            LHS (
+            Condition: EQ
+               LHS (Name : c)
+               RHS (Num : 0))
+            RHS (
+            Condition: NE
+               LHS (Name : c)
+               RHS (Num : 0))
+            LHS (Num : 0)
+            RHS (Num : 1))
          a : 1
 
 
