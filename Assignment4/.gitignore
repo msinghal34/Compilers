@@ -1,0 +1,8 @@
+*.toks
+*.spim
+*.tocs
+*.mips
+*lex.yy.c
+*.hh
+*.h
+*sclp
