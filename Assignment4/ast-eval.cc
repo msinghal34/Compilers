@@ -34,22 +34,28 @@ void Name_Ast::print_value(Local_Environment &eval_env, ostream &file_buffer)
     double double_val;
     if(eval_env.does_variable_exist(name)){
         Eval_Result *evalResult = eval_env.get_variable_value(name);
-        resultEnum = evalResult->get_result_enum();
-        int_val = evalResult->get_int_value();        
+        if (evalResult->get_result_enum() == int_result)
+        {
+            file_buffer <<"\n"<< AST_SPACE << name << " : " << evalResult->get_int_value() << "\n\n";
+        }
+        else
+        {
+            file_buffer <<"\n"<< AST_SPACE << name << " : " << evalResult->get_double_value() << "\n\n";
+        }
     }
     else{
         Eval_Result *evalResult = interpreter_global_table.get_variable_value(name);
         resultEnum = evalResult->get_result_enum();
-        double_val = evalResult->get_int_value();
+        if (evalResult->get_result_enum() == int_result)
+        {
+            file_buffer <<"\n"<< AST_SPACE << name << " : " << evalResult->get_int_value() << "\n\n";
+        }
+        else
+        {
+            file_buffer <<"\n"<< AST_SPACE << name << " : " << evalResult->get_double_value()<< "\n\n";
+        }
     } 
-    if (resultEnum == int_result)
-    {
-        file_buffer <<"\n"<< AST_SPACE << name << " : " << int_val << "\n\n";
-    }
-    else if (resultEnum == double_result)
-    {
-        file_buffer <<"\n"<< AST_SPACE << name << " : " << double_val << "\n\n";
-    }
+    
 
    
 }
@@ -57,6 +63,7 @@ Eval_Result &Name_Ast::get_value_of_evaluation(Local_Environment &eval_env)
 {
     string name = variable_symbol_entry->get_variable_name();
     if(eval_env.does_variable_exist(name)){
+        //TODO
         Eval_Result *evalResult = eval_env.get_variable_value(name);
         return *evalResult;
     }
