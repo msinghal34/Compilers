@@ -156,6 +156,10 @@ DO_WHILE_STATEMENT		: DO '{' SEQUENCE_STATEMENT_LIST '}' WHILE '(' COND_EXP_VERI
 						{
 							$$ = new Iteration_Statement_Ast($7,$3,yylineno,true);
 						}
+						DO STATEMENT WHILE '(' COND_EXP_VERIFIED ')' ';'
+						{
+							$$ = new Iteration_Statement_Ast($5,$3,yylineno,true);
+						}
 
 // FOR_STATEMENT			: FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' '{' SEQUENCE_STATEMENT_LIST '}' 
 // 						{
