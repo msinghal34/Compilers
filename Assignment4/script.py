@@ -27,6 +27,6 @@ def foo(mainDirectory):
 	print("\n")
 
 os.system("make")
-directories = ["errortesting"]
+directories = ["mytesting"]
 for dir in directories:
 	foo(dir)

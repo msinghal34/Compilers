@@ -50,8 +50,8 @@ Symbol_Table* local_symbol_table;
 %nterm <ast_list> STATEMENT_LIST 
 %nterm <ast> STATEMENT ASSIGN_STATEMENT ARITH_EXP COND_EXP IF_STATEMENT 
 %nterm <ast> DO_WHILE_STATEMENT WHILE_STATEMENT IF_ELSE_STATEMENT BALANCED_IF_STATEMENT
-%nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED
-%nterm <seq_ast> SEQUENCE_STATEMENT_LIST  
+%nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED 
+%nterm <seq_ast> SEQUENCE_STATEMENT_LIST FOR_INIT_INCR SCOPE_BODY FOR_STATEMENT  
 %%
 
 PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
@@ -150,7 +150,7 @@ STATEMENT 				: ASSIGN_STATEMENT_VERIFIED
 						| IF_ELSE_STATEMENT
 						| WHILE_STATEMENT
 						| DO_WHILE_STATEMENT
-						// | FOR_STATEMENT
+						| FOR_STATEMENT
 
 DO_WHILE_STATEMENT		: DO '{' SEQUENCE_STATEMENT_LIST '}' WHILE '(' COND_EXP_VERIFIED ')' ';'
 						{
@@ -162,20 +162,37 @@ DO_WHILE_STATEMENT		: DO '{' SEQUENCE_STATEMENT_LIST '}' WHILE '(' COND_EXP_VERI
 							$$ = new Iteration_Statement_Ast($5,$2,yylineno,true);
 						}
 
-// FOR_STATEMENT			: FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' '{' SEQUENCE_STATEMENT_LIST '}' 
-// 						{
+FOR_STATEMENT			: FOR  '(' FOR_INIT_INCR ';' COND_EXP ';' FOR_INIT_INCR ')' SCOPE_BODY 
+						{
+							// $9->ast_push_back($7);
+							// Iteration_Statement_Ast *v = new Iteration_Statement_Ast($5,$3,yylineno,true);
+							$$ = new Sequence_Ast(yylineno);
+							// $$->ast_push_back($3);
+							// $$->ast_push_back(v);
+						}
 
-// 						}
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' STATEMENT '{' SEQUENCE_STATEMENT_LIST '}'
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' '{' SEQUENCE_STATEMENT_LIST '}' 
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' '{' SEQUENCE_STATEMENT_LIST '}' 
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' STATEMENT 
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' STATEMENT STATEMENT
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' STATEMENT 
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' STATEMENT
+FOR_INIT_INCR			: /* epsilon */ 
+						// {
+						// 	cout<<"came\n";
+						// 	$$ = new Sequence_Ast(yylineno);
+						// } 
+						 ASSIGN_STATEMENT_VERIFIED
+						{
+							cout<<"came\n";
+							$$ = new Sequence_Ast(yylineno);
+							$$->ast_push_back($1);
+						}
 
-// STATEMENT_NULLABLE		:  epsilon  
-// 						|STATEMENT
+
+SCOPE_BODY				: '{' SEQUENCE_STATEMENT_LIST '}'
+						{
+							$$ = $2;
+						}
+						// | STATEMENT
+						// {
+						// 	$$ = new Sequence_Ast(yylineno);
+						// 	$$->ast_push_back($1);
+						// }
 
 WHILE_STATEMENT			: WHILE '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}'
 						{

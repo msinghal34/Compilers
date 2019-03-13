@@ -60,6 +60,12 @@ while 			{
 					return WHILE;
 				}
 
+for 			{
+					store_token_name("FOR", yytext, yylineno);
+					yylval.string_value = new string(yytext);												
+					return WHILE;
+				}
+
 					
 void		 	{
 					store_token_name("VOID", yytext, yylineno);
