@@ -144,6 +144,11 @@ STATEMENT_LIST			: /* epsilon */
  								$1->push_back($2);
  								$$ = $1;
  							}
+ 						| STATEMENT_LIST '{' SEQUENCE_STATEMENT_LIST '}'
+ 						{
+ 							$1->push_back($3);
+ 							$$ = $1;
+ 						} 
 
 STATEMENT 				: ASSIGN_STATEMENT_VERIFIED
 						| IF_STATEMENT
