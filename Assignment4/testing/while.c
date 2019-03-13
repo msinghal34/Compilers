@@ -1,7 +1,7 @@
-float a,b;
+int a,b;
 void main()
 {
-	float c,d;
+	int c,d;
 	c=0;
 	d=3;
 	while(c+d<=3)

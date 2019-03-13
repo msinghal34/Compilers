@@ -18,7 +18,7 @@ void Ast::print_value(Local_Environment &eval_env, ostream &file_buffer)
 ////////////////////////////////////////////////////////////
 Eval_Result &Assignment_Ast::evaluate(Local_Environment &eval_env, ostream &file_buffer)
 {
-    Eval_Result &lhsResult = lhs->evaluate(eval_env, file_buffer);
+    // Eval_Result &lhsResult = lhs->evaluate(eval_env, file_buffer);
     Eval_Result &rhsResult = rhs->evaluate(eval_env, file_buffer);
     // file_buffer<<"assn "<<rhsResult.get_result_enum()<<"\n";
     lhs->set_value_of_evaluation(eval_env, rhsResult);
@@ -68,7 +68,7 @@ Eval_Result &Name_Ast::get_value_of_evaluation(Local_Environment &eval_env)
             return *evalResult;
         }
         else{
-            cout<<"\ncs316: Error, using uninitialized variable\n";
+            cout<<"\ncs316: Error\nVariable should be defined before its use\n";
             exit(0);
         }
     }
@@ -91,8 +91,14 @@ Eval_Result &Name_Ast::evaluate(Local_Environment &eval_env, ostream &file_buffe
 {
     string name = variable_symbol_entry->get_variable_name();
     if(eval_env.does_variable_exist(name)){
-        Eval_Result *evalResult = eval_env.get_variable_value(name);
-        return *evalResult;
+        if(eval_env.is_variable_defined(name)){
+            Eval_Result *evalResult = eval_env.get_variable_value(name);
+            return *evalResult;
+        }
+        else{
+            cout<<"\ncs316: Error\nVariable should be defined before its use\n";
+            exit(0);
+        }
     }
     else{
         Eval_Result *evalResult = interpreter_global_table.get_variable_value(name);
@@ -208,7 +214,8 @@ Eval_Result &Divide_Ast::evaluate(Local_Environment &eval_env, ostream &file_buf
     {
         Eval_Result_Value_Int *num_eval = new Eval_Result_Value_Int();
         if(rhsEval.get_int_value()==0){
-            cout<<"\ncs316: Error , Divide by zero\n";
+            cout<<"\ncs316: Error\n Divide by 0\n";
+            exit(0);
         }
         num_eval->set_value(lhsEval.get_int_value() / rhsEval.get_int_value());
         num_eval->set_result_enum(int_result);
@@ -218,6 +225,10 @@ Eval_Result &Divide_Ast::evaluate(Local_Environment &eval_env, ostream &file_buf
     else if (dt == double_data_type)
     {
         Eval_Result_Value_Double *num_eval = new Eval_Result_Value_Double();
+        if(rhsEval.get_double_value()==0.0){
+            cout<<"\ncs316: Error\n Divide by 0\n";
+            exit(0);
+        }
         num_eval->set_value(lhsEval.get_double_value() / rhsEval.get_double_value());
         num_eval->set_result_enum(double_result);
         num_eval->set_variable_status(true);
@@ -274,9 +285,11 @@ Eval_Result &Relational_Expr_Ast::evaluate(Local_Environment &eval_env, ostream 
     Data_Type dt = get_data_type();
     Eval_Result_Value_Int *bool_eval = new Eval_Result_Value_Int();
     int t;
-
+    // cout<<"hahahaha"<<endl;
+    // exit(-1);
     if (dt == int_data_type)
     {
+        // cout<<"hell"<<endl;
         int lhsVal = lhsEval.get_int_value();
         int rhsVal = rhsEval.get_int_value();
         switch (rel_op)
@@ -305,10 +318,14 @@ Eval_Result &Relational_Expr_Ast::evaluate(Local_Environment &eval_env, ostream 
     {
         double lhsVal = lhsEval.get_double_value();
         double rhsVal = rhsEval.get_double_value();
+        // cout<<rel_op<<endl;
+        // exit(0);
         switch (rel_op)
         {
         case less_equalto:
+            // cout <<"meow"<<endl;
             t = lhsVal <= rhsVal ? 1 : 0;
+            // exit(0);
             break;
         case less_than:
             t = lhsVal < rhsVal ? 1 : 0;
@@ -334,17 +351,23 @@ Eval_Result &Relational_Expr_Ast::evaluate(Local_Environment &eval_env, ostream 
 Eval_Result &Logical_Expr_Ast::evaluate(Local_Environment &eval_env, ostream &file_buffer)
 {
   
-    int t=0;   
+    int t=0;
+    int b1 = rhs_op->evaluate(eval_env, file_buffer).get_int_value();
+    int b2;
+    if (bool_op != _logical_not)
+    {
+        b2 = lhs_op->evaluate(eval_env, file_buffer).get_int_value();
+    }
     switch (bool_op)
     {
     case _logical_and:
-        t = lhs_op->evaluate(eval_env, file_buffer).get_int_value() && rhs_op->evaluate(eval_env, file_buffer).get_int_value() ? 1 : 0;
+        t = b1 == 1 && b2 == 1 ? 1 : 0;
         break;
     case _logical_or:
-        t = lhs_op->evaluate(eval_env, file_buffer).get_int_value() || rhs_op->evaluate(eval_env, file_buffer).get_int_value() ? 1 : 0;
+        t = b1 == 1 || b2 == 1 ? 1 : 0;
         break;
     case _logical_not:
-        t = !lhs_op->evaluate(eval_env, file_buffer).get_int_value() ? 1 : 0;
+        t = (b1 == 0) ? 1 : 0;
         break;
     }    
     Eval_Result_Value_Int *bool_eval = new Eval_Result_Value_Int();
@@ -374,6 +397,8 @@ Eval_Result &Selection_Statement_Ast::evaluate(Local_Environment &eval_env, ostr
 ////////////////////////////////////////////////////////////
 Eval_Result &Iteration_Statement_Ast::evaluate(Local_Environment &eval_env, ostream &file_buffer)
 {
+    // cout<<cond->evaluate(eval_env, file_buffer).get_int_value()<<endl;
+    // exit(0);
     if (is_do_form)
     {
         body->evaluate(eval_env, file_buffer);

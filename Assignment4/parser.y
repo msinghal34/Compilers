@@ -144,6 +144,11 @@ STATEMENT_LIST			: /* epsilon */
  								$1->push_back($2);
  								$$ = $1;
  							}
+ 						| STATEMENT_LIST '{' SEQUENCE_STATEMENT_LIST '}'
+ 						{
+ 							$1->push_back($3);
+ 							$$ = $1;
+ 						}
 
 STATEMENT 				: ASSIGN_STATEMENT_VERIFIED
 						| IF_STATEMENT
@@ -161,21 +166,6 @@ DO_WHILE_STATEMENT		: DO '{' SEQUENCE_STATEMENT_LIST '}' WHILE '(' COND_EXP_VERI
 						{
 							$$ = new Iteration_Statement_Ast($5,$2,yylineno,true);
 						}
-
-// FOR_STATEMENT			: FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' '{' SEQUENCE_STATEMENT_LIST '}' 
-// 						{
-
-// 						}
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' STATEMENT '{' SEQUENCE_STATEMENT_LIST '}'
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' '{' SEQUENCE_STATEMENT_LIST '}' 
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' '{' SEQUENCE_STATEMENT_LIST '}' 
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' STATEMENT 
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' STATEMENT STATEMENT
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' STATEMENT ')' STATEMENT 
-// 						| FOR '(' STATEMENT ';' COND_EXP ';' ')' STATEMENT
-
-// STATEMENT_NULLABLE		:  epsilon  
-// 						|STATEMENT
 
 WHILE_STATEMENT			: WHILE '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}'
 						{
@@ -255,6 +245,11 @@ SEQUENCE_STATEMENT_LIST	:/* epsilon */
 							$1->ast_push_back($2);
 							$$=$1;
 						}
+						| SEQUENCE_STATEMENT_LIST '{' SEQUENCE_STATEMENT_LIST '}'
+						{
+							$1->ast_push_back($3);
+							$$ = $1;
+						}
 
 ASSIGN_STATEMENT_VERIFIED: ASSIGN_STATEMENT
 						{
@@ -318,22 +313,22 @@ COND_EXP				: ARITH_EXP RELOP ARITH_EXP
 						| COND_EXP AND COND_EXP
 						{
 							$$ = new Logical_Expr_Ast($1, _logical_and, $3, yylineno);
-							$$->set_data_type($1->get_data_type());
+							$$->set_data_type(int_data_type);
 						}
 						| COND_EXP OR COND_EXP
 						{
 							$$ = new Logical_Expr_Ast($1, _logical_or, $3, yylineno);
-							$$->set_data_type($1->get_data_type());
+							$$->set_data_type(int_data_type);
 						}
 						| NOT COND_EXP %prec '*'
 						{
-							$$ = new Logical_Expr_Ast($2, _logical_not, NULL, yylineno);
-							$$->set_data_type($2->get_data_type());
+							$$ = new Logical_Expr_Ast(NULL, _logical_not, $2, yylineno);
+							$$->set_data_type(int_data_type);
 						}
 						| COND_EXP '?' COND_EXP ':' COND_EXP
 						{
 							$$ = new Conditional_Expression_Ast($1, $3, $5, yylineno);
-							$$->set_data_type($3->get_data_type());
+							$$->set_data_type(int_data_type);
 						}
 						| '(' COND_EXP ')'
 						{

@@ -11,7 +11,9 @@ digit 			[0-9]
 operator 		[-+*/]
 assignment 		[=]
 identifier 		{char}({char}|{digit})*
-float 			{digit}+\.{digit}+
+float1 			{digit}*\.{digit}+
+float2			{digit}+\.
+float 			{float1}|{float2}
 meta			[,\{\}\(\)\;\?:]
 comment 		[/][/].*
 %%
