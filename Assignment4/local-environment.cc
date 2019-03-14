@@ -163,7 +163,6 @@ void Local_Environment::put_variable_value(Eval_Result &value, string name)
 bool Local_Environment::does_variable_exist(string name)
 {
 	return (variable_table.count(name) > 0);
-	
 } 
 ////////////////////////////////////////////////////////////
 void Symbol_Table::create(Local_Environment &local_global_variables_table)
@@ -183,7 +182,6 @@ void Symbol_Table::create(Local_Environment &local_global_variables_table)
 				evalResult->set_value(0);
 				evalResult->set_variable_status(true);
 			}
-			// cout<<"Test "<<evalResult->get_result_enum()<<"\n";
 			local_global_variables_table.put_variable_value(*evalResult, name);
 		}
 		else
@@ -192,7 +190,7 @@ void Symbol_Table::create(Local_Environment &local_global_variables_table)
 			evalResult->set_variable_status(false);
 			evalResult->set_result_enum(double_result);
 			if(scope==global){
-				evalResult->set_value(0);
+				evalResult->set_value(0.0);
 				evalResult->set_variable_status(true);
 			}
 			local_global_variables_table.put_variable_value(*evalResult, name);

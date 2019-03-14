@@ -51,7 +51,7 @@ Symbol_Table* local_symbol_table;
 %nterm <ast> STATEMENT ASSIGN_STATEMENT ARITH_EXP COND_EXP IF_STATEMENT 
 %nterm <ast> DO_WHILE_STATEMENT WHILE_STATEMENT IF_ELSE_STATEMENT BALANCED_IF_STATEMENT
 %nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED 
-%nterm <seq_ast> SEQUENCE_STATEMENT_LIST FOR_INIT_INCR SCOPE_BODY FOR_STATEMENT  
+%nterm <seq_ast> SEQUENCE_STATEMENT_LIST   
 %%
 
 PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
@@ -148,14 +148,15 @@ STATEMENT_LIST			: /* epsilon */
  						{
  							$1->push_back($3);
  							$$ = $1;
+
  						} 
 
-STATEMENT 				: ASSIGN_STATEMENT_VERIFIED
+
+STATEMENT 				: ASSIGN_STATEMENT_VERIFIED ';'
 						| IF_STATEMENT
 						| IF_ELSE_STATEMENT
 						| WHILE_STATEMENT
 						| DO_WHILE_STATEMENT
-						| FOR_STATEMENT
 
 DO_WHILE_STATEMENT		: DO '{' SEQUENCE_STATEMENT_LIST '}' WHILE '(' COND_EXP_VERIFIED ')' ';'
 						{
@@ -166,38 +167,6 @@ DO_WHILE_STATEMENT		: DO '{' SEQUENCE_STATEMENT_LIST '}' WHILE '(' COND_EXP_VERI
 						{
 							$$ = new Iteration_Statement_Ast($5,$2,yylineno,true);
 						}
-
-FOR_STATEMENT			: FOR  '(' FOR_INIT_INCR ';' COND_EXP ';' FOR_INIT_INCR ')' SCOPE_BODY 
-						{
-							// $9->ast_push_back($7);
-							// Iteration_Statement_Ast *v = new Iteration_Statement_Ast($5,$3,yylineno,true);
-							$$ = new Sequence_Ast(yylineno);
-							// $$->ast_push_back($3);
-							// $$->ast_push_back(v);
-						}
-
-FOR_INIT_INCR			: /* epsilon */ 
-						// {
-						// 	cout<<"came\n";
-						// 	$$ = new Sequence_Ast(yylineno);
-						// } 
-						 ASSIGN_STATEMENT_VERIFIED
-						{
-							cout<<"came\n";
-							$$ = new Sequence_Ast(yylineno);
-							$$->ast_push_back($1);
-						}
-
-
-SCOPE_BODY				: '{' SEQUENCE_STATEMENT_LIST '}'
-						{
-							$$ = $2;
-						}
-						// | STATEMENT
-						// {
-						// 	$$ = new Sequence_Ast(yylineno);
-						// 	$$->ast_push_back($1);
-						// }
 
 WHILE_STATEMENT			: WHILE '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}'
 						{
@@ -217,7 +186,7 @@ IF_STATEMENT			: IF '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}'
 							$$ = new Selection_Statement_Ast($3,$5,NULL,yylineno);
 						}
 
-BALANCED_IF_STATEMENT 	: ASSIGN_STATEMENT_VERIFIED
+BALANCED_IF_STATEMENT 	: ASSIGN_STATEMENT_VERIFIED ';'
 						{
 							$$ = $1;
 						}
@@ -277,6 +246,11 @@ SEQUENCE_STATEMENT_LIST	:/* epsilon */
 							$1->ast_push_back($2);
 							$$=$1;
 						}
+						| SEQUENCE_STATEMENT_LIST '{' SEQUENCE_STATEMENT_LIST '}'
+						{
+							$1->ast_push_back($3);
+							$$ = $1;
+						}
 
 ASSIGN_STATEMENT_VERIFIED: ASSIGN_STATEMENT
 						{
@@ -299,7 +273,7 @@ COND_EXP_VERIFIED		: COND_EXP
 
 						}
 
-ASSIGN_STATEMENT		: NAME '=' ARITH_EXP  ';' 
+ASSIGN_STATEMENT		: NAME '=' ARITH_EXP   
 							{
 								Symbol_Table_Entry *v;
 								if (local_symbol_table->variable_in_symbol_list_check(*$1))
@@ -340,22 +314,22 @@ COND_EXP				: ARITH_EXP RELOP ARITH_EXP
 						| COND_EXP AND COND_EXP
 						{
 							$$ = new Logical_Expr_Ast($1, _logical_and, $3, yylineno);
-							$$->set_data_type($1->get_data_type());
+							$$->set_data_type(int_data_type);
 						}
 						| COND_EXP OR COND_EXP
 						{
 							$$ = new Logical_Expr_Ast($1, _logical_or, $3, yylineno);
-							$$->set_data_type($1->get_data_type());
+							$$->set_data_type(int_data_type);
 						}
 						| NOT COND_EXP %prec '*'
 						{
-							$$ = new Logical_Expr_Ast($2, _logical_not, NULL, yylineno);
-							$$->set_data_type($2->get_data_type());
+							$$ = new Logical_Expr_Ast(NULL, _logical_not, $2, yylineno);
+							$$->set_data_type(int_data_type);
 						}
 						| COND_EXP '?' COND_EXP ':' COND_EXP
 						{
 							$$ = new Conditional_Expression_Ast($1, $3, $5, yylineno);
-							$$->set_data_type($3->get_data_type());
+							$$->set_data_type(int_data_type);
 						}
 						| '(' COND_EXP ')'
 						{
@@ -456,6 +430,11 @@ ARITH_EXP 				: INTEGER_NUMBER
 							}
 						| COND_EXP '?' ARITH_EXP ':' ARITH_EXP 
 							{
+								if(!$1->check_ast())
+								{
+									printf("\ncs316: Error %d,  Conditional Expression Statement data type not compatible \n", yylineno);
+									exit(0);
+								}
 								$$ = new Conditional_Expression_Ast($1, $3, $5, yylineno);
 								$$->set_data_type($3->get_data_type());
 							}

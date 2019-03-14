@@ -376,24 +376,24 @@ void Logical_Expr_Ast::set_data_type(Data_Type dt)
 
 bool Logical_Expr_Ast::check_ast()
 {
-	if (rhs_op == NULL)
-		return lhs_op->check_ast();
-	return ((lhs_op->get_data_type() == rhs_op->get_data_type()) && (lhs_op->check_ast() && rhs_op->check_ast()));
+	if (lhs_op == NULL)
+		return rhs_op->check_ast();
+	return ((lhs_op->check_ast() && rhs_op->check_ast()));
 }
 
 string logicOp_array[] = {"NOT", "OR", "AND"};
 
 void Logical_Expr_Ast::print(ostream &file_buffer)
 {
-	file_buffer<<"\n"<<AST_NODE_SPACE<<"Condition: "<<logicOp_array[bool_op]<<"\n";
-	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
-	lhs_op->print(file_buffer);
-	file_buffer<<")";
-	if(rhs_op!=NULL){
-		file_buffer<<"\n"<<AST_SUB_NODE_SPACE<<"RHS (";
-		rhs_op->print(file_buffer);
+	file_buffer<<"\n"<<AST_NODE_SPACE<<"Condition: "<<logicOp_array[bool_op];
+	if(lhs_op!=NULL){
+		file_buffer<<"\n"<<AST_SUB_NODE_SPACE<<"LHS (";
+		lhs_op->print(file_buffer);
 		file_buffer<<")";
 	}
+	file_buffer<<"\n"<<AST_SUB_NODE_SPACE<<"RHS (";
+	rhs_op->print(file_buffer);
+	file_buffer<<")";
 }
 
 // ///////////////////////////////////////////////////////////////////

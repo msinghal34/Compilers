@@ -13,7 +13,7 @@ BISON=bison
 all: $(MYPROGRAM)
 
 $(MYPROGRAM): $(SOURCE)
-	$(CPP) -include $(ALLHEADERS) -L$(MYLIBRARY) $(CFLAGS) $(LDFLAGS) $(SOURCE) -o $(MYPROGRAM) -lsclpshared -lfl -ly
+	$(CPP) -include $(ALLHEADERS) -L$(MYLIBRARY) $(CFLAGS) $(LDFLAGS) $(SOURCE) -o $(MYPROGRAM) -lsclpshared -lfl -ly 
 
 lex.yy.c: scanner.l parser.tab.h
 	$(FLEX) -l --yylineno scanner.l
