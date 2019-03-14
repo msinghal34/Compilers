@@ -42,8 +42,10 @@ def foo(mainDirectory):
 	print("\n")
 
 os.system("make")
+
 directories = ["testing", "mytesting", "errortesting"]
-file = "mytesting/scoping.c"
+file = "test.c"
 # foofile(file)
+
 for dir in directories:
 	foo(dir)

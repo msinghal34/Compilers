@@ -50,8 +50,8 @@ Symbol_Table* local_symbol_table;
 %nterm <ast_list> STATEMENT_LIST 
 %nterm <ast> STATEMENT ASSIGN_STATEMENT ARITH_EXP COND_EXP IF_STATEMENT 
 %nterm <ast> DO_WHILE_STATEMENT WHILE_STATEMENT IF_ELSE_STATEMENT BALANCED_IF_STATEMENT
-%nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED
-%nterm <seq_ast> SEQUENCE_STATEMENT_LIST  
+%nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED 
+%nterm <seq_ast> SEQUENCE_STATEMENT_LIST   
 %%
 
 PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
@@ -148,14 +148,15 @@ STATEMENT_LIST			: /* epsilon */
  						{
  							$1->push_back($3);
  							$$ = $1;
- 						}
 
-STATEMENT 				: ASSIGN_STATEMENT_VERIFIED
+ 						} 
+
+
+STATEMENT 				: ASSIGN_STATEMENT_VERIFIED ';'
 						| IF_STATEMENT
 						| IF_ELSE_STATEMENT
 						| WHILE_STATEMENT
 						| DO_WHILE_STATEMENT
-						// | FOR_STATEMENT
 
 DO_WHILE_STATEMENT		: DO '{' SEQUENCE_STATEMENT_LIST '}' WHILE '(' COND_EXP_VERIFIED ')' ';'
 						{
@@ -185,7 +186,7 @@ IF_STATEMENT			: IF '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}'
 							$$ = new Selection_Statement_Ast($3,$5,NULL,yylineno);
 						}
 
-BALANCED_IF_STATEMENT 	: ASSIGN_STATEMENT_VERIFIED
+BALANCED_IF_STATEMENT 	: ASSIGN_STATEMENT_VERIFIED ';'
 						{
 							$$ = $1;
 						}
@@ -272,7 +273,7 @@ COND_EXP_VERIFIED		: COND_EXP
 
 						}
 
-ASSIGN_STATEMENT		: NAME '=' ARITH_EXP  ';' 
+ASSIGN_STATEMENT		: NAME '=' ARITH_EXP   
 							{
 								Symbol_Table_Entry *v;
 								if (local_symbol_table->variable_in_symbol_list_check(*$1))

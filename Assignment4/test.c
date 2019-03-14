@@ -1,14 +1,9 @@
 
-int c,d,e,f;
 void main()
 {
-	int a,b;
-
-	a=-2;
-	b=3;
-	c=a+b;
-    d=a-b-c;
-    e=a*b;
-    f=a/b;
+	int i,j;
+	i=0;
+	j=1;
+	i = 5==6.0?7:8;
 }
 
