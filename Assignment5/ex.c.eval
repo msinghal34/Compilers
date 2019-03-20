@@ -1,0 +1,36 @@
+Evaluating Program
+   Global Variables (before evaluating):
+   Evaluating Procedure main_
+      Local Variables (before evaluating):
+         a_ : undefined
+         b_ : undefined
+         c_ : undefined
+
+
+         Asgn:
+            LHS (Name : c_)
+            RHS (Num : 20)
+         c_ : 20
+
+
+         Asgn:
+            LHS (Name : a_)
+            RHS (Num : 30)
+         a_ : 30
+
+
+         Asgn:
+            LHS (Name : b_)
+            RHS (
+            Arith: PLUS
+               LHS (Name : a_)
+               RHS (Num : 30))
+         b_ : 60
+
+
+
+      Local Variables (after evaluating):
+         a_ : 30
+         b_ : 60
+         c_ : 20
+   Global Variables (after evaluating):
