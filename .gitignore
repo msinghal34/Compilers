@@ -1,5 +1,7 @@
-*.toks
-*.spim
-*.tocs
-*.mips
-*lex.yy.c
+*toks
+*spim
+*tocs
+*mips
+*lex\.yy\.c
+*parser\.tab*
+*sclp
