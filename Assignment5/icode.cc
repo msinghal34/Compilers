@@ -215,6 +215,84 @@ void Move_IC_Stmt::print_assembly(ostream &file_buffer)
 
 ///////////////////////////////////////////////////////////////////
 
+Control_Flow_IC_Stmt::Control_Flow_IC_Stmt(Tgt_Op inst_op, Ics_Opd *opd1, string label)
+{
+	this->opd1 = opd1;
+	this->label = label;
+	op_desc = *machine_desc_object.spim_instruction_table[inst_op];
+}
+
+Control_Flow_IC_Stmt &Control_Flow_IC_Stmt::operator=(const Control_Flow_IC_Stmt &rhs)
+{
+	return *this;
+}
+
+Instruction_Descriptor &Control_Flow_IC_Stmt::get_inst_op_of_ics()
+{
+	return op_desc;
+}
+
+Ics_Opd *Control_Flow_IC_Stmt::get_opd1()
+{
+	return opd1;
+}
+void Control_Flow_IC_Stmt::set_opd1(Ics_Opd *io)
+{
+	opd1 = io;
+}
+
+string Control_Flow_IC_Stmt::get_label()
+{
+	return label;
+}
+void Control_Flow_IC_Stmt::set_label(string label)
+{
+	this->label = label;
+}
+
+void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer)
+{
+}
+void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer)
+{
+}
+
+//////////////////////// Intermediate code for Ast statements ////////////////////////
+
+Code_For_Ast::Code_For_Ast()
+{
+}
+Code_For_Ast::Code_For_Ast(list<Icode_Stmt *> &ic_l, Register_Descriptor *reg)
+{
+	ics_list = ic_l;
+	result_register = reg;
+}
+
+void Code_For_Ast::append_ics(Icode_Stmt &ics)
+{
+	ics_list.push_back(&ics);
+}
+list<Icode_Stmt *> &Code_For_Ast::get_icode_list()
+{
+	return ics_list;
+}
+
+Register_Descriptor *Code_For_Ast::get_reg()
+{
+	return result_register;
+}
+void Code_For_Ast::set_reg(Register_Descriptor *reg)
+{
+	result_register = reg;
+}
+
+Code_For_Ast &Code_For_Ast::operator=(const Code_For_Ast &rhs)
+{
+	return *this;
+}
+
+///////////////////////////////////////////////////////////////////
+
 Compute_IC_Stmt::Compute_IC_Stmt(Tgt_Op inst_op, Ics_Opd *opd1, Ics_Opd *opd2, Ics_Opd *result)
 {
 	this->opd1 = opd1;
@@ -303,5 +381,3 @@ void Label_IC_Stmt::print_icode(ostream &file_buffer)
 void Label_IC_Stmt::print_assembly(ostream &file_buffer)
 {
 }
-
-///////////////////////////////////////////////////////////////////
