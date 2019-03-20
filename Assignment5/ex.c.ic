@@ -1,0 +1,21 @@
+  Procedure: main_
+  Intermediate Code Statements
+	iLoad:    	v0 <- 20
+	store:    	c_ <- v0
+	iLoad:    	v0 <- 30
+	store:    	a_ <- v0
+	load:    	v0 <- c_
+	iLoad:    	t0 <- 20
+	sgt:    	t1 <- v0 , t0
+	beq:    	t1 , zero : goto label0
+	iLoad:    	v0 <- 20
+	store:    	a_ <- v0
+	goto label1
+
+label0:    	
+	load:    	v0 <- a_
+	iLoad:    	t0 <- 30
+	add:    	t2 <- v0 , t0
+	store:    	b_ <- t2
+
+label1:    	
