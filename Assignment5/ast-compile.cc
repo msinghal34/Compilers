@@ -320,3 +320,58 @@ Code_For_Ast &UMinus_Ast::compile_and_optimize_ast(Lra_Outcome &lra)
 {
 	return *(new Code_For_Ast());
 }
+
+///////////////////////// UMinus_Ast ////////////////////////
+
+Code_For_Ast & Conditional_Expression_Ast::compile()
+{
+	Code_For_Ast &cond_code = cond->compile();
+	Register_Descriptor *cond_reg = cond_code.get_reg();
+	Register_Addr_Opd *cond_opd = new Register_Addr_Opd(cond_reg);
+	cond_reg->reset_use_for_expr_result();
+
+	Code_For_Ast &lcode = lhs->compile();
+	Register_Descriptor *lreg = lcode.get_reg();
+	Register_Addr_Opd *lropd = new Register_Addr_Opd(lreg);
+	lreg->reset_use_for_expr_result();
+
+	Code_For_Ast &rcode = rhs->compile();
+	Register_Descriptor *rreg = rcode.get_reg();
+	Register_Addr_Opd *rropd = new Register_Addr_Opd(rreg);
+	rreg->reset_use_for_expr_result();
+
+	Register_Descriptor *result_reg;
+	Tgt_Op move_op;
+	if (node_data_type == int_data_type)
+	{
+		result_reg = machine_desc_object.get_new_register<gp_data>();
+		move_op = mov;
+	}
+	else
+	{
+		result_reg = machine_desc_object.get_new_register<gp_data>();
+		move_op = move_d;
+	}
+	result_reg->set_use_for_expr_result();
+	Register_Addr_Opd *result_opd = new Register_Addr_Opd(result_reg);
+
+	string else_start = get_new_label();
+	string else_end = get_new_label();
+
+	Control_Flow_IC_Stmt *beq_stmt = new Control_Flow_IC_Stmt(beq,cond_opd,else_start);
+	Control_Flow_IC_Stmt *goto_else_end = new Control_Flow_IC_Stmt(j,NULL,else_end);
+	Label_IC_Stmt *label_else_start = new Label_IC_Stmt(label,else_start);
+	Label_IC_Stmt *label_else_end = new Label_IC_Stmt(label,else_end);
+	Move_IC_Stmt *if_part = new Move_IC_Stmt(move_op,lropd,result_opd);	
+	Move_IC_Stmt *else_part = new Move_IC_Stmt(move_op,rropd,result_opd);
+
+	list<Icode_Stmt *> ics_list = cond_code.get_icode_list();
+	ics_list.push_back(beq_stmt);
+	ics_list.merge(lcode.get_icode_list());
+	ics_list.push_back(goto_else_end);
+	ics_list.push_back(label_else_start);
+	ics_list.merge(rcode.get_icode_list());
+	ics_list.push_back(else_part);
+	ics_list.push_back(label_else_end);
+	return *(new Code_For_Ast(ics_list,result_reg));  
+}
