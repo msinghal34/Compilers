@@ -1,5 +1,7 @@
 
 void main(){
 	int a;
-	a = 5>6?7:8;
+	int b;
+	b=4;
+	a = 5>6?3:5;
 }

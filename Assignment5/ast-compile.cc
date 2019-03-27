@@ -2,7 +2,8 @@
 #include "reg-alloc.hh"
 #include "ast.hh"
 #include "symbol-table.hh"
-
+template class Number_Ast<double>;
+template class Number_Ast<int>;
 ///////////////////////// Ast ////////////////////////
 Code_For_Ast &Ast::create_store_stmt(Register_Descriptor *store_register)
 {
@@ -137,7 +138,7 @@ Code_For_Ast &Plus_Ast::compile()
 	}
 	else
 	{
-		result_reg = machine_desc_object.get_new_register<gp_data>();
+		result_reg = machine_desc_object.get_new_register<float_reg>();
 		op = add_d;
 	}
 	result_reg->set_use_for_expr_result();
@@ -178,7 +179,7 @@ Code_For_Ast &Minus_Ast::compile()
 	}
 	else
 	{
-		result_reg = machine_desc_object.get_new_register<gp_data>();
+		result_reg = machine_desc_object.get_new_register<float_reg>();
 		op = sub_d;
 	}
 	result_reg->set_use_for_expr_result();
@@ -219,7 +220,7 @@ Code_For_Ast &Mult_Ast::compile()
 	}
 	else
 	{
-		result_reg = machine_desc_object.get_new_register<gp_data>();
+		result_reg = machine_desc_object.get_new_register<float_reg>();
 		op = mult_d;
 	}
 	result_reg->set_use_for_expr_result();
@@ -260,7 +261,7 @@ Code_For_Ast &Divide_Ast::compile()
 	}
 	else
 	{
-		result_reg = machine_desc_object.get_new_register<gp_data>();
+		result_reg = machine_desc_object.get_new_register<float_reg>();
 		op = div_d;
 	}
 	result_reg->set_use_for_expr_result();
@@ -287,11 +288,6 @@ Code_For_Ast &UMinus_Ast::compile()
 	Register_Addr_Opd *lropd = new Register_Addr_Opd(lreg);
 	lreg->reset_use_for_expr_result();
 
-	Code_For_Ast &rcode = rhs->compile();
-	Register_Descriptor *rreg = rcode.get_reg();
-	Register_Addr_Opd *rropd = new Register_Addr_Opd(rreg);
-	rreg->reset_use_for_expr_result();
-
 	Register_Descriptor *result_reg;
 	Tgt_Op op;
 	if (node_data_type == int_data_type)
@@ -301,17 +297,15 @@ Code_For_Ast &UMinus_Ast::compile()
 	}
 	else
 	{
-		result_reg = machine_desc_object.get_new_register<gp_data>();
+		result_reg = machine_desc_object.get_new_register<float_reg>();
 		op = uminus_d;
 	}
 	result_reg->set_use_for_expr_result();
 	Register_Addr_Opd *result_opd = new Register_Addr_Opd(result_reg);
 
-	Compute_IC_Stmt *ic_stmt = new Compute_IC_Stmt(op, lropd, rropd, result_opd);
+	Compute_IC_Stmt *ic_stmt = new Compute_IC_Stmt(op, lropd, NULL, result_opd);
 
 	list<Icode_Stmt *> llist = lcode.get_icode_list();
-	list<Icode_Stmt *> rlist = rcode.get_icode_list();
-	llist.merge(rlist);
 	Code_For_Ast *result_code = new Code_For_Ast(llist, result_reg);
 	result_code->append_ics(*ic_stmt);
 	return *result_code;
@@ -321,7 +315,7 @@ Code_For_Ast &UMinus_Ast::compile_and_optimize_ast(Lra_Outcome &lra)
 	return *(new Code_For_Ast());
 }
 
-///////////////////////// UMinus_Ast ////////////////////////
+///////////////////////// Conditional_Expression_Ast ////////////////////////
 
 Code_For_Ast & Conditional_Expression_Ast::compile()
 {
@@ -349,7 +343,7 @@ Code_For_Ast & Conditional_Expression_Ast::compile()
 	}
 	else
 	{
-		result_reg = machine_desc_object.get_new_register<gp_data>();
+		result_reg = machine_desc_object.get_new_register<float_reg>();
 		move_op = move_d;
 	}
 	result_reg->set_use_for_expr_result();
@@ -375,3 +369,58 @@ Code_For_Ast & Conditional_Expression_Ast::compile()
 	ics_list.push_back(label_else_end);
 	return *(new Code_For_Ast(ics_list,result_reg));  
 }
+
+///////////////////////// Return_Ast ////////////////////////
+
+Code_For_Ast & Return_Ast::compile()
+{
+	return *(new Code_For_Ast());
+}
+
+
+Code_For_Ast & Return_Ast::compile_and_optimize_ast(Lra_Outcome &lra)
+{
+	return *(new Code_For_Ast());
+}
+
+///////////////////////// Relational_Expr_Ast ////////////////////////
+
+Code_For_Ast & Relational_Expr_Ast::compile()
+{
+	return *(new Code_For_Ast());
+}
+
+
+///////////////////////// Logical_Expr_Ast ////////////////////////
+
+Code_For_Ast & Logical_Expr_Ast::compile()
+{
+	return *(new Code_For_Ast());
+}
+///////////////////////// Selection_Statement_Ast ////////////////////////
+
+Code_For_Ast & Selection_Statement_Ast::compile()
+{
+	return *(new Code_For_Ast());
+}
+
+///////////////////////// Iteration_Statement_Ast ////////////////////////
+
+Code_For_Ast & Iteration_Statement_Ast::compile()
+{
+	return *(new Code_For_Ast());
+}
+
+///////////////////////// Sequence_Ast ////////////////////////
+
+Code_For_Ast & Sequence_Ast::compile()
+{
+	return *(new Code_For_Ast());
+}
+///////////////////////// Print_Ast ////////////////////////
+
+// Code_For_Ast & Print_Ast::compile()
+// {
+// 	return *(new Code_For_Ast());
+// }
+
