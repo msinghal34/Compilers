@@ -207,6 +207,7 @@ void Move_IC_Stmt::set_result(Ics_Opd *io)
 
 void Move_IC_Stmt::print_icode(ostream &file_buffer)
 {
+	ostream<<op_desc.get_mnemonic()<<"\n";
 }
 
 void Move_IC_Stmt::print_assembly(ostream &file_buffer)
