@@ -1,7 +1,11 @@
-
-void main(){
-	int a;
+void main()
+{
 	int b;
-	b=4;
-	a = 5>6?3:5;
+	int a;
+	int x, y, z;
+	b = 4;
+	a = b > 2?5:b;
+	// x = a < b;
+	// y = x * a;
+	// z = x / y;
 }

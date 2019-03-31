@@ -1,5 +1,4 @@
 
-
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -288,30 +287,30 @@ void Lra_Outcome::optimize_lra(Lra_Scenario lcase, Ast * destination_memory, Ast
 void Machine_Description::initialize_register_table()
 {
 	spim_register_table[zero] = new Register_Descriptor(zero, "zero", int_num, fixed_reg);
-	spim_register_table[v0] = new Register_Descriptor(v0, "v0", int_num, gp_data);
+	spim_register_table[v0] = new Register_Descriptor(v0, "v0", int_num, int_reg);
 	spim_register_table[v1] = new Register_Descriptor(v1, "v1", int_num, fn_result);
 	spim_register_table[a0] = new Register_Descriptor(a0, "a0", int_num, argument);
 	spim_register_table[a1] = new Register_Descriptor(a1, "a1", int_num, argument);
 	spim_register_table[a2] = new Register_Descriptor(a2, "a2", int_num, argument);
 	spim_register_table[a3] = new Register_Descriptor(a3, "a3", int_num, argument);
-	spim_register_table[t0] = new Register_Descriptor(t0, "t0", int_num, gp_data);
-	spim_register_table[t1] = new Register_Descriptor(t1, "t1", int_num, gp_data);
-	spim_register_table[t2] = new Register_Descriptor(t2, "t2", int_num, gp_data);
-	spim_register_table[t3] = new Register_Descriptor(t3, "t3", int_num, gp_data);
-	spim_register_table[t4] = new Register_Descriptor(t4, "t4", int_num, gp_data);
-	spim_register_table[t5] = new Register_Descriptor(t5, "t5", int_num, gp_data);
-	spim_register_table[t6] = new Register_Descriptor(t6, "t6", int_num, gp_data);
-	spim_register_table[t7] = new Register_Descriptor(t7, "t7", int_num, gp_data);
-	spim_register_table[t8] = new Register_Descriptor(t8, "t8", int_num, gp_data);
-	spim_register_table[t9] = new Register_Descriptor(t9, "t9", int_num, gp_data);
-	spim_register_table[s0] = new Register_Descriptor(s0, "s0", int_num, gp_data);
-	spim_register_table[s1] = new Register_Descriptor(s1, "s1", int_num, gp_data);
-	spim_register_table[s2] = new Register_Descriptor(s2, "s2", int_num, gp_data);
-	spim_register_table[s3] = new Register_Descriptor(s3, "s3", int_num, gp_data);
-	spim_register_table[s4] = new Register_Descriptor(s4, "s4", int_num, gp_data);
-	spim_register_table[s5] = new Register_Descriptor(s5, "s5", int_num, gp_data);
-	spim_register_table[s6] = new Register_Descriptor(s6, "s6", int_num, gp_data);
-	spim_register_table[s7] = new Register_Descriptor(s7, "s7", int_num, gp_data);
+	spim_register_table[t0] = new Register_Descriptor(t0, "t0", int_num, int_reg);
+	spim_register_table[t1] = new Register_Descriptor(t1, "t1", int_num, int_reg);
+	spim_register_table[t2] = new Register_Descriptor(t2, "t2", int_num, int_reg);
+	spim_register_table[t3] = new Register_Descriptor(t3, "t3", int_num, int_reg);
+	spim_register_table[t4] = new Register_Descriptor(t4, "t4", int_num, int_reg);
+	spim_register_table[t5] = new Register_Descriptor(t5, "t5", int_num, int_reg);
+	spim_register_table[t6] = new Register_Descriptor(t6, "t6", int_num, int_reg);
+	spim_register_table[t7] = new Register_Descriptor(t7, "t7", int_num, int_reg);
+	spim_register_table[t8] = new Register_Descriptor(t8, "t8", int_num, int_reg);
+	spim_register_table[t9] = new Register_Descriptor(t9, "t9", int_num, int_reg);
+	spim_register_table[s0] = new Register_Descriptor(s0, "s0", int_num, int_reg);
+	spim_register_table[s1] = new Register_Descriptor(s1, "s1", int_num, int_reg);
+	spim_register_table[s2] = new Register_Descriptor(s2, "s2", int_num, int_reg);
+	spim_register_table[s3] = new Register_Descriptor(s3, "s3", int_num, int_reg);
+	spim_register_table[s4] = new Register_Descriptor(s4, "s4", int_num, int_reg);
+	spim_register_table[s5] = new Register_Descriptor(s5, "s5", int_num, int_reg);
+	spim_register_table[s6] = new Register_Descriptor(s6, "s6", int_num, int_reg);
+	spim_register_table[s7] = new Register_Descriptor(s7, "s7", int_num, int_reg);
 	spim_register_table[f0] = new Register_Descriptor(f0, "f0", float_num, fn_result);
 	spim_register_table[f2] = new Register_Descriptor(f2, "f2", float_num, float_reg);
 	spim_register_table[f4] = new Register_Descriptor(f4, "f4", float_num, float_reg);
@@ -373,12 +372,15 @@ void Machine_Description::initialize_instruction_table()
 	spim_instruction_table[blez] = new Instruction_Descriptor(blez, "blez", "blez", "", i_op_o1_o2_st, a_op_o1_o2_st);
 	spim_instruction_table[j] = new Instruction_Descriptor(j, "jump", "j", "", i_op_st, a_op_st);
 	spim_instruction_table[jal] = new Instruction_Descriptor(jal, "jal", "jal", "", i_op_st, a_op_st);
-	spim_instruction_table[syscal1] = new Instruction_Descriptor(syscal1, "syscall", "syscall", "", i_op_st, a_op_st);
+	spim_instruction_table[print] = new Instruction_Descriptor(print, "print", "syscall", "", i_op, a_op);
 	spim_instruction_table[label] = new Instruction_Descriptor(label, "", "", "", i_op_st, a_op_st);
 	spim_instruction_table[ret_inst] = new Instruction_Descriptor(ret_inst, "return", "", "", i_op, a_op);
-	spim_instruction_table[seq_d] = new Instruction_Descriptor(seq_d, "seq.d", "c.eq.d", "", i_r_o1_op_o2, a_op_r_o1_o2);
-     spim_instruction_table[slt_d] = new Instruction_Descriptor(slt_d, "slt.d", "c.lt.d", "", i_r_o1_op_o2, a_op_r_o1_o2);
-	spim_instruction_table[sle_d] = new Instruction_Descriptor(sle_d, "sle.d", "c.le.d", "", i_r_o1_op_o2, a_op_r_o1_o2);
+	spim_instruction_table[seq_d] = new Instruction_Descriptor(seq_d, "seq.d", "c.eq.d", "", i_o1_op_o2, a_op_o1_o2);
+     spim_instruction_table[slt_d] = new Instruction_Descriptor(slt_d, "slt.d", "c.lt.d", "", i_o1_op_o2, a_op_o1_o2);
+	spim_instruction_table[sle_d] = new Instruction_Descriptor(sle_d, "sle.d", "c.le.d", "", i_o1_op_o2, a_op_o1_o2);
+	spim_instruction_table[sgt_d] = new Instruction_Descriptor(sgt_d, "sgt.d", "c.le.d", "", i_o1_op_o2, a_op_o1_o2);
+	spim_instruction_table[sge_d] = new Instruction_Descriptor(sge_d, "sge.d", "c.lt.d", "", i_o1_op_o2, a_op_o1_o2);
+	spim_instruction_table[sne_d] = new Instruction_Descriptor(sne_d, "sne.d", "c.eq.d", "", i_o1_op_o2, a_op_o1_o2);
 	spim_instruction_table[bc1t] = new Instruction_Descriptor(bc1t, "bc1t", "bc1t", "", i_op_st, a_op_st);
 	spim_instruction_table[bc1f] = new Instruction_Descriptor(bc1f, "bc1f", "bc1f", "", i_op_st, a_op_st);
 }
@@ -392,9 +394,9 @@ void Machine_Description::validate_init_local_register_mapping_before_fn_call()
 
 		if (reg_desc->is_used_for_fn_return() == false)
 		{
-			if (reg_desc->get_use_category() == gp_data)
+			if (reg_desc->get_use_category() == int_reg)
 			{
-				CHECK_INVARIANT((reg_desc->is_free<gp_data>()), "GP data registers should be free at the start of a basic block or after a function call");
+				CHECK_INVARIANT((reg_desc->is_free<int_reg>()), "GP data registers should be free at the start of a basic block or after a function call");
 			}
 
 			else if (reg_desc->get_use_category() == float_reg)
@@ -412,9 +414,9 @@ void Machine_Description::validate_init_local_register_mapping()
 	{
 		Register_Descriptor * reg_desc = i->second;
 
-		if (reg_desc->get_use_category() == gp_data)
+		if (reg_desc->get_use_category() == int_reg)
 		{
-			CHECK_INVARIANT((reg_desc->is_free<gp_data>()), "GP data registers should be free at the start of a basic block or after a function call");
+			CHECK_INVARIANT((reg_desc->is_free<int_reg>()), "GP data registers should be free at the start of a basic block or after a function call");
 		}
 
 		else if (reg_desc->get_use_category() == float_reg)
@@ -509,14 +511,14 @@ void Machine_Description::clear_reg_not_used_for_expr_result()
 	}
 }
 
-template bool Register_Descriptor::is_free<gp_data>();
+template bool Register_Descriptor::is_free<int_reg>();
 template bool Register_Descriptor::is_free<float_reg>();
 
-template void Lra_Outcome::optimize_lra<gp_data>(Lra_Scenario lcase, Ast * destination_memory, Ast * source_memory);
+template void Lra_Outcome::optimize_lra<int_reg>(Lra_Scenario lcase, Ast * destination_memory, Ast * source_memory);
 template void Lra_Outcome::optimize_lra<float_reg>(Lra_Scenario lcase, Ast * destination_memory, Ast * source_memory);
 
-template Register_Descriptor * Machine_Description::get_new_register<gp_data>();
+template Register_Descriptor * Machine_Description::get_new_register<int_reg>();
 template Register_Descriptor * Machine_Description::get_new_register<float_reg>();
 
-template int Machine_Description::count_free_register<gp_data>();
+template int Machine_Description::count_free_register<int_reg>();
 template int Machine_Description::count_free_register<float_reg>();
