@@ -354,22 +354,41 @@ void Control_Flow_IC_Stmt::set_label(string label)
 
 void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer)
 {
-	file_buffer<<AST_SPACE<<op_desc.get_name()<<":    \t";
 	switch (op_desc.get_ic_format())
 	{
 		case i_op_o1_o2_st:
-				opd1->print_ics_opd(file_buffer);
-				file_buffer<<" , zero : goto ";
-				file_buffer<<label<<endl;
-		break;
-	
+			file_buffer << AST_SPACE << op_desc.get_name() << ":    \t";
+			opd1->print_ics_opd(file_buffer);
+			file_buffer<<" , zero : goto ";
+			file_buffer<<label<<endl;
+			break;
+		case i_op_st:
+			file_buffer << "goto " << label << endl;
+			break;
+
 		default:
+			file_buffer << AST_SPACE << op_desc.get_name() << "\n";
 			break;
 	}	
 }
 void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer)
 {
-	// machine_desc_object.spim_register_table[zero]->get_name()
+	file_buffer << AST_SPACE << op_desc.get_mnemonic() << " ";
+	switch (op_desc.get_assembly_format())
+	{
+		case a_op_o1_o2_st:
+			opd1->print_asm_opd(file_buffer);
+			file_buffer << ", ";
+			file_buffer<<"$"<<machine_desc_object.spim_register_table[zero]->get_name();
+			file_buffer << ", "<<label<<endl;
+			break;
+		case i_op_st:
+			file_buffer << label << endl;
+			break;
+
+		default:
+			break;
+	}
 }
 ///////////////////////////////////////////////////////////////////
 

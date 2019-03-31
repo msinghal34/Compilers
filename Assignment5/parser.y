@@ -30,7 +30,7 @@ Symbol_Table* local_symbol_table;
 	Relational_Op relop_value; 
 	Sequence_Ast * seq_ast;
 };
-%token <string_value> INTEGER FLOAT VOID NAME IF ELSE DO WHILE AND OR NOT FOR
+%token <string_value> INTEGER FLOAT VOID NAME IF ELSE DO WHILE AND OR NOT FOR PRINT
 %token <double_value> DOUBLE_NUMBER
 %token <integer_value> INTEGER_NUMBER 
 %token <relop_value> RELOP EQOP
@@ -48,7 +48,7 @@ Symbol_Table* local_symbol_table;
 %nterm <string_value> TYPE
 %nterm <procedure> MAIN_FUNCTION PROCEDURE
 %nterm <ast_list> STATEMENT_LIST 
-%nterm <ast> STATEMENT ASSIGN_STATEMENT ARITH_EXP COND_EXP IF_STATEMENT 
+%nterm <ast> STATEMENT ASSIGN_STATEMENT ARITH_EXP COND_EXP IF_STATEMENT PRINT_STATEMENT
 %nterm <ast> DO_WHILE_STATEMENT WHILE_STATEMENT IF_ELSE_STATEMENT BALANCED_IF_STATEMENT
 %nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED
 %nterm <seq_ast> SEQUENCE_STATEMENT_LIST  
@@ -155,8 +155,29 @@ STATEMENT 				: ASSIGN_STATEMENT_VERIFIED
 						| IF_ELSE_STATEMENT
 						| WHILE_STATEMENT
 						| DO_WHILE_STATEMENT
-						// | FOR_STATEMENT
+						| PRINT_STATEMENT
 
+PRINT_STATEMENT 		: PRINT NAME ';'
+						{
+							Symbol_Table_Entry *v;
+							//cout<<*$1<<"\n";
+							if (local_symbol_table->variable_in_symbol_list_check(*$2))
+							{
+								v = &(local_symbol_table->get_symbol_table_entry(*$2));
+							}
+							else if (global_symbol_table->variable_in_symbol_list_check(*$2))
+							{
+								v = &(global_symbol_table->get_symbol_table_entry(*$2));
+							}
+							else
+							{
+								printf("\ncs316: Error %d,  Name Error \n", yylineno);
+								exit(0);
+							}
+							Name_Ast *name = new Name_Ast(*$2, *v, yylineno);
+							name->set_data_type(v->get_data_type());
+							$$ = new Print_Ast(name, yylineno);
+						}
 DO_WHILE_STATEMENT		: DO '{' SEQUENCE_STATEMENT_LIST '}' WHILE '(' COND_EXP_VERIFIED ')' ';'
 						{
 							$$ = new Iteration_Statement_Ast($7,$3,yylineno,true);
@@ -200,6 +221,10 @@ BALANCED_IF_STATEMENT 	: ASSIGN_STATEMENT_VERIFIED
 						| WHILE '(' COND_EXP_VERIFIED ')' BALANCED_IF_STATEMENT
 						{
 							$$ = new Iteration_Statement_Ast($3,$5,yylineno,false);
+						}
+						| PRINT_STATEMENT
+						{
+							$$ = $1;
 						}
 						| IF '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}' ELSE '{' SEQUENCE_STATEMENT_LIST '}'
 						{
