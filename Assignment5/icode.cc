@@ -297,8 +297,11 @@ void Compute_IC_Stmt::print_icode(ostream &file_buffer)
 	result->print_ics_opd(file_buffer);
 	file_buffer << " <- ";
 	opd1->print_ics_opd(file_buffer);
-	file_buffer << " , ";
-	opd2->print_ics_opd(file_buffer);
+	if (opd2 != NULL)
+	{
+		file_buffer << " , ";
+		opd2->print_ics_opd(file_buffer);
+	}
 	file_buffer << endl;
 }
 
@@ -308,9 +311,11 @@ void Compute_IC_Stmt::print_assembly(ostream &file_buffer)
 	result->print_asm_opd(file_buffer);
 	file_buffer << ", ";
 	opd1->print_asm_opd(file_buffer);
-	file_buffer << ", ";
-	opd2->print_asm_opd(file_buffer);
-	file_buffer << ", ";
+	if (opd2 != NULL)
+	{
+		file_buffer << ", ";
+		opd2->print_asm_opd(file_buffer);
+	}
 	file_buffer << endl;
 }
 ///////////////////////////////////////////////////////////////////

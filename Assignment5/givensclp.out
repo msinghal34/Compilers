@@ -1,0 +1,9 @@
+SPIM Version 8.0 of January 8, 2010
+Copyright 1990-2010, James R. Larus.
+All Rights Reserved.
+See the file README for a full copyright notice.
+Loaded: /usr/lib/spim/exceptions.s
+The following symbols are undefined:
+main
+
+[0x00400014]	0x0c000000  jal 0x00000000 [main]           ; 188: jal main
