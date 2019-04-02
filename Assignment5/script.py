@@ -54,7 +54,7 @@ os.system("make")
 
 directories = ["mytesting"]#, "testing", "errortesting"]
 file = "test.c"
-# foofile(file)
+foofile(file)
 
-for dir in directories:
-	foo(dir)
+# for dir in directories:
+# 	foo(dir)

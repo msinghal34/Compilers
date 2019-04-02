@@ -6,3 +6,5 @@
 *parser\.tab*
 *sclp
 *vscode*
+*.out
+*\.s

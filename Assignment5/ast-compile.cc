@@ -348,6 +348,18 @@ Code_For_Ast &Conditional_Expression_Ast::compile()
 	Register_Addr_Opd *rropd = new Register_Addr_Opd(rreg);
 
 	Register_Descriptor *result_reg;
+	Tgt_Op op;
+
+	if (node_data_type == int_data_type)
+	{
+		result_reg = machine_desc_object.get_new_register<int_reg>();
+		op = mov;
+	}
+	else
+	{
+		result_reg = machine_desc_object.get_new_register<float_reg>();
+		op = move_d;
+	}
 
 	cond_reg->reset_use_for_expr_result();
 	lreg->reset_use_for_expr_result();
@@ -366,18 +378,22 @@ Code_For_Ast &Conditional_Expression_Ast::compile()
 	Control_Flow_IC_Stmt *goto_else_end = new Control_Flow_IC_Stmt(j, NULL, else_end);
 	Label_IC_Stmt *label_else_start = new Label_IC_Stmt(label, else_start);
 	Label_IC_Stmt *label_else_end = new Label_IC_Stmt(label, else_end);
-	Compute_IC_Stmt *if_part = new Compute_IC_Stmt(or_t, lropd, zeroopd, result_opd);
-	Compute_IC_Stmt *else_part = new Compute_IC_Stmt(or_t, rropd, zeroopd, result_opd);
+	Move_IC_Stmt *if_part = new Move_IC_Stmt(op, lropd, result_opd);
+	Move_IC_Stmt *else_part = new Move_IC_Stmt(op, rropd, result_opd);
 
 	list<Icode_Stmt *> ics_list = cond_code.get_icode_list();
 
 	ics_list.push_back(beq_stmt);
+
 	ics_list.insert(ics_list.end(), lcode.get_icode_list().begin(), lcode.get_icode_list().end());
+	
 	ics_list.push_back(if_part);
 	ics_list.push_back(goto_else_end);
 	ics_list.push_back(label_else_start);
 	ics_list.insert(ics_list.end(), rcode.get_icode_list().begin(), rcode.get_icode_list().end());
+
 	ics_list.push_back(else_part);
+
 	ics_list.push_back(label_else_end);
 	return *(new Code_For_Ast(ics_list, result_reg));
 }
@@ -596,8 +612,8 @@ Code_For_Ast &Print_Ast::compile()
 	Register_Addr_Opd *target = new Register_Addr_Opd(a0_reg); 
 	Mem_Addr_Opd *source = new Mem_Addr_Opd(var->get_symbol_entry());
 	Move_IC_Stmt *arg_stmt = new Move_IC_Stmt(move_op,source,target);
-	string condition = get_new_label();
-	Control_Flow_IC_Stmt *syscall_stmt = new Control_Flow_IC_Stmt(Tgt_Op::print, NULL, condition);
+	// string condition = get_new_label();
+	Control_Flow_IC_Stmt *syscall_stmt = new Control_Flow_IC_Stmt(Tgt_Op::print, NULL, "");
 
 	ilist.push_back(new Move_IC_Stmt(imm_load,new Const_Opd<int>(print_cmd),v0_opd));
 	ilist.push_back(arg_stmt);
