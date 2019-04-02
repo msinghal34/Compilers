@@ -38,6 +38,12 @@ float 			{
 					return FLOAT;
 				}
 
+print 			{
+					store_token_name("PRINT", yytext, yylineno);
+					yylval.string_value = new string(yytext);												
+					return PRINT;
+				}
+
 if 				{
 					store_token_name("IF", yytext, yylineno);
 					yylval.string_value = new string(yytext);												

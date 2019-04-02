@@ -1,11 +1,3 @@
-
-#include<string>
-#include<fstream>
-#include<iostream>
-
-using namespace std;
-
-
 Eval_Result & Procedure::evaluate(ostream & file_buffer)
 {
 	Local_Environment & eval_env = *new Local_Environment();

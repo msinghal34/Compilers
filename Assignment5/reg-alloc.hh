@@ -44,7 +44,7 @@ typedef enum
 typedef enum 
 { 
 	fixed_reg, 
-	gp_data, 
+	int_reg, 
 	fn_result, 
 	argument,
 	pointer, 
