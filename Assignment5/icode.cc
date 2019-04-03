@@ -308,8 +308,10 @@ void Compute_IC_Stmt::print_icode(ostream &file_buffer)
 void Compute_IC_Stmt::print_assembly(ostream &file_buffer)
 {
 	file_buffer << AST_SPACE << op_desc.get_mnemonic() << " ";
-	result->print_asm_opd(file_buffer);
-	file_buffer << ", ";
+	if(result!=NULL){
+		result->print_asm_opd(file_buffer);
+		file_buffer << ", ";
+	}
 	opd1->print_asm_opd(file_buffer);
 	if (opd2 != NULL)
 	{

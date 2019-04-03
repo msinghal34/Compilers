@@ -5,7 +5,7 @@
 
 #include <algorithm>
 #include <iterator>
-#include <list>
+#include <list>  
 
 template class Number_Ast<double>;
 template class Number_Ast<int>;
@@ -431,27 +431,57 @@ Code_For_Ast &Relational_Expr_Ast::compile()
 	{
 		result_reg = machine_desc_object.get_new_register<int_reg>();
 		op = Relop_array[rel_op];
+		lreg->reset_use_for_expr_result();
+		rreg->reset_use_for_expr_result();
+		result_reg->set_use_for_expr_result();
+
+		Register_Addr_Opd *result_opd = new Register_Addr_Opd(result_reg);
+
+		Compute_IC_Stmt *ic_stmt = new Compute_IC_Stmt(op, lropd, rropd, result_opd);
+
+		list<Icode_Stmt *> llist = lcode.get_icode_list();
+		list<Icode_Stmt *> rlist = rcode.get_icode_list();
+		merge_list(llist, rlist);
+		Code_For_Ast *result_code = new Code_For_Ast(llist, result_reg);
+		result_code->append_ics(*ic_stmt);
+		return *result_code;
 	}
 	else
 	{
-		result_reg = machine_desc_object.get_new_register<float_reg>();
+		result_reg = machine_desc_object.get_new_register<int_reg>();
 		op = Relop_array_d[rel_op];
+		lreg->reset_use_for_expr_result();
+		rreg->reset_use_for_expr_result();
+		result_reg->set_use_for_expr_result();
+
+		Register_Addr_Opd *result_opd = new Register_Addr_Opd(result_reg);
+
+		Compute_IC_Stmt *cmp_stmt = new Compute_IC_Stmt(op, lropd, rropd, NULL);
+		Move_IC_Stmt *true_part = new Move_IC_Stmt(imm_load, new Const_Opd<int>(1), result_opd);
+		string true_label_string =  get_new_label();
+		Control_Flow_IC_Stmt *goto_true;
+		if(op == sgt_d|| op == sge_d){
+			goto_true = new Control_Flow_IC_Stmt(bc1f,NULL,true_label_string);
+		}
+		else{
+			goto_true = new Control_Flow_IC_Stmt(bc1t,NULL,true_label_string);
+		}
+		Move_IC_Stmt *false_part = new Move_IC_Stmt(imm_load, new Const_Opd<int>(0), result_opd);
+		Label_IC_Stmt *end_label = new Label_IC_Stmt(label,true_label_string);
+
+		list<Icode_Stmt *> llist = lcode.get_icode_list();
+		list<Icode_Stmt *> rlist = rcode.get_icode_list();
+		merge_list(llist, rlist);
+		Code_For_Ast *result_code = new Code_For_Ast(llist, result_reg);
+		result_code->append_ics(*cmp_stmt);
+		result_code->append_ics(*true_part);
+		result_code->append_ics(*goto_true);
+		result_code->append_ics(*false_part);
+		result_code->append_ics(*end_label);
+		return *result_code;
 	}
 
-	lreg->reset_use_for_expr_result();
-	rreg->reset_use_for_expr_result();
-	result_reg->set_use_for_expr_result();
 
-	Register_Addr_Opd *result_opd = new Register_Addr_Opd(result_reg);
-
-	Compute_IC_Stmt *ic_stmt = new Compute_IC_Stmt(op, lropd, rropd, result_opd);
-
-	list<Icode_Stmt *> llist = lcode.get_icode_list();
-	list<Icode_Stmt *> rlist = rcode.get_icode_list();
-	merge_list(llist, rlist);
-	Code_For_Ast *result_code = new Code_For_Ast(llist, result_reg);
-	result_code->append_ics(*ic_stmt);
-	return *result_code;
 }
 
 ///////////////////////// Logical_Expr_Ast ////////////////////////
