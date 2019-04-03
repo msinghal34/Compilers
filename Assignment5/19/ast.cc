@@ -283,15 +283,17 @@ Conditional_Expression_Ast::~Conditional_Expression_Ast()
 
 void Conditional_Expression_Ast::print(ostream &file_buffer)
 {
-	file_buffer<<"\n"<<AST_SPACE<<"Cond:\n";
-	file_buffer<<AST_NODE_SPACE<<"IF_ELSE";
+	file_buffer << "\n"
+				<< AST_SPACE << "Cond:\n";
+	file_buffer << AST_NODE_SPACE << "IF_ELSE";
 	cond->print(file_buffer);
-	file_buffer<<"\n"<<AST_NODE_SPACE<<"LHS (";
+	file_buffer << "\n"
+				<< AST_NODE_SPACE << "LHS (";
 	lhs->print(file_buffer);
-	file_buffer<<")\n";
-	file_buffer<<AST_NODE_SPACE<<"RHS (";
+	file_buffer << ")\n";
+	file_buffer << AST_NODE_SPACE << "RHS (";
 	rhs->print(file_buffer);
-	file_buffer<<")";
+	file_buffer << ")";
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -341,13 +343,14 @@ string Relop_array[] = {"LE", "LT", "GT", "GE", "EQ", "NE"};
 
 void Relational_Expr_Ast::print(ostream &file_buffer)
 {
-	file_buffer<<"\n"<<AST_NODE_SPACE<<"Condition: "<<Relop_array[rel_op]<<"\n";
-	file_buffer<<AST_SUB_NODE_SPACE<<"LHS (";
+	file_buffer << "\n"
+				<< AST_NODE_SPACE << "Condition: " << Relop_array[rel_op] << "\n";
+	file_buffer << AST_SUB_NODE_SPACE << "LHS (";
 	lhs_condition->print(file_buffer);
-	file_buffer<<")\n";
-	file_buffer<<AST_SUB_NODE_SPACE<<"RHS (";
+	file_buffer << ")\n";
+	file_buffer << AST_SUB_NODE_SPACE << "RHS (";
 	rhs_condition->print(file_buffer);
-	file_buffer<<")";
+	file_buffer << ")";
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -385,15 +388,19 @@ string logicOp_array[] = {"NOT", "OR", "AND"};
 
 void Logical_Expr_Ast::print(ostream &file_buffer)
 {
-	file_buffer<<"\n"<<AST_NODE_SPACE<<"Condition: "<<logicOp_array[bool_op];
-	if(lhs_op!=NULL){
-		file_buffer<<"\n"<<AST_SUB_NODE_SPACE<<"LHS (";
+	file_buffer << "\n"
+				<< AST_NODE_SPACE << "Condition: " << logicOp_array[bool_op];
+	if (lhs_op != NULL)
+	{
+		file_buffer << "\n"
+					<< AST_SUB_NODE_SPACE << "LHS (";
 		lhs_op->print(file_buffer);
-		file_buffer<<")";
+		file_buffer << ")";
 	}
-	file_buffer<<"\n"<<AST_SUB_NODE_SPACE<<"RHS (";
+	file_buffer << "\n"
+				<< AST_SUB_NODE_SPACE << "RHS (";
 	rhs_op->print(file_buffer);
-	file_buffer<<")";
+	file_buffer << ")";
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -430,16 +437,20 @@ bool Selection_Statement_Ast::check_ast()
 
 void Selection_Statement_Ast::print(ostream &file_buffer)
 {
-	file_buffer<<"\n"<<AST_SPACE<<"IF : \n"<<AST_SPACE<<"CONDITION (";
+	file_buffer << "\n"
+				<< AST_SPACE << "IF : \n"
+				<< AST_SPACE << "CONDITION (";
 	cond->print(file_buffer);
-	file_buffer<<")\n";
-	file_buffer<<AST_SPACE<<"THEN (";
+	file_buffer << ")\n";
+	file_buffer << AST_SPACE << "THEN (";
 	then_part->print(file_buffer);
-	file_buffer<<")";
-	if(else_part!=NULL){
-		file_buffer<<"\n"<<AST_SPACE<<"ELSE (";
+	file_buffer << ")";
+	if (else_part != NULL)
+	{
+		file_buffer << "\n"
+					<< AST_SPACE << "ELSE (";
 		else_part->print(file_buffer);
-		file_buffer<<")";
+		file_buffer << ")";
 	}
 }
 
@@ -474,23 +485,27 @@ bool Iteration_Statement_Ast::check_ast()
 
 void Iteration_Statement_Ast::print(ostream &file_buffer)
 {
-	if(is_do_form){
-		file_buffer<<"\n"<<AST_SPACE<<"DO (";
+	if (is_do_form)
+	{
+		file_buffer << "\n"
+					<< AST_SPACE << "DO (";
 		body->print(file_buffer);
-		file_buffer<<")\n";
-		file_buffer<<AST_SPACE<<"WHILE CONDITION (";
+		file_buffer << ")\n";
+		file_buffer << AST_SPACE << "WHILE CONDITION (";
 		cond->print(file_buffer);
-		file_buffer<<")";
+		file_buffer << ")";
 	}
-	else{
-		file_buffer<<"\n"<<AST_SPACE<<"WHILE : \n"<<AST_SPACE<<"CONDITION (";
+	else
+	{
+		file_buffer << "\n"
+					<< AST_SPACE << "WHILE : \n"
+					<< AST_SPACE << "CONDITION (";
 		cond->print(file_buffer);
-		file_buffer<<")\n";
-		file_buffer<<AST_SPACE<<"BODY (";
+		file_buffer << ")\n";
+		file_buffer << AST_SPACE << "BODY (";
 		body->print(file_buffer);
-		file_buffer<<")";
+		file_buffer << ")";
 	}
-	
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -512,9 +527,30 @@ void Sequence_Ast::ast_push_back(Ast *ast)
 void Sequence_Ast::print(ostream &file_buffer)
 {
 	list<Ast *>::iterator it;
-    for (it = statement_list.begin(); it != statement_list.end(); ++it)
-    {
-		file_buffer<<"\n"<<AST_NODE_SPACE;
-        (*it)->print(file_buffer);
-    }
+	for (it = statement_list.begin(); it != statement_list.end(); ++it)
+	{
+		file_buffer << "\n"
+					<< AST_NODE_SPACE;
+		(*it)->print(file_buffer);
+	}
+}
+
+// ///////////////////////////////////////////////////////////////////
+
+Print_Ast::Print_Ast(Ast *v, int line)
+{
+	node_data_type = v->get_data_type();
+	var = v;
+	lineno = line;
+}
+Print_Ast::~Print_Ast()
+{
+}
+
+void Print_Ast::print(ostream &file_buffer)
+{
+	file_buffer << "\n" << AST_SPACE << "Print :\n";
+	file_buffer << AST_NODE_SPACE << "    (";
+	var->print(file_buffer);
+	file_buffer << ")";
 }
