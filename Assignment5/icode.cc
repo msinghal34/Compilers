@@ -72,12 +72,26 @@ Mem_Addr_Opd::Mem_Addr_Opd(Symbol_Table_Entry &se)
 
 void Mem_Addr_Opd::print_ics_opd(ostream &file_buffer)
 {
-	file_buffer << symbol_entry->get_variable_name();
+	if (symbol_entry->get_symbol_scope() == global)
+	{
+		file_buffer << symbol_entry->get_variable_name();
+	}
+	else
+	{
+		file_buffer << symbol_entry->get_variable_name();
+	}
 }
 
 void Mem_Addr_Opd::print_asm_opd(ostream &file_buffer)
 {
-	file_buffer << symbol_entry->get_start_offset() << "($" << (machine_desc_object.spim_register_table[fp])->get_name() << ")";
+	if (symbol_entry->get_symbol_scope() == global)
+	{
+		file_buffer << symbol_entry->get_variable_name();
+	}
+	else
+	{
+		file_buffer << symbol_entry->get_start_offset() << "($" << (machine_desc_object.spim_register_table[fp])->get_name() << ")";
+	}
 }
 
 Mem_Addr_Opd &Mem_Addr_Opd::operator=(const Mem_Addr_Opd &rhs)
@@ -214,7 +228,7 @@ void Move_IC_Stmt::set_result(Ics_Opd *io)
 void Move_IC_Stmt::print_icode(ostream &file_buffer)
 {
 
-	file_buffer << AST_SPACE << op_desc.get_name() << ":    \t";
+	file_buffer << "\t" << op_desc.get_name() << ":    \t";
 	result->print_ics_opd(file_buffer);
 	file_buffer << " <- ";
 	opd1->print_ics_opd(file_buffer);
@@ -293,7 +307,7 @@ void Compute_IC_Stmt::set_result(Ics_Opd *io)
 
 void Compute_IC_Stmt::print_icode(ostream &file_buffer)
 {
-	file_buffer << AST_SPACE << op_desc.get_name() << ":    \t";
+	file_buffer << "\t" << op_desc.get_name() << ":    \t";
 	result->print_ics_opd(file_buffer);
 	file_buffer << " <- ";
 	opd1->print_ics_opd(file_buffer);
@@ -366,7 +380,7 @@ void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer)
 	switch (op_desc.get_ic_format())
 	{
 	case i_op_o1_o2_st:
-		file_buffer << AST_SPACE << op_desc.get_name() << ":    \t";
+		file_buffer << "\t" << op_desc.get_name() << ":    \t";
 		opd1->print_ics_opd(file_buffer);
 		file_buffer << " , zero : goto ";
 		file_buffer << label << endl;
@@ -376,7 +390,7 @@ void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer)
 		break;
 
 	default:
-		file_buffer << AST_SPACE << op_desc.get_name() << "\n";
+		file_buffer << "\t" << op_desc.get_name() << "\n";
 		break;
 	}
 }

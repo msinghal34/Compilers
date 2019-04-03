@@ -460,7 +460,7 @@ Code_For_Ast &Relational_Expr_Ast::compile()
 		Move_IC_Stmt *true_part = new Move_IC_Stmt(imm_load, new Const_Opd<int>(1), result_opd);
 		string true_label_string =  get_new_label();
 		Control_Flow_IC_Stmt *goto_true;
-		if(op == sgt_d|| op == sge_d){
+		if(op == sgt_d|| op == sge_d || op == sne_d){
 			goto_true = new Control_Flow_IC_Stmt(bc1f,NULL,true_label_string);
 		}
 		else{
@@ -488,6 +488,33 @@ Code_For_Ast &Relational_Expr_Ast::compile()
 
 Code_For_Ast &Logical_Expr_Ast::compile()
 {
+	if (lhs_op == NULL)
+	{
+		Code_For_Ast &rcode = rhs_op->compile();
+		Register_Descriptor *rreg = rcode.get_reg();
+		Register_Addr_Opd *rropd = new Register_Addr_Opd(rreg);
+
+		Tgt_Op Logical_array[] = {not_t, or_t, and_t};
+
+		Register_Descriptor *result_reg;
+		Tgt_Op op;
+		result_reg = machine_desc_object.get_new_register<int_reg>();
+		op = Logical_array[bool_op];
+
+		rreg->reset_use_for_expr_result();
+		result_reg->set_use_for_expr_result();
+
+		Register_Addr_Opd *result_opd = new Register_Addr_Opd(result_reg);
+
+		Move_IC_Stmt *load_one = new Move_IC_Stmt(imm_load, new Const_Opd<int>(1), result_opd);
+		Compute_IC_Stmt *ic_stmt = new Compute_IC_Stmt(op, rropd, result_opd, result_opd);
+
+		list<Icode_Stmt *> rlist = rcode.get_icode_list();
+		Code_For_Ast *result_code = new Code_For_Ast(rlist, result_reg);
+		result_code->append_ics(*load_one);
+		result_code->append_ics(*ic_stmt);
+		return *result_code;		
+	}
 	Code_For_Ast &lcode = lhs_op->compile();
 	Register_Descriptor *lreg = lcode.get_reg();
 	Register_Addr_Opd *lropd = new Register_Addr_Opd(lreg);

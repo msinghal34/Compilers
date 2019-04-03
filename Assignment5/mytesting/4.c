@@ -4,7 +4,7 @@ void main()
 
 	int a,b;
 
-	 a= -1;
+	 a= 4;
 
 	 b= 2;
 
@@ -12,4 +12,5 @@ void main()
 	 {
 	 	a = 3;
 	 }
+	 print a;
 }

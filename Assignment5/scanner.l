@@ -75,13 +75,20 @@ void		 	{
 					return VOID;
 				}
 
+main			{
+					store_token_name("NAME", yytext, yylineno);
+					yylval.string_value = new string(yytext);
+					return NAME;
+				}
+
 {comment}		{
 					;
 				}
 					
 {identifier} 	{
 					store_token_name("NAME", yytext, yylineno);
-					yylval.string_value = new string(yytext);								
+					yylval.string_value = new string(yytext);
+					(*yylval.string_value).append("_");
 					return NAME;
 				}
 
