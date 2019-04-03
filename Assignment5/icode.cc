@@ -308,7 +308,8 @@ void Compute_IC_Stmt::print_icode(ostream &file_buffer)
 void Compute_IC_Stmt::print_assembly(ostream &file_buffer)
 {
 	file_buffer << AST_SPACE << op_desc.get_mnemonic() << " ";
-	if(result!=NULL){
+	if (result != NULL)
+	{
 		result->print_asm_opd(file_buffer);
 		file_buffer << ", ";
 	}
@@ -364,38 +365,40 @@ void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer)
 {
 	switch (op_desc.get_ic_format())
 	{
-		case i_op_o1_o2_st:
-			file_buffer << AST_SPACE << op_desc.get_name() << ":    \t";
-			opd1->print_ics_opd(file_buffer);
-			file_buffer<<" , zero : goto ";
-			file_buffer<<label<<endl;
-			break;
-		case i_op_st:
-			file_buffer << "goto " << label << endl;
-			break;
+	case i_op_o1_o2_st:
+		file_buffer << AST_SPACE << op_desc.get_name() << ":    \t";
+		opd1->print_ics_opd(file_buffer);
+		file_buffer << " , zero : goto ";
+		file_buffer << label << endl;
+		break;
+	case i_op_st:
+		file_buffer << "goto " << label << endl;
+		break;
 
-		default:
-			file_buffer << AST_SPACE << op_desc.get_name() << "\n";
-			break;
-	}	
+	default:
+		file_buffer << AST_SPACE << op_desc.get_name() << "\n";
+		break;
+	}
 }
 void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer)
 {
-	file_buffer << AST_SPACE << op_desc.get_mnemonic() << " ";
 	switch (op_desc.get_assembly_format())
 	{
-		case a_op_o1_o2_st:
-			opd1->print_asm_opd(file_buffer);
-			file_buffer << ", ";
-			file_buffer<<"$"<<machine_desc_object.spim_register_table[zero]->get_name();
-			file_buffer << ", "<<label<<endl;
-			break;
-		case i_op_st:
-			file_buffer << label << endl;
-			break;
+	case a_op_o1_o2_st:
+		file_buffer << AST_SPACE << op_desc.get_mnemonic() << " ";
+		opd1->print_asm_opd(file_buffer);
+		file_buffer << ", ";
+		file_buffer << "$" << machine_desc_object.spim_register_table[zero]->get_name();
+		file_buffer << ", " << label << endl;
+		break;
+	case i_op_st:
+		file_buffer << AST_SPACE << op_desc.get_mnemonic() << " ";
+		file_buffer << label << endl;
+		break;
 
-		default:
-			break;
+	default:
+		file_buffer << AST_SPACE << op_desc.get_mnemonic() << endl;
+		break;
 	}
 }
 ///////////////////////////////////////////////////////////////////
@@ -452,7 +455,7 @@ Code_For_Ast::Code_For_Ast(list<Icode_Stmt *> &ic_l, Register_Descriptor *reg)
 void Code_For_Ast::append_ics(Icode_Stmt &ics)
 {
 	ics_list.push_back(&ics);
-} 
+}
 list<Icode_Stmt *> &Code_For_Ast::get_icode_list()
 {
 	return ics_list;
