@@ -12,7 +12,7 @@ void main()
 	if(!(a>b&&c==d)){
 		c=c+d;
 	}
-	if(1.0==1.0){
+	else if(1.0==1.0){
 		c=c+d;
 	}
 	if(c!=d){

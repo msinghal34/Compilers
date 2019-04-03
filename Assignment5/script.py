@@ -58,7 +58,7 @@ def foo(mainDirectory):
     print("\n")
 
 os.system("make")
-directories = ["finaltesting", "testing", "mytesting"]
+directories = ["finaltesting"]#, "testing", "mytesting"]
 for dir in directories:
     foo(dir)
 os.system("rm *.out")
