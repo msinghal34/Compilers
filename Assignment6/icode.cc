@@ -337,17 +337,21 @@ void Compute_IC_Stmt::print_assembly(ostream &file_buffer)
 }
 ///////////////////////////////////////////////////////////////////
 
-Control_Flow_IC_Stmt::Control_Flow_IC_Stmt(Tgt_Op inst_op, Ics_Opd *opd1, string label)
+
+Control_Flow_IC_Stmt::Control_Flow_IC_Stmt(Tgt_Op op, Ics_Opd * o1, Ics_Opd * o2, string label, int size)
 {
-	this->opd1 = opd1;
-	this->label = label;
-	op_desc = *machine_desc_object.spim_instruction_table[inst_op];
+	this->opd1 = o1;
+	this->opd2 = o2;
+	this->offset = label;
+	actual_param_size = size;
+	op_desc = *machine_desc_object.spim_instruction_table[op];
 }
 
 Control_Flow_IC_Stmt &Control_Flow_IC_Stmt::operator=(const Control_Flow_IC_Stmt &rhs)
 {
 	opd1 = rhs.opd1;
-	label = rhs.label;
+	opd2 = rhs.opd2;
+	offset = rhs.offset;
 	op_desc = rhs.op_desc;
 	return *this;
 }
@@ -361,18 +365,25 @@ Ics_Opd *Control_Flow_IC_Stmt::get_opd1()
 {
 	return opd1;
 }
+Ics_Opd *Control_Flow_IC_Stmt::get_opd2()
+{
+	return opd2;
+}
+string Control_Flow_IC_Stmt::get_Offset()
+{
+	return offset;
+}
 void Control_Flow_IC_Stmt::set_opd1(Ics_Opd *io)
 {
 	opd1 = io;
 }
-
-string Control_Flow_IC_Stmt::get_label()
+void Control_Flow_IC_Stmt::set_opd2(Ics_Opd *io)
 {
-	return label;
+	opd2 = io;
 }
-void Control_Flow_IC_Stmt::set_label(string label)
+void Control_Flow_IC_Stmt::set_Offset(string label)
 {
-	this->label = label;
+	offset = label;
 }
 
 void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer)

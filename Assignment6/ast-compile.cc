@@ -374,8 +374,8 @@ Code_For_Ast &Conditional_Expression_Ast::compile()
 	Register_Descriptor *zerod = machine_desc_object.spim_register_table[zero];
 	Register_Addr_Opd *zeroopd = new Register_Addr_Opd(zerod);
 
-	Control_Flow_IC_Stmt *beq_stmt = new Control_Flow_IC_Stmt(beq, cond_opd, else_start);
-	Control_Flow_IC_Stmt *goto_else_end = new Control_Flow_IC_Stmt(j, NULL, else_end);
+	Control_Flow_IC_Stmt *beq_stmt = new Control_Flow_IC_Stmt(beq, cond_opd, zeroopd, else_start);
+	Control_Flow_IC_Stmt *goto_else_end = new Control_Flow_IC_Stmt(j, NULL,NULL, else_end);
 	Label_IC_Stmt *label_else_start = new Label_IC_Stmt(label, else_start);
 	Label_IC_Stmt *label_else_end = new Label_IC_Stmt(label, else_end);
 	Move_IC_Stmt *if_part = new Move_IC_Stmt(op, lropd, result_opd);
@@ -414,6 +414,9 @@ Code_For_Ast &Return_Ast::compile_and_optimize_ast(Lra_Outcome &lra)
 
 Code_For_Ast &Relational_Expr_Ast::compile()
 {
+
+
+
 	Code_For_Ast &lcode = lhs_condition->compile();
 	Register_Descriptor *lreg = lcode.get_reg();
 	Register_Addr_Opd *lropd = new Register_Addr_Opd(lreg);
@@ -461,10 +464,10 @@ Code_For_Ast &Relational_Expr_Ast::compile()
 		string true_label_string =  get_new_label();
 		Control_Flow_IC_Stmt *goto_true;
 		if(op == sgt_d|| op == sge_d || op == sne_d){
-			goto_true = new Control_Flow_IC_Stmt(bc1f,NULL,true_label_string);
+			goto_true = new Control_Flow_IC_Stmt(bc1f,NULL,NULL,true_label_string);
 		}
 		else{
-			goto_true = new Control_Flow_IC_Stmt(bc1t,NULL,true_label_string);
+			goto_true = new Control_Flow_IC_Stmt(bc1t,NULL,NULL,true_label_string);
 		}
 		Move_IC_Stmt *false_part = new Move_IC_Stmt(imm_load, new Const_Opd<int>(0), result_opd);
 		Label_IC_Stmt *end_label = new Label_IC_Stmt(label,true_label_string);
@@ -549,6 +552,8 @@ Code_For_Ast &Logical_Expr_Ast::compile()
 
 Code_For_Ast &Selection_Statement_Ast::compile()
 {
+	Register_Descriptor *zerod = machine_desc_object.spim_register_table[zero];
+	Register_Addr_Opd *zeroopd = new Register_Addr_Opd(zerod);
 	if (else_part == NULL)
 	{
 		Code_For_Ast &cond_code = cond->compile();
@@ -561,7 +566,7 @@ Code_For_Ast &Selection_Statement_Ast::compile()
 
 		string end = get_new_label();
 
-		Control_Flow_IC_Stmt *beq_stmt = new Control_Flow_IC_Stmt(beq, cond_opd, end);
+		Control_Flow_IC_Stmt *beq_stmt = new Control_Flow_IC_Stmt(beq, cond_opd, zeroopd, end);
 		Label_IC_Stmt *label_end = new Label_IC_Stmt(label, end);
 
 		list<Icode_Stmt *> ics_list = cond_code.get_icode_list();
@@ -582,8 +587,8 @@ Code_For_Ast &Selection_Statement_Ast::compile()
 	string else_start = get_new_label();
 	string else_end = get_new_label();
 
-	Control_Flow_IC_Stmt *beq_stmt = new Control_Flow_IC_Stmt(beq, cond_opd, else_start);
-	Control_Flow_IC_Stmt *goto_else_end = new Control_Flow_IC_Stmt(j, NULL, else_end);
+	Control_Flow_IC_Stmt *beq_stmt = new Control_Flow_IC_Stmt(beq, cond_opd, zeroopd, else_start);
+	Control_Flow_IC_Stmt *goto_else_end = new Control_Flow_IC_Stmt(j, NULL,NULL, else_end);
 	Label_IC_Stmt *label_else_start = new Label_IC_Stmt(label, else_start);
 	Label_IC_Stmt *label_else_end = new Label_IC_Stmt(label, else_end);
 
@@ -601,6 +606,10 @@ Code_For_Ast &Selection_Statement_Ast::compile()
 
 Code_For_Ast &Iteration_Statement_Ast::compile()
 {
+
+	Register_Descriptor *zerod = machine_desc_object.spim_register_table[zero];
+	Register_Addr_Opd *zeroopd = new Register_Addr_Opd(zerod);
+
 	Code_For_Ast &cond_code = cond->compile();
 	Register_Descriptor *cond_reg = cond_code.get_reg();
 	Register_Addr_Opd *cond_opd = new Register_Addr_Opd(cond_reg);
@@ -614,8 +623,8 @@ Code_For_Ast &Iteration_Statement_Ast::compile()
 
 	Label_IC_Stmt *body_label = new Label_IC_Stmt(label, body);
 	Label_IC_Stmt *condition_label = new Label_IC_Stmt(label, condition);
-	Control_Flow_IC_Stmt *bne_stmt = new Control_Flow_IC_Stmt(bne, cond_opd, body);
-	Control_Flow_IC_Stmt *goto_cond_stmt = new Control_Flow_IC_Stmt(j, NULL, condition);
+	Control_Flow_IC_Stmt *bne_stmt = new Control_Flow_IC_Stmt(bne, cond_opd, zeroopd, body);
+	Control_Flow_IC_Stmt *goto_cond_stmt = new Control_Flow_IC_Stmt(j, NULL, NULL, condition);
 
 	cond_reg->reset_use_for_expr_result();
 
@@ -670,7 +679,7 @@ Code_For_Ast &Print_Ast::compile()
 	Mem_Addr_Opd *source = new Mem_Addr_Opd(var->get_symbol_entry());
 	Move_IC_Stmt *arg_stmt = new Move_IC_Stmt(move_op,source,target);
 	// string condition = get_new_label();
-	Control_Flow_IC_Stmt *syscall_stmt = new Control_Flow_IC_Stmt(Tgt_Op::print, NULL, "");
+	Print_IC_Stmt *syscall_stmt = new Print_IC_Stmt();
 
 	ilist.push_back(new Move_IC_Stmt(imm_load,new Const_Opd<int>(print_cmd),v0_opd));
 	ilist.push_back(arg_stmt);

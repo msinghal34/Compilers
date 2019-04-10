@@ -298,16 +298,26 @@ void Conditional_Expression_Ast::print(ostream &file_buffer)
 
 // ///////////////////////////////////////////////////////////////////
 
-Return_Ast::Return_Ast(int line)
+Return_Ast::Return_Ast(Ast * ret_val, string name, int line)
 {
 	lineno = line;
+	return_value = ret_val;
+	proc_name = name; 
 }
 
 Return_Ast::~Return_Ast()
 {
 }
+
+Data_Type Return_Ast::get_data_type(){
+	return return_value->get_data_type();
+}
+
 void Return_Ast::print(ostream &file_buffer)
 {
+	file_buffer << "\n"
+				<< AST_SPACE << "Return:";
+	return_value->print(file_buffer);	
 }
 
 // ///////////////////////////////////////////////////////////////////
