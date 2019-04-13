@@ -57,7 +57,7 @@ Symbol_Table* local_symbol_table;
 PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
 							{
 								program_object.set_global_table(*$1);
-								program_object.set_procedure($2,yylineno);
+								program_object.set_proc_to_map($2->get_proc_name(),$2);
 							}
 
 GLOBAL_DECLARATIONS		: /* epsilon */
