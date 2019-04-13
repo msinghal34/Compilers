@@ -10,6 +10,7 @@ Data_Type curr_data_type;
 
 string curr_proc_name;
 Data_Type curr_proc_type;
+Data_Type curr_return_type;
 
 Table_Scope curr_table_scope;
 
@@ -30,7 +31,7 @@ Symbol_Table* local_symbol_table;
 	Relational_Op relop_value; 
 	Sequence_Ast * seq_ast;
 };
-%token <string_value> INTEGER FLOAT VOID NAME IF ELSE DO WHILE AND OR NOT FOR PRINT
+%token <string_value> INTEGER FLOAT VOID NAME IF ELSE DO WHILE AND OR NOT PRINT RETURN
 %token <double_value> DOUBLE_NUMBER
 %token <integer_value> INTEGER_NUMBER 
 %token <relop_value> RELOP EQOP
@@ -42,40 +43,45 @@ Symbol_Table* local_symbol_table;
 %left '+' '-'
 %left '*' '/'
 %start PROGRAM 
-%nterm <symbol_table> GLOBAL_DECLARATIONS LOCAL_DECLARATIONS
-%nterm <symbol_table> DECLARATION
-%nterm <symbol_table> NAME_LIST
-%nterm <string_value> TYPE
-%nterm <procedure> MAIN_FUNCTION PROCEDURE
-%nterm <ast_list> STATEMENT_LIST 
+%nterm <integer_value> LOCAL_DECLARATIONS FUNCTIONDEF FUNCTIONDECLR DECLARATION GLOBAL_DECLARATIONS VAR_GLOBAL VAR_LOCAL DEF
+%nterm <symbol_table>  NAME_LIST ARGLIST
+%nterm <string_value> TYPE TYPEFUN
+%nterm <procedure> FUNCTIONDECLR1
+%nterm <ast_list> STATEMENT_LIST ARGUMENTS
 %nterm <ast> STATEMENT ASSIGN_STATEMENT ARITH_EXP COND_EXP IF_STATEMENT PRINT_STATEMENT
 %nterm <ast> DO_WHILE_STATEMENT WHILE_STATEMENT IF_ELSE_STATEMENT BALANCED_IF_STATEMENT
-%nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED
+%nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED FUNCTIONCALL RETURN_STATEMENT
 %nterm <seq_ast> SEQUENCE_STATEMENT_LIST  
+%nterm <symbol_entry> ARG
 %%
 
-PROGRAM					: GLOBAL_DECLARATIONS MAIN_FUNCTION
+PROGRAM					: GLOBAL_DECLARATIONS
 							{
-								program_object.set_global_table(*$1);
-								program_object.set_proc_to_map($2->get_proc_name(),$2);
+								program_object.set_global_table(*global_symbol_table);
 							}
 
 GLOBAL_DECLARATIONS		: /* epsilon */
 							{
-								$$ = new Symbol_Table();
-								global_symbol_table = $$;
+								global_symbol_table = new Symbol_Table();
 								curr_table_scope = global;
+								$$ = 0;
 							}
 						| GLOBAL_DECLARATIONS DECLARATION
-							{
-								$1->append_list(*$2,yylineno);
-								$$ = $1;
-								$$->set_table_scope(global);
-							}
+							
 
-DECLARATION				: TYPE NAME_LIST ';'
+DECLARATION				: VAR_GLOBAL 
+						| FUNCTIONDEF
+						| FUNCTIONDECLR
+
+VAR_GLOBAL 					: TYPE NAME_LIST ';'
 							{
-								$$ = $2;
+								if(curr_data_type==void_data_type)
+								{
+									printf("\ncs316: Error %d,  Void data type Error \n", yylineno);
+									exit(0);
+								}
+								global_symbol_table->append_list(*$2,yylineno);
+								$$ = 0;
 							}
 
 NAME_LIST				: NAME
@@ -91,7 +97,7 @@ NAME_LIST				: NAME
 								ste->set_symbol_scope(curr_table_scope);
 								$1->push_symbol(ste);
 								$$ = $1;
-							}
+							} 
 TYPE					: INTEGER 
 							{
 								curr_data_type = int_data_type;
@@ -102,37 +108,154 @@ TYPE					: INTEGER
 								curr_data_type = double_data_type;
 								$$ = $1;
 							}
-
-DEF						: VOID NAME
+						| VOID
 							{
-								curr_proc_type = void_data_type;
-								curr_proc_name = *$2;
-							}
-
-MAIN_FUNCTION			: DEF '(' ')' '{' PROCEDURE '}'
-							{
-								$$ = $5;	
-							}
-
-PROCEDURE				: LOCAL_DECLARATIONS STATEMENT_LIST
-							{
-								$$ = new Procedure(curr_proc_type, curr_proc_name, yylineno);
-								$$->set_local_list(*$1);
-								$$->set_ast_list(*$2);
-							}
-
-LOCAL_DECLARATIONS		: /* epsilon */
-							{
-								$$ = new Symbol_Table();
-								local_symbol_table = $$;
-								curr_table_scope = local;
-							}
-						| LOCAL_DECLARATIONS DECLARATION
-							{
-								$1->append_list(*$2,yylineno);
+								curr_data_type = void_data_type;
 								$$ = $1;
-								$$->set_table_scope(curr_table_scope);
 							}
+
+// DEF						: VOID NAME
+// 							{
+// 								curr_proc_type = void_data_type;
+// 								curr_proc_name = *$2;
+// 							}
+
+// MAIN_FUNCTION			: DEF '(' ')' '{' PROCEDURE '}'
+// 							{
+// 								$$ = $5;	
+// 							}
+
+ARG						: TYPE NAME
+						{
+							if(curr_data_type==void_data_type)
+							{
+								printf("\ncs316: Error %d,  Void data type Error \n", yylineno);
+								exit(0);
+							}
+							$$ = new Symbol_Table_Entry(*$2, curr_data_type , yylineno);
+						}
+
+ARGLIST 				: /* epsilon */
+						{
+							$$ = new Symbol_Table();
+							$$->set_table_scope(formal);
+						}
+						| ARG
+						{
+							$$ = new Symbol_Table();
+							$$->push_symbol($1);
+							$$->set_table_scope(formal);
+						} 
+						| ARGLIST ',' ARG
+						{
+							$1->push_symbol($3);
+							$$ = $1;
+						}
+
+DEF 					: TYPE NAME
+						{
+							curr_return_type = curr_data_type;
+							curr_proc_name = *$2;
+							$$ = 0;
+						}
+FUNCTIONDEF 			: DEF '(' ARGLIST ')' ';'
+						{
+							if (program_object.is_procedure_exists(curr_proc_name))
+							{
+								printf("\ncs316: Error %d,  Re-Declaration Error \n", yylineno);
+								exit(0);
+							}
+							Procedure *proc = new Procedure(curr_return_type, curr_proc_name, yylineno);
+							proc->set_formal_param_list(*$3);
+							program_object.set_proc_to_map(curr_proc_name, proc);
+							$$ = 0;
+
+						}
+
+FUNCTIONDECLR1 			: TYPEFUN NAME '(' ARGLIST ')'
+						{
+							if (program_object.is_procedure_exists(*$2))
+							{
+								$$ = program_object.get_procedure_prototype(*$2);
+								if($$->is_proc_defined())
+								{
+									printf("\ncs316: Error %d,  Re-Declaration Error \n", yylineno);
+									exit(0);
+								}
+							}
+							else
+							{
+								$$ = new Procedure(curr_return_type, *$2, yylineno);
+							}
+							curr_proc_name = *$2;
+							$$->set_formal_param_list(*$4);
+							program_object.set_proc_to_map(*$2, $$);
+							local_symbol_table = new Symbol_Table();
+							curr_table_scope = local;
+							local_symbol_table->set_table_scope(curr_table_scope);
+						}
+
+FUNCTIONDECLR 			: FUNCTIONDECLR1 '{' LOCAL_DECLARATIONS STATEMENT_LIST '}'
+						{
+							$1->set_proc_is_defined();
+							$1->set_local_list(*local_symbol_table);
+							$1->set_ast_list(*$4);
+							$$ = 0;
+							curr_table_scope = global;
+						}
+
+ARGUMENTS 				: /* epsilon */
+						{
+							$$ = new list<Ast *>();	
+						}
+						| ARITH_EXP
+						{
+							$$ = new list<Ast *>();
+							$$->push_back($1);
+						}
+						| ARGUMENTS ',' ARITH_EXP
+						{
+							$1->push_back($3);
+							$$=$1;
+						}
+FUNCTIONCALL 			: NAME '(' ARGUMENTS ')'
+						{
+							Call_Ast *cst = new Call_Ast(*$1, yylineno);
+							if (!program_object.is_procedure_exists(*$1))
+							{
+								printf("\ncs316: Error %d,  Re-Declaration Error \n", yylineno);
+								exit(0);
+							}
+							cst->set_actual_param_list(*$3);
+							Procedure *proc = program_object.get_procedure_prototype(*$1);
+							cst->set_data_type(proc->get_return_type());
+							cst->check_actual_formal_param(proc->get_formal_param_list());
+							$$ = cst;
+						}
+
+
+// PROCEDURE				: LOCAL_DECLARATIONS STATEMENT_LIST
+// 							{
+// 								$$ = new Procedure(curr_proc_type, curr_proc_name, yylineno);
+// 								$$->set_local_list(*$1);
+// 								$$->set_ast_list(*$2);
+// 							}
+
+
+VAR_LOCAL 					: TYPE NAME_LIST ';'
+							{
+								if(curr_data_type==void_data_type)
+								{
+									printf("\ncs316: Error %d,  Void data type Error \n", yylineno);
+									exit(0);
+								}
+								local_symbol_table->append_list(*$2,yylineno);
+								$$ = 0;
+							}
+
+
+LOCAL_DECLARATIONS		: /* epsilon */{$$=0;}
+						| LOCAL_DECLARATIONS VAR_LOCAL
 
 
 STATEMENT_LIST			: /* epsilon */
@@ -156,6 +279,35 @@ STATEMENT 				: ASSIGN_STATEMENT_VERIFIED
 						| WHILE_STATEMENT
 						| DO_WHILE_STATEMENT
 						| PRINT_STATEMENT
+						| RETURN_STATEMENT
+
+RETURN_STATEMENT		: RETURN ';'
+						{
+							if (program_object.get_procedure_prototype(curr_proc_name)->get_return_type() == void_data_type)
+							{
+								$$ = new Return_Ast(NULL, curr_proc_name, yylineno);
+								$$->set_data_type(void_data_type);
+							}
+							else
+							{
+								printf("\ncs316: Error %d,  Rerurn type mismatch Error \n", yylineno);
+								exit(0);
+							}
+						}
+						| RETURN ARITH_EXP ';'
+						{
+							
+							if (program_object.get_procedure_prototype(curr_proc_name)->get_return_type() == $2->get_data_type())
+							{
+								$$ = new Return_Ast($2, curr_proc_name, yylineno);
+								$$->set_data_type($2->get_data_type());
+							}
+							else
+							{
+								printf("\ncs316: Error %d,  Rerurn type mismatch Error \n", yylineno);
+								exit(0);
+							}
+						}
 
 PRINT_STATEMENT 		: PRINT NAME ';'
 						{
@@ -467,6 +619,10 @@ ARITH_EXP 				: INTEGER_NUMBER
 								$$ = new Conditional_Expression_Ast($1, $3, $5, yylineno);
 								$$->set_data_type($3->get_data_type());
 							}
+						| FUNCTIONCALL 
+						{
+							$$ = $1;
+						}
 %%
 
 extern YYSTYPE yylval;

@@ -80,6 +80,11 @@ main			{
 					yylval.string_value = new string(yytext);
 					return NAME;
 				}
+return 			{
+					store_token_name("RETURN", yytext, yylineno);
+					yylval.string_value = new string(yytext);
+					return RETURN;
+				}
 
 {comment}		{
 					;
