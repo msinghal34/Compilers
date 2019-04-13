@@ -187,6 +187,19 @@ void Icode_Stmt::set_result(Ics_Opd *io)
 
 ///////////////////////////////////////////////////////////////////
 
+
+ 	Print_IC_Stmt::Print_IC_Stmt(){};
+ 	Print_IC_Stmt::~Print_IC_Stmt(){};
+ void Print_IC_Stmt::print_icode(ostream & file_buffer){
+ 	file_buffer << "\t" << op_desc.get_name() << "\n";
+ }
+ void Print_IC_Stmt::print_assembly(ostream & file_buffer){
+ 	file_buffer << AST_SPACE << op_desc.get_mnemonic() << "\n";
+ }
+
+///////////////////////////////////////////////////////////////////
+
+
 Move_IC_Stmt::Move_IC_Stmt(Tgt_Op inst_op, Ics_Opd *opd1, Ics_Opd *result)
 {
 	this->opd1 = opd1;

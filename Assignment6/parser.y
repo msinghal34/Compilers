@@ -6,7 +6,7 @@ extern "C" void yyerror(const char *s);
 extern int yylex(void);
 extern int yylineno;
 
-Data_Type curr_data_type;
+Data_Type curr_data_type; 
 
 string curr_proc_name;
 Data_Type curr_proc_type;

@@ -49,6 +49,7 @@ public:
     bool variable_in_proc_map_check(string symbol);
 	void global_list_in_proc_map_check();
 
+    bool is_procedure_exists(string proc_name);
 
 	// compile
 	void compile();
