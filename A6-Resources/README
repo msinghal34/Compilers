@@ -1,0 +1,55 @@
+This directory contains the following files:
+
+- allheaders.h.gch which is a pre-compiled header file.
+- libsclpshared.so which is a shared object file.
+- sclp which is the reference implementation.
+- reg-alloc.cc for regsiter allocation scheme
+- Makefile which contains the commands to build your implementation.
+- Besides, the following header files are provided ONLY for telling you the
+  class structure and the member functions whose implementation is provided
+  in the library. YOU DO NOT NEED TO INCLUDE ANY OF THESE FILES IN YOUR IMPLEMENTATION.
+  . storetokens.hh contains the declaration of the function which you can call to 
+    store tokens and print them.
+  . ast.hh
+  . procedure.hh
+  . program.hh
+  . symbol-table.hh
+  . local-environment.hh
+  . reg-alloc.hh
+  . icode.hh
+You need to write 
+   - a scanner, 
+   - a parser, 
+   - actions within the scanner and parser to construct Abstract Syntax Trees, 
+   - ast functions, and
+   - an interperter 
+   - a compiler which generates spim code for the input program. 
+
+   You need to understand the local environment used for evaluation.
+
+   A high level description of the classes can be found on the sclp web page 
+   https://www.cse.iitb.ac.in/~uday/web-source/.
+   You need to create the top level object for program. 
+
+You need to add code to handle new constructs which include function declarations and definitions, and function calls and returns.
+
+For ease of working on small programs, you can use the -d option to produce the dump on the screen 
+instead of having to open the dump files.
+
+For the AST you need to create objects of the following classes:
+
+	- Assignment_Ast, 
+	- Name_Ast, 
+	- Number_Ast, 
+	- Arithmetic_Expr_Ast (and its derived classes)
+	- Selection_Statement_Ast
+	- Relational_Expr_Ast
+	- Logical_Expr_Ast
+	- COnditional_Op_Ast
+	- Iterative_Statement_Ast
+        - Sequence_Statement_Ast
+        - Print_Ast
+        - Call_Ast
+        - Return_ASt
+
+You will need to submit ONLY the scanner.l, parser.y, ast.cc, local-environment.cc, ast-eval.cc, ast-compile.cc, and icode.cc files.
