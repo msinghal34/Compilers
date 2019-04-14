@@ -4,4 +4,4 @@
 *mips
 *lex\.yy\.c
 *parser\.tab*
-*sclp
+sclp
