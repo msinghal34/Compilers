@@ -43,7 +43,7 @@ Symbol_Table* local_symbol_table;
 %left '*' '/'
 %start PROGRAM 
 %nterm <integer_value> LOCAL_DECLARATIONS FUNCTIONDEF FUNCTIONDECLR 
-%nterm <integer_value> STARTUP DECLARATION GLOBAL_DECLARATIONS VAR_GLOBAL VAR_LOCAL DEF
+%nterm <integer_value> INITIALIZATION DECLARATION GLOBAL_DECLARATIONS VAR_GLOBAL VAR_LOCAL DEF
 %nterm <symbol_table>  NAME_LIST ARGLIST
 %nterm <string_value> TYPE
 %nterm <procedure> FUNCTIONDECLR1
@@ -55,12 +55,12 @@ Symbol_Table* local_symbol_table;
 %nterm <symbol_entry> ARG 
 %%
 
-PROGRAM					: STARTUP GLOBAL_DECLARATIONS
+PROGRAM					: INITIALIZATION GLOBAL_DECLARATIONS 
 							{
 								program_object.set_global_table(*global_symbol_table);
 							}
 
-STARTUP					: /* epsilon */
+INITIALIZATION			: /* epsilon */
 							{
 								global_symbol_table = new Symbol_Table();
 								curr_table_scope = global;
@@ -169,6 +169,8 @@ FUNCTIONDEF 			: DEF '(' ARGLIST ')' ';'
 							}
 							Procedure *proc = new Procedure(curr_return_type, curr_proc_name, yylineno);
 							proc->set_formal_param_list(*$3);
+							local_symbol_table->append_list(*$3,yylineno);
+							proc->set_local_list(*local_symbol_table);
 							program_object.set_proc_to_map(curr_proc_name, proc);
 							$$ = 0;
 
@@ -193,14 +195,15 @@ FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
 							$$->set_formal_param_list(*$3);
 							program_object.set_proc_to_map(curr_proc_name, $$);
 							local_symbol_table = new Symbol_Table();
+							local_symbol_table->append_list(*$3,yylineno);
 							curr_table_scope = local;
 							local_symbol_table->set_table_scope(curr_table_scope);
+							$$->set_proc_is_defined();
 						}
 
 FUNCTIONDECLR 			: FUNCTIONDECLR1 '{' LOCAL_DECLARATIONS STATEMENT_LIST '}'
 						{
-							$1->set_proc_is_defined();
-							$1->set_local_list(*local_symbol_table);
+							
 							$1->set_ast_list(*$4);
 							$$ = 0;
 							curr_table_scope = global;
@@ -230,6 +233,11 @@ FUNCTIONCALL 			: NAME '(' ARGUMENTS ')'
 							}
 							cst->set_actual_param_list(*$3);
 							Procedure *proc = program_object.get_procedure_prototype(*$1);
+							if(!proc->is_proc_defined()){
+								printf("\ncs316: Error %d,  Undefined proc use Error \n", yylineno);
+								exit(0);
+							}
+							proc->set_proc_is_called();
 							cst->set_data_type(proc->get_return_type());
 							cst->check_actual_formal_param(proc->get_formal_param_list());
 							$$ = cst;
