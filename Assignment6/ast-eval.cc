@@ -421,3 +421,7 @@ Eval_Result &Sequence_Ast::evaluate(Local_Environment &eval_env, ostream &file_b
     Eval_Result &eval = *static_cast<Eval_Result *>(NULL);
     return eval;
 }
+////////////////////////////////////////////////////////////
+Eval_Result & Call_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){
+    
+}

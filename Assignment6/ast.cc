@@ -545,7 +545,7 @@ void Sequence_Ast::print(ostream &file_buffer)
 	}
 }
 
-// ///////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 
 Print_Ast::Print_Ast(Ast *v, int line)
 {
@@ -562,5 +562,45 @@ void Print_Ast::print(ostream &file_buffer)
 	file_buffer << "\n" << AST_SPACE << "Print :\n";
 	file_buffer << AST_NODE_SPACE << "    (";
 	var->print(file_buffer);
+	file_buffer << ")";
+}
+
+/////////////////////////////////////////////////////////////////////
+
+Call_Ast::Call_Ast(string name, int line){
+	procedure_name = name;
+	lineno = line;
+}
+Call_Ast::~Call_Ast(){
+
+}
+
+Data_Type Call_Ast::get_data_type(){
+	return node_data_type;
+}
+void Call_Ast::check_actual_formal_param(Symbol_Table & formal_param_list){
+	int i = 0;
+	list<Ast *>::iterator it;
+	for (it = actual_param_list.begin(); it != actual_param_list.end(); ++it)
+	{
+		if(!(*it)->get_data_type()==formal_param_list.get_symbol_table_entry_by_index(i).get_data_type()){
+			printf("\ncs316: Error %d,  Func arg mistmatch Error \n", lineno);
+			exit(0);
+		}
+		i++;
+	}
+}
+void Call_Ast::set_actual_param_list(list<Ast *> & param_list){
+	actual_param_list = param_list;
+}
+void Call_Ast::print(ostream & file_buffer){
+	file_buffer << "\n" << AST_SPACE << "FN CALL: "<<procedure_name<<"(\n";
+	list<Ast *>::iterator it;
+	for (it = actual_param_list.begin(); it != actual_param_list.end(); ++it)
+	{
+		file_buffer << "\n"
+					<< AST_SUB_NODE_SPACE;
+		(*it)->print(file_buffer);
+	}
 	file_buffer << ")";
 }

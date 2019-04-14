@@ -9,7 +9,6 @@ extern int yylineno;
 Data_Type curr_data_type; 
 
 string curr_proc_name;
-Data_Type curr_proc_type;
 Data_Type curr_return_type;
 
 Table_Scope curr_table_scope;
@@ -43,29 +42,32 @@ Symbol_Table* local_symbol_table;
 %left '+' '-'
 %left '*' '/'
 %start PROGRAM 
-%nterm <integer_value> LOCAL_DECLARATIONS FUNCTIONDEF FUNCTIONDECLR DECLARATION GLOBAL_DECLARATIONS VAR_GLOBAL VAR_LOCAL DEF
+%nterm <integer_value> LOCAL_DECLARATIONS FUNCTIONDEF FUNCTIONDECLR 
+%nterm <integer_value> STARTUP DECLARATION GLOBAL_DECLARATIONS VAR_GLOBAL VAR_LOCAL DEF
 %nterm <symbol_table>  NAME_LIST ARGLIST
-%nterm <string_value> TYPE TYPEFUN
+%nterm <string_value> TYPE
 %nterm <procedure> FUNCTIONDECLR1
 %nterm <ast_list> STATEMENT_LIST ARGUMENTS
 %nterm <ast> STATEMENT ASSIGN_STATEMENT ARITH_EXP COND_EXP IF_STATEMENT PRINT_STATEMENT
 %nterm <ast> DO_WHILE_STATEMENT WHILE_STATEMENT IF_ELSE_STATEMENT BALANCED_IF_STATEMENT
 %nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED FUNCTIONCALL RETURN_STATEMENT
 %nterm <seq_ast> SEQUENCE_STATEMENT_LIST  
-%nterm <symbol_entry> ARG
+%nterm <symbol_entry> ARG 
 %%
 
-PROGRAM					: GLOBAL_DECLARATIONS
+PROGRAM					: STARTUP GLOBAL_DECLARATIONS
 							{
 								program_object.set_global_table(*global_symbol_table);
 							}
 
-GLOBAL_DECLARATIONS		: /* epsilon */
+STARTUP					: /* epsilon */
 							{
 								global_symbol_table = new Symbol_Table();
 								curr_table_scope = global;
 								$$ = 0;
-							}
+							} 
+
+GLOBAL_DECLARATIONS		: DECLARATION
 						| GLOBAL_DECLARATIONS DECLARATION
 							
 
@@ -172,11 +174,12 @@ FUNCTIONDEF 			: DEF '(' ARGLIST ')' ';'
 
 						}
 
-FUNCTIONDECLR1 			: TYPEFUN NAME '(' ARGLIST ')'
+FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
 						{
-							if (program_object.is_procedure_exists(*$2))
+							if (program_object.is_procedure_exists(curr_proc_name))
 							{
-								$$ = program_object.get_procedure_prototype(*$2);
+								$$ = program_object.get_procedure_prototype(curr_proc_name);
+								*$3 == $$->get_formal_param_list();
 								if($$->is_proc_defined())
 								{
 									printf("\ncs316: Error %d,  Re-Declaration Error \n", yylineno);
@@ -185,11 +188,10 @@ FUNCTIONDECLR1 			: TYPEFUN NAME '(' ARGLIST ')'
 							}
 							else
 							{
-								$$ = new Procedure(curr_return_type, *$2, yylineno);
+								$$ = new Procedure(curr_return_type, curr_proc_name, yylineno);
 							}
-							curr_proc_name = *$2;
-							$$->set_formal_param_list(*$4);
-							program_object.set_proc_to_map(*$2, $$);
+							$$->set_formal_param_list(*$3);
+							program_object.set_proc_to_map(curr_proc_name, $$);
 							local_symbol_table = new Symbol_Table();
 							curr_table_scope = local;
 							local_symbol_table->set_table_scope(curr_table_scope);
@@ -359,13 +361,9 @@ IF_STATEMENT			: IF '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}'
 						}
 
 BALANCED_IF_STATEMENT 	: ASSIGN_STATEMENT_VERIFIED
-						{
-							$$ = $1;
-						}
 						| DO_WHILE_STATEMENT
-						{
-							$$ = $1;
-						}
+						| PRINT_STATEMENT
+						| RETURN_STATEMENT
 						| WHILE '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}'
 						{
 							$$ = new Iteration_Statement_Ast($3,$6,yylineno,false);
@@ -374,10 +372,7 @@ BALANCED_IF_STATEMENT 	: ASSIGN_STATEMENT_VERIFIED
 						{
 							$$ = new Iteration_Statement_Ast($3,$5,yylineno,false);
 						}
-						| PRINT_STATEMENT
-						{
-							$$ = $1;
-						}
+						
 						| IF '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}' ELSE '{' SEQUENCE_STATEMENT_LIST '}'
 						{
 							$$ = new Selection_Statement_Ast($3,$6,$10,yylineno);
