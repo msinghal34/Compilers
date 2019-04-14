@@ -1,7 +1,7 @@
 int i1,i2;
 void func1();
 float f1,f2;
-int func2(int,float,int);
+// int func2(int,float,int);
 float func3(int p,float q,float r);
 
 int func4(){

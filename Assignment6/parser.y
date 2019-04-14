@@ -57,9 +57,7 @@ Symbol_Table* local_symbol_table;
 
 PROGRAM					: INITIALIZATION GLOBAL_DECLARATIONS 
 							{
-								// cout<<"error\n";
 								program_object.set_global_table(*global_symbol_table);
-								// cout<<"no err\n";
 							}
 
 INITIALIZATION			: /* epsilon */
@@ -117,17 +115,6 @@ TYPE					: INTEGER
 								curr_data_type = void_data_type;
 								$$ = $1;
 							}
-
-// DEF						: VOID NAME
-// 							{
-// 								curr_proc_type = void_data_type;
-// 								curr_proc_name = *$2;
-// 							}
-
-// MAIN_FUNCTION			: DEF '(' ')' '{' PROCEDURE '}'
-// 							{
-// 								$$ = $5;	
-// 							}
 
 ARG						: TYPE NAME
 						{
@@ -203,11 +190,9 @@ FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
 
 FUNCTIONDECLR 			: FUNCTIONDECLR1 '{' LOCAL_DECLARATIONS STATEMENT_LIST '}'
 						{
-							// cout<<"error!";
 							$1->set_ast_list(*$4);
 							$$ = 0;
 							curr_table_scope = global;
-							cout<<curr_proc_name<<"\n";
 						}
 
 ARGUMENTS 				: /* epsilon */
@@ -229,26 +214,16 @@ FUNCTIONCALL 			: NAME '(' ARGUMENTS ')'
 							Call_Ast *cst = new Call_Ast(*$1, yylineno);
 							if (!program_object.is_procedure_exists(*$1))
 							{
-								printf("\ncs316: Error %d,  Re-Declaration Error \n", yylineno);
+								printf("\ncs316: Error %d,  Use before Declaration Error \n", yylineno);
 								exit(0);
 							}
 							cst->set_actual_param_list(*$3);
 							Procedure *proc = program_object.get_procedure_prototype(*$1);
 							proc->set_proc_is_called();
 							cst->set_data_type(proc->get_return_type());
-							// cout<<proc->get_formal_param_list().get_size()<<"\n";
 							cst->check_actual_formal_param(proc->get_formal_param_list());
 							$$ = cst;
 						}
-
-
-// PROCEDURE				: LOCAL_DECLARATIONS STATEMENT_LIST
-// 							{
-// 								$$ = new Procedure(curr_proc_type, curr_proc_name, yylineno);
-// 								$$->set_local_list(*$1);
-// 								$$->set_ast_list(*$2);
-// 							}
-
 
 VAR_LOCAL 					: TYPE NAME_LIST ';'
 							{
@@ -288,6 +263,7 @@ STATEMENT 				: ASSIGN_STATEMENT_VERIFIED
 						| DO_WHILE_STATEMENT
 						| PRINT_STATEMENT
 						| RETURN_STATEMENT
+						| FUNCTIONCALL ';'
 
 RETURN_STATEMENT		: RETURN ';'
 						{
@@ -370,6 +346,7 @@ BALANCED_IF_STATEMENT 	: ASSIGN_STATEMENT_VERIFIED
 						| DO_WHILE_STATEMENT
 						| PRINT_STATEMENT
 						| RETURN_STATEMENT
+						| FUNCTIONCALL ';'
 						| WHILE '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}'
 						{
 							$$ = new Iteration_Statement_Ast($3,$6,yylineno,false);
