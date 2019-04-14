@@ -141,17 +141,22 @@ ARGLIST 				: /* epsilon */
 						{
 							$$ = new Symbol_Table();
 							$$->set_table_scope(formal);
+							// cout<<"ARG size"<<$$->get_size()<<"\n";
 						}
 						| ARG
 						{
 							$$ = new Symbol_Table();
 							$$->push_symbol($1);
 							$$->set_table_scope(formal);
+							// cout<<"ARG size"<<$$->get_size()<<"\n";
 						} 
 						| ARGLIST ',' ARG
 						{
 							$1->push_symbol($3);
 							$$ = $1;
+							// cout<<"ARG size"<<$$->get_size()<<"\n";
+							// cout<<(*$$).variable_in_symbol_list_check("a_");
+							// cout<<"no error"<<"\n";
 						}
 
 DEF 					: TYPE NAME
@@ -199,6 +204,7 @@ FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
 							curr_table_scope = local;
 							local_symbol_table->set_table_scope(curr_table_scope);
 							$$->set_proc_is_defined();
+							// cout<<(*$3).get_variable_in_formal_list(0)<<"\n";
 						}
 
 FUNCTIONDECLR 			: FUNCTIONDECLR1 '{' LOCAL_DECLARATIONS STATEMENT_LIST '}'
@@ -239,6 +245,7 @@ FUNCTIONCALL 			: NAME '(' ARGUMENTS ')'
 							}
 							proc->set_proc_is_called();
 							cst->set_data_type(proc->get_return_type());
+							// cout<<proc->get_formal_param_list().get_size()<<"\n";
 							cst->check_actual_formal_param(proc->get_formal_param_list());
 							$$ = cst;
 						}
