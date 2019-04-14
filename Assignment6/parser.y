@@ -57,7 +57,9 @@ Symbol_Table* local_symbol_table;
 
 PROGRAM					: INITIALIZATION GLOBAL_DECLARATIONS 
 							{
+								// cout<<"error\n";
 								program_object.set_global_table(*global_symbol_table);
+								// cout<<"no err\n";
 							}
 
 INITIALIZATION			: /* epsilon */
@@ -141,14 +143,12 @@ ARGLIST 				: /* epsilon */
 						{
 							$$ = new Symbol_Table();
 							$$->set_table_scope(formal);
-							// cout<<"ARG size"<<$$->get_size()<<"\n";
 						}
 						| ARG
 						{
 							$$ = new Symbol_Table();
 							$$->push_symbol($1);
 							$$->set_table_scope(formal);
-							// cout<<"ARG size"<<$$->get_size()<<"\n";
 						} 
 						| ARGLIST ',' ARG
 						{
@@ -203,10 +203,11 @@ FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
 
 FUNCTIONDECLR 			: FUNCTIONDECLR1 '{' LOCAL_DECLARATIONS STATEMENT_LIST '}'
 						{
-							
+							// cout<<"error!";
 							$1->set_ast_list(*$4);
 							$$ = 0;
 							curr_table_scope = global;
+							cout<<curr_proc_name<<"\n";
 						}
 
 ARGUMENTS 				: /* epsilon */

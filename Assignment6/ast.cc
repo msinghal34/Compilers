@@ -581,7 +581,6 @@ Data_Type Call_Ast::get_data_type(){
 void Call_Ast::check_actual_formal_param(Symbol_Table & formal_param_list){
 	int i = 1;
 	list<Ast *>::iterator it;
-	cout<<"Func check"<<"\n";
 	for (it = actual_param_list.begin(); it != actual_param_list.end(); ++it)
 	{
 		// cout<<formal_param_list.get_symbol_table_entry_by_index(i).get_data_type()<<"\n";
@@ -591,8 +590,6 @@ void Call_Ast::check_actual_formal_param(Symbol_Table & formal_param_list){
 		}
 		i++;
 	}
-	cout<<"Func check done"<<"\n";
-
 }
 void Call_Ast::set_actual_param_list(list<Ast *> & param_list){
 	actual_param_list = param_list;

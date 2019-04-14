@@ -694,7 +694,7 @@ void Call_Ast::set_register(Register_Descriptor * reg){
 	return_value_reg = reg;
 }
 Code_For_Ast & Call_Ast::compile(){
-
+	
 }
 Code_For_Ast & Call_Ast::compile_and_optimize_ast(Lra_Outcome & lra){
 }
