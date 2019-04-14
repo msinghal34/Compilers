@@ -154,9 +154,6 @@ ARGLIST 				: /* epsilon */
 						{
 							$1->push_symbol($3);
 							$$ = $1;
-							// cout<<"ARG size"<<$$->get_size()<<"\n";
-							// cout<<(*$$).variable_in_symbol_list_check("a_");
-							// cout<<"no error"<<"\n";
 						}
 
 DEF 					: TYPE NAME
@@ -174,8 +171,6 @@ FUNCTIONDEF 			: DEF '(' ARGLIST ')' ';'
 							}
 							Procedure *proc = new Procedure(curr_return_type, curr_proc_name, yylineno);
 							proc->set_formal_param_list(*$3);
-							local_symbol_table->append_list(*$3,yylineno);
-							proc->set_local_list(*local_symbol_table);
 							program_object.set_proc_to_map(curr_proc_name, proc);
 							$$ = 0;
 
@@ -204,7 +199,6 @@ FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
 							curr_table_scope = local;
 							local_symbol_table->set_table_scope(curr_table_scope);
 							$$->set_proc_is_defined();
-							// cout<<(*$3).get_variable_in_formal_list(0)<<"\n";
 						}
 
 FUNCTIONDECLR 			: FUNCTIONDECLR1 '{' LOCAL_DECLARATIONS STATEMENT_LIST '}'
