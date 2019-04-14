@@ -234,10 +234,6 @@ FUNCTIONCALL 			: NAME '(' ARGUMENTS ')'
 							}
 							cst->set_actual_param_list(*$3);
 							Procedure *proc = program_object.get_procedure_prototype(*$1);
-							if(!proc->is_proc_defined()){
-								printf("\ncs316: Error %d,  Undefined proc use Error \n", yylineno);
-								exit(0);
-							}
 							proc->set_proc_is_called();
 							cst->set_data_type(proc->get_return_type());
 							// cout<<proc->get_formal_param_list().get_size()<<"\n";

@@ -23,8 +23,14 @@ void main()
 
 }
 
+int g(int a){
+	a = f(a);
+	return a;
+}
+
+
 int f(int a){
-	return a-a;
+	return g(a);
 }
 
 

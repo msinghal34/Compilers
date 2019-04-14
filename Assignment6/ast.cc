@@ -317,7 +317,8 @@ void Return_Ast::print(ostream &file_buffer)
 {
 	file_buffer << "\n"
 				<< AST_SPACE << "Return:";
-	return_value->print(file_buffer);	
+	return_value->print(file_buffer);
+	file_buffer<<"\n";	
 }
 
 // ///////////////////////////////////////////////////////////////////
