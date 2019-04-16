@@ -16,6 +16,24 @@ Table_Scope curr_table_scope;
 Symbol_Table* global_symbol_table;
 Symbol_Table* local_symbol_table;
 
+void checkSignatures(Symbol_Table s1, Symbol_Table s2)
+{
+	list<Symbol_Table_Entry *> l1  = s1.get_table();
+	list<Symbol_Table_Entry *> l2  = s2.get_table();
+	if (l1.size() != l2.size())
+	{
+		printf("\ncs316: Error %d,  Name Error Functions \n", yylineno);
+		exit(0);
+	}
+	for (auto it1 = l1.begin(), it2 = l2.begin(); it1 != l1.end() && it2 != l2.end(); ++it1, ++it2)
+	{
+		if ((*it1)->get_data_type() != (*it2)->get_data_type())
+		{
+			printf("\ncs316: Error %d,  Name Error Functions \n", yylineno);
+			exit(0);		
+		}
+	}
+}
 %}
 %union{
 	int integer_value;
@@ -44,8 +62,8 @@ Symbol_Table* local_symbol_table;
 %start PROGRAM 
 %nterm <integer_value> LOCAL_DECLARATIONS FUNCTIONDEF FUNCTIONDECLR 
 %nterm <integer_value> INITIALIZATION DECLARATION GLOBAL_DECLARATIONS VAR_GLOBAL VAR_LOCAL DEF
-%nterm <symbol_table>  NAME_LIST ARGLIST
-%nterm <string_value> TYPE
+%nterm <symbol_table>  NAME_LIST ARGLIST ARGLIST2
+%nterm <string_value> TYPE ARG2
 %nterm <procedure> FUNCTIONDECLR1
 %nterm <ast_list> STATEMENT_LIST ARGUMENTS
 %nterm <ast> STATEMENT ASSIGN_STATEMENT ARITH_EXP COND_EXP IF_STATEMENT PRINT_STATEMENT
@@ -118,17 +136,6 @@ TYPE					: INTEGER
 								$$ = $1;
 							}
 
-// DEF						: VOID NAME
-// 							{
-// 								curr_proc_type = void_data_type;
-// 								curr_proc_name = *$2;
-// 							}
-
-// MAIN_FUNCTION			: DEF '(' ')' '{' PROCEDURE '}'
-// 							{
-// 								$$ = $5;	
-// 							}
-
 ARG						: TYPE NAME
 						{
 							if(curr_data_type==void_data_type)
@@ -156,6 +163,35 @@ ARGLIST 				: /* epsilon */
 							$$ = $1;
 						}
 
+ARG2 					: INTEGER
+						{
+
+							curr_data_type = int_data_type;
+							$$ = $1;
+						}
+						
+						| FLOAT
+						{
+							curr_data_type = double_data_type;
+							$$ = $1;
+						}
+
+ARGLIST2 				: ARG2
+						{
+							$$ = new Symbol_Table();
+							string meow = "meow";
+							Symbol_Table_Entry *ste = new Symbol_Table_Entry(meow, curr_data_type , yylineno);
+							$$->push_symbol(ste);
+							$$->set_table_scope(formal);
+						}
+						| ARGLIST2 ',' ARG2
+						{
+							string meow = "meow";
+							Symbol_Table_Entry *ste = new Symbol_Table_Entry(meow, curr_data_type , yylineno);
+							$1->push_symbol(ste);
+							$$ = $1;
+						}
+
 DEF 					: TYPE NAME
 						{
 							curr_return_type = curr_data_type;
@@ -175,13 +211,28 @@ FUNCTIONDEF 			: DEF '(' ARGLIST ')' ';'
 							$$ = 0;
 
 						}
-
-FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
+						| DEF '(' ARGLIST2 ')' ';'
 						{
 							if (program_object.is_procedure_exists(curr_proc_name))
 							{
+								printf("\ncs316: Error %d,  Re-Declaration Error \n", yylineno);
+								exit(0);
+							}
+							Procedure *proc = new Procedure(curr_return_type, curr_proc_name, yylineno);
+							proc->set_formal_param_list(*$3);
+							program_object.set_proc_to_map(curr_proc_name, proc);
+							$$ = 0;
+						}
+
+FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
+						{
+							cout<<"meeemmemem";
+							if (program_object.is_procedure_exists(curr_proc_name))
+							{
 								$$ = program_object.get_procedure_prototype(curr_proc_name);
-								*$3 == $$->get_formal_param_list();
+								Symbol_Table st = $$->get_formal_param_list();
+								// Checking sigmmatures
+								checkSignatures(st, *$3);
 								if($$->is_proc_defined())
 								{
 									printf("\ncs316: Error %d,  Re-Declaration Error \n", yylineno);

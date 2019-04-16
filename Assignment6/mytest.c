@@ -6,7 +6,7 @@ void main()
 	a = 2;
 	b = f(a,a);
 }
-int f(int a, int b)
+int f(int a, int c)
 {
 	return a;
 }
