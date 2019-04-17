@@ -177,14 +177,14 @@ ARG2 					: INTEGER
 ARGLIST2 				: ARG2
 						{
 							$$ = new Symbol_Table();
-							string meow = "meow";
+							string meow = "";
 							Symbol_Table_Entry *ste = new Symbol_Table_Entry(meow, curr_data_type , yylineno);
 							$$->push_symbol(ste);
 							$$->set_table_scope(formal);
 						}
 						| ARGLIST2 ',' ARG2
 						{
-							string meow = "meow";
+							string meow = "";
 							Symbol_Table_Entry *ste = new Symbol_Table_Entry(meow, curr_data_type , yylineno);
 							$1->push_symbol(ste);
 							$$ = $1;
@@ -203,6 +203,8 @@ FUNCTIONDEF 			: DEF '(' ARGLIST ')' ';'
 								printf("\ncs316: Error %d,  Re-Declaration Error \n", yylineno);
 								exit(0);
 							}
+							Symbol_Table *l = new Symbol_Table();
+							l->append_list(*$3,yylineno);
 							Procedure *proc = new Procedure(curr_return_type, curr_proc_name, yylineno);
 							proc->set_formal_param_list(*$3);
 							program_object.set_proc_to_map(curr_proc_name, proc);
@@ -224,12 +226,14 @@ FUNCTIONDEF 			: DEF '(' ARGLIST ')' ';'
 
 FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
 						{
-							cout<<"meeemmemem";
 							if (program_object.is_procedure_exists(curr_proc_name))
 							{
 								$$ = program_object.get_procedure_prototype(curr_proc_name);
 								Symbol_Table st = $$->get_formal_param_list();
 								// Checking sigmmatures
+								// Symbol_Table *l = new Symbol_Table();
+								// l->append_list(*$3,yylineno);
+								Procedure *proc = new Procedure(curr_return_type, curr_proc_name, yylineno);
 								checkSignatures(st, *$3);
 								if($$->is_proc_defined())
 								{

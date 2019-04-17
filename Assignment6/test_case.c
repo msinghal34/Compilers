@@ -1,8 +1,8 @@
 int i1,i2;
 void func1();
 float f1,f2;
-// int func2(int,float,int);
-float func3(int p,float q,float r);
+int func2(int ,float ,int );
+float func3(int a,float c,float d);
 
 int func4(){
 	i1=4;
@@ -13,6 +13,11 @@ void func1(){
 	i2=5;
 	f2=5.0;
 }
+void func1(int a){
+	i2=5;
+	f2=5.0;
+}
+
 
 int func2(int a,float b,int i1){
 	a=a+10;

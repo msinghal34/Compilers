@@ -694,7 +694,40 @@ void Call_Ast::set_register(Register_Descriptor * reg){
 	return_value_reg = reg;
 }
 Code_For_Ast & Call_Ast::compile(){
+	cout<<"compiling\n";
+	// exit(0);
+	list<Icode_Stmt *> ilist;
+	Code_For_Ast func_icode;
+	Register_Descriptor *arg;
+	int offset = 0;
 	
+	for (auto it = actual_param_list.end(); it != actual_param_list.begin(); )
+	{
+		--it;
+		func_icode = (*it)->compile();
+		merge_list(ilist,func_icode.get_icode_list());
+		// ilist.append_ics();
+		arg = func_icode.get_reg();
+
+		if((*it)->get_data_type()==int_data_type){
+			// ilist.push_back(new Move_IC_Stmt(store,new Register_Addr_Opd(arg),new Mem_Addr_Opd()))
+			offset+=4;
+		}
+		else if((*it)->get_data_type()==double_data_type){
+			offset+=8;
+		}
+		else{
+			cout<<"Internal error!!!\n";
+			exit(0);
+		}
+
+	}
+	// exit(0);
+	return *new Code_For_Ast(ilist,NULL);
 }
 Code_For_Ast & Call_Ast::compile_and_optimize_ast(Lra_Outcome & lra){
+}
+
+void Procedure::compile(){
+	cout<<name<<"\n";
 }

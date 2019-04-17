@@ -188,8 +188,8 @@ void Icode_Stmt::set_result(Ics_Opd *io)
 ///////////////////////////////////////////////////////////////////
 
 
- 	Print_IC_Stmt::Print_IC_Stmt(){};
- 	Print_IC_Stmt::~Print_IC_Stmt(){};
+Print_IC_Stmt::Print_IC_Stmt(){};
+Print_IC_Stmt::~Print_IC_Stmt(){};
  void Print_IC_Stmt::print_icode(ostream & file_buffer){
  	file_buffer << "\t" << op_desc.get_name() << "\n";
  }

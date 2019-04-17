@@ -580,18 +580,26 @@ Data_Type Call_Ast::get_data_type(){
 	return node_data_type;
 }
 void Call_Ast::check_actual_formal_param(Symbol_Table & formal_param_list){
-	int i = 1;
-	list<Ast *>::iterator it;
-	for (it = actual_param_list.begin(); it != actual_param_list.end(); ++it)
+	list<Symbol_Table_Entry *> l  = formal_param_list.get_table();
+	auto it_l = l.begin();
+	auto it = actual_param_list.begin();
+
+	if (l.size() != actual_param_list.size())
+	{
+		printf("\ncs316: Error %d,  Improper argumnets passed \n", lineno);
+		exit(0);
+	}
+	for (; it != actual_param_list.end(); ++it,++it_l)
 	{
 		// cout<<formal_param_list.get_symbol_table_entry_by_index(i).get_data_type()<<"\n";
-		if(!(*it)->get_data_type()==formal_param_list.get_symbol_table_entry_by_index(i).get_data_type()){
+		if(!(*it)->get_data_type()==(*it_l)->get_data_type()){
 			printf("\ncs316: Error %d,  Func arg mistmatch Error \n", lineno);
 			exit(0);
 		}
-		i++;
 	}
 }
+
+
 void Call_Ast::set_actual_param_list(list<Ast *> & param_list){
 	actual_param_list = param_list;
 }
