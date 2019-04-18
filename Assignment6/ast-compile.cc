@@ -398,17 +398,7 @@ Code_For_Ast &Conditional_Expression_Ast::compile()
 	return *(new Code_For_Ast(ics_list, result_reg));
 }
 
-///////////////////////// Return_Ast ////////////////////////
 
-Code_For_Ast &Return_Ast::compile()
-{
-	return *(new Code_For_Ast());
-}
-
-Code_For_Ast &Return_Ast::compile_and_optimize_ast(Lra_Outcome &lra)
-{
-	return *(new Code_For_Ast());
-}
 
 ///////////////////////// Relational_Expr_Ast ////////////////////////
 
@@ -687,47 +677,101 @@ Code_For_Ast &Print_Ast::compile()
 	return *new Code_For_Ast(ilist,NULL);
 
 }
+///////////////////////// Return_Ast ////////////////////////
 
+Code_For_Ast &Return_Ast::compile()
+{
+	
+	Code_For_Ast ast_icode = return_value->compile();
+	list<Icode_Stmt *> ilist = ast_icode.get_icode_list();
+	Register_Descriptor *reg = ast_icode.get_reg();
+	if(node_data_type==int_data_type)
+		ilist.push_back(new Move_IC_Stmt(mov,new Register_Addr_Opd(reg)
+			,new Register_Addr_Opd(machine_desc_object.spim_register_table[v1])));
+	else
+		ilist.push_back(new Move_IC_Stmt(move_d,new Register_Addr_Opd(reg)
+			,new Register_Addr_Opd(machine_desc_object.spim_register_table[f0])));
+	reg->reset_use_for_expr_result();
+	ilist.push_back(new Control_Flow_IC_Stmt(j,NULL,NULL,"epilogue_"+proc_name));
+	return *(new Code_For_Ast(ilist,NULL));
+}
+
+Code_For_Ast &Return_Ast::compile_and_optimize_ast(Lra_Outcome &lra)
+{
+	return *(new Code_For_Ast());
+}
 ///////////////////////// Call_Ast ////////////////////////
 
 void Call_Ast::set_register(Register_Descriptor * reg){
 	return_value_reg = reg;
 }
 Code_For_Ast & Call_Ast::compile(){
-	cout<<"compiling\n";
+	// cout<<"compiling\n";
 	// exit(0);
 	list<Icode_Stmt *> ilist;
 	Code_For_Ast func_icode;
 	Register_Descriptor *arg;
 	int offset = 0;
+	Procedure *proc = program_object.get_procedure_prototype(procedure_name);
+	list<Symbol_Table_Entry *> formal_table = proc->get_formal_param_list().get_table();
+	string *s = new string("");
 	
-	for (auto it = actual_param_list.end(); it != actual_param_list.begin(); )
+	auto it_f = formal_table.end();
+	for (auto it = actual_param_list.end() ; it != actual_param_list.begin(); )
 	{
 		--it;
+		--it_f;
 		func_icode = (*it)->compile();
 		merge_list(ilist,func_icode.get_icode_list());
-		// ilist.append_ics();
 		arg = func_icode.get_reg();
+		*s = (*it_f)->get_variable_name();
+		Symbol_Table_Entry *formal_arg = new Symbol_Table_Entry(*s,(*it_f)->get_data_type(),(*it_f)->get_lineno(),sp_ref); 
+		formal_arg->set_start_offset(-offset);
+		formal_arg->set_symbol_scope(formal);
 
 		if((*it)->get_data_type()==int_data_type){
-			// ilist.push_back(new Move_IC_Stmt(store,new Register_Addr_Opd(arg),new Mem_Addr_Opd()))
 			offset+=4;
+			ilist.push_back(new Move_IC_Stmt(store,new Register_Addr_Opd(arg),new Mem_Addr_Opd(*formal_arg)));
 		}
 		else if((*it)->get_data_type()==double_data_type){
 			offset+=8;
+			ilist.push_back(new Move_IC_Stmt(store_d,new Register_Addr_Opd(arg),new Mem_Addr_Opd(*formal_arg)));
 		}
 		else{
 			cout<<"Internal error!!!\n";
 			exit(0);
 		}
-
+		arg->reset_use_for_expr_result();
 	}
-	// exit(0);
-	return *new Code_For_Ast(ilist,NULL);
+	arg = machine_desc_object.spim_register_table[sp];
+	if(offset!=0)
+		ilist.push_back(new Compute_IC_Stmt(sub,new Register_Addr_Opd(arg), new Const_Opd<int> (offset),new Register_Addr_Opd(arg)));
+	ilist.push_back(new Control_Flow_IC_Stmt(jal,NULL,NULL,procedure_name));
+	if(offset!=0)
+		ilist.push_back(new Compute_IC_Stmt(add,new Register_Addr_Opd(arg), new Const_Opd<int> (offset),new Register_Addr_Opd(arg)));
+	
+	if (node_data_type == int_data_type)
+	{
+		arg = machine_desc_object.get_new_register<int_reg>();
+		ilist.push_back(new Move_IC_Stmt(mov,new Register_Addr_Opd(machine_desc_object.spim_register_table[v1]),new Register_Addr_Opd(arg)));
+	}
+	else if (node_data_type == double_data_type)
+	{
+		arg = machine_desc_object.get_new_register<float_reg>();
+		ilist.push_back(new Move_IC_Stmt(move_d,new Register_Addr_Opd(machine_desc_object.spim_register_table[f0]),new Register_Addr_Opd(arg)));
+	}
+	arg->set_use_for_expr_result(); 
+	return *new Code_For_Ast(ilist,arg);
 }
 Code_For_Ast & Call_Ast::compile_and_optimize_ast(Lra_Outcome & lra){
 }
 
 void Procedure::compile(){
-	cout<<name<<"\n";
+	Code_For_Ast ast_icode;
+	for (auto it = statement_list.begin(); it != statement_list.end(); ++it )
+	{
+		ast_icode = (*it)->compile();
+		merge_list(bb_icode_list,ast_icode.get_icode_list());
+	}
+
 }

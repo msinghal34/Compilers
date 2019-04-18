@@ -90,7 +90,11 @@ void Mem_Addr_Opd::print_asm_opd(ostream &file_buffer)
 	}
 	else
 	{
-		file_buffer << symbol_entry->get_start_offset() << "($" << (machine_desc_object.spim_register_table[fp])->get_name() << ")";
+		if(symbol_entry->get_ref_offset()==fp_ref)
+			file_buffer << symbol_entry->get_start_offset() << "($" << (machine_desc_object.spim_register_table[fp])->get_name() << ")";
+		else
+			file_buffer << symbol_entry->get_start_offset() << "($" << (machine_desc_object.spim_register_table[sp])->get_name() << ")";
+
 	}
 }
 
@@ -191,10 +195,11 @@ void Icode_Stmt::set_result(Ics_Opd *io)
 Print_IC_Stmt::Print_IC_Stmt(){};
 Print_IC_Stmt::~Print_IC_Stmt(){};
  void Print_IC_Stmt::print_icode(ostream & file_buffer){
- 	file_buffer << "\t" << op_desc.get_name() << "\n";
+ 	file_buffer << "\t" << "print" << "\n";
  }
  void Print_IC_Stmt::print_assembly(ostream & file_buffer){
- 	file_buffer << AST_SPACE << op_desc.get_mnemonic() << "\n";
+ 	// file_buffer<<"asd\n";
+ 	file_buffer << AST_SPACE << "syscall" << "\n";
  }
 
 ///////////////////////////////////////////////////////////////////
@@ -407,10 +412,10 @@ void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer)
 		file_buffer << "\t" << op_desc.get_name() << ":    \t";
 		opd1->print_ics_opd(file_buffer);
 		file_buffer << " , zero : goto ";
-		file_buffer << label << endl;
+		file_buffer << offset << endl;
 		break;
 	case i_op_st:
-		file_buffer << "goto " << label << endl;
+		file_buffer << "goto " << offset << endl;
 		break;
 
 	default:
@@ -427,11 +432,11 @@ void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer)
 		opd1->print_asm_opd(file_buffer);
 		file_buffer << ", ";
 		file_buffer << "$" << machine_desc_object.spim_register_table[zero]->get_name();
-		file_buffer << ", " << label << endl;
+		file_buffer << ", " << offset << endl;
 		break;
 	case i_op_st:
 		file_buffer << AST_SPACE << op_desc.get_mnemonic() << " ";
-		file_buffer << label << endl;
+		file_buffer << offset << endl;
 		break;
 
 	default:

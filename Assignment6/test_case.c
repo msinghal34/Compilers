@@ -1,5 +1,5 @@
 int i1,i2;
-void func1();
+// void func1();
 float f1,f2;
 int func2(int ,float ,int );
 float func3(int a,float c,float d);
@@ -9,10 +9,10 @@ int func4(){
 	return i1+i1;
 }
 
-void func1(){
-	i2=5;
-	f2=5.0;
-}
+// void func1(){
+// 	i2=5;
+// 	f2=5.0;
+// }
 void func1(int a){
 	i2=5;
 	f2=5.0;
@@ -32,7 +32,7 @@ float func3(int a,float b,float c){
 }
 
 void main(){
-	func1();
+	// func1();
 	// print i2; print f2;
 	i2 = func4();
 	// print i1; print i2;

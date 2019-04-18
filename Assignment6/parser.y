@@ -15,6 +15,7 @@ Table_Scope curr_table_scope;
 
 Symbol_Table* global_symbol_table;
 Symbol_Table* local_symbol_table;
+Symbol_Table* formal_symbol_table;
 
 void checkSignatures(Symbol_Table s1, Symbol_Table s2)
 {
@@ -75,6 +76,7 @@ void checkSignatures(Symbol_Table s1, Symbol_Table s2)
 
 PROGRAM					: INITIALIZATION GLOBAL_DECLARATIONS 
 							{
+								global_symbol_table->assign_offsets();
 								program_object.set_global_table(*global_symbol_table);
 							}
 
@@ -247,15 +249,18 @@ FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
 							}
 							$$->set_formal_param_list(*$3);
 							program_object.set_proc_to_map(curr_proc_name, $$);
+							formal_symbol_table = $3;
 							local_symbol_table = new Symbol_Table();
-							local_symbol_table->append_list(*$3,yylineno);
 							curr_table_scope = local;
 							local_symbol_table->set_table_scope(curr_table_scope);
 							$$->set_proc_is_defined();
 						}
 
-FUNCTIONDECLR 			: FUNCTIONDECLR1 '{' LOCAL_DECLARATIONS STATEMENT_LIST '}'
+FUNCTIONDECLR 			: FUNCTIONDECLR1 '{' LOCAL_DECLARATIONS  STATEMENT_LIST '}'
 						{
+							local_symbol_table->assign_offsets();
+							formal_symbol_table->set_start_offset_of_first_symbol(8);
+							formal_symbol_table->assign_offsets();
 							$1->set_ast_list(*$4);
 							$$ = 0;
 							curr_table_scope = global;
@@ -285,6 +290,10 @@ FUNCTIONCALL 			: NAME '(' ARGUMENTS ')'
 							}
 							cst->set_actual_param_list(*$3);
 							Procedure *proc = program_object.get_procedure_prototype(*$1);
+							if(!proc->is_proc_defined()){
+								printf("\ncs316: Error %d,  Use before Definition Error \n", yylineno);
+								exit(0);
+							}
 							proc->set_proc_is_called();
 							cst->set_data_type(proc->get_return_type());
 							cst->check_actual_formal_param(proc->get_formal_param_list());
@@ -500,6 +509,9 @@ ASSIGN_STATEMENT		: NAME '=' ARITH_EXP  ';'
 								{
 									v = &(local_symbol_table->get_symbol_table_entry(*$1));
 								}
+								else if(formal_symbol_table->variable_in_symbol_list_check(*$1)){
+									v = &(formal_symbol_table->get_symbol_table_entry(*$1));
+								}
 								else if (global_symbol_table->variable_in_symbol_list_check(*$1))
 								{
 									v = &(global_symbol_table->get_symbol_table_entry(*$1));
@@ -572,6 +584,9 @@ ARITH_EXP 				: INTEGER_NUMBER
 								if (local_symbol_table->variable_in_symbol_list_check(*$1))
 								{
 									v = &(local_symbol_table->get_symbol_table_entry(*$1));
+								}
+								else if(formal_symbol_table->variable_in_symbol_list_check(*$1)){
+									v = &(formal_symbol_table->get_symbol_table_entry(*$1));
 								}
 								else if (global_symbol_table->variable_in_symbol_list_check(*$1))
 								{

@@ -4,30 +4,34 @@
 // void func1(int a);
 // float f1,f2;
 
-int f(int a);
+// int f(int a);
 
 
 // int g(int a,int b){
 // 	return b;
 // }
-int g(int a,int b,int c,float e,int f);
-int g(int a,int b,int c,float e,int f){
-	a = a+c+f;
-	e = e + e;
-	return a;
+ // g(float,float);
+float g(float i,float j){
+	// a = a+c+f;
+	// e = e + e;
+	i = 3.0;
+	return 0.0;
 }
 
 
 void main()
 {
 	int a;
+	float b;
 	// a = g(a,a);
-	g(a,a,a,0.1,1);
-	a = f(a);
+	// b = g(1.0,2.0);
+	// a = f(a);
 	// a=f(0);
 	// a=foo(4,5);
+	b=5.0;
+	a=2;
 
-	print a;
+	print b;
 
 }
 
