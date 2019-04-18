@@ -14,12 +14,7 @@
 float g(float i,float j){
 	// a = a+c+f;
 	// e = e + e;
-	int r,s,t,u;
-	s=1+2;
-	t=3;
-	r=0;
 	i = 3.0;
-	j = i;
 	return 0.0;
 }
 
@@ -32,7 +27,7 @@ void main()
 	// b = g(1.0,2.0);
 	// a = f(a);
 	// a=f(0);
-	b=g(4.0,5.0);
+	// a=foo(4,5);
 	b=5.0;
 	a=2;
 

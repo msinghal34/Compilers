@@ -76,7 +76,6 @@ void checkSignatures(Symbol_Table s1, Symbol_Table s2)
 
 PROGRAM					: INITIALIZATION GLOBAL_DECLARATIONS 
 							{
-								global_symbol_table->assign_offsets();
 								program_object.set_global_table(*global_symbol_table);
 							}
 
@@ -258,10 +257,9 @@ FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
 
 FUNCTIONDECLR 			: FUNCTIONDECLR1 '{' LOCAL_DECLARATIONS  STATEMENT_LIST '}'
 						{
-							local_symbol_table->assign_offsets();
-							formal_symbol_table->set_start_offset_of_first_symbol(8);
-							formal_symbol_table->assign_offsets();
+							// cout<<$1->get_local_list().get_size()<<" l\n";
 							$1->set_ast_list(*$4);
+							$1->set_local_list(*local_symbol_table);
 							$$ = 0;
 							curr_table_scope = global;
 						}

@@ -476,12 +476,12 @@ void Label_IC_Stmt::set_label(string label)
 
 void Label_IC_Stmt::print_icode(ostream &file_buffer)
 {
-	file_buffer << label << ":\n";
+	file_buffer <<"\n"<< label << ":\n";
 }
 
 void Label_IC_Stmt::print_assembly(ostream &file_buffer)
 {
-	file_buffer << label << ":\n";
+	file_buffer <<"\n"<< label << ":\n";
 }
 
 //////////////////////// Intermediate code for Ast statements ////////////////////////

@@ -766,12 +766,3 @@ Code_For_Ast & Call_Ast::compile(){
 Code_For_Ast & Call_Ast::compile_and_optimize_ast(Lra_Outcome & lra){
 }
 
-void Procedure::compile(){
-	Code_For_Ast ast_icode;
-	for (auto it = statement_list.begin(); it != statement_list.end(); ++it )
-	{
-		ast_icode = (*it)->compile();
-		merge_list(bb_icode_list,ast_icode.get_icode_list());
-	}
-
-}
