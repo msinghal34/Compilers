@@ -77,6 +77,21 @@ void checkSignatures(Symbol_Table s1, Symbol_Table s2)
 PROGRAM					: INITIALIZATION GLOBAL_DECLARATIONS 
 							{
 								program_object.set_global_table(*global_symbol_table);
+								if(program_object.is_procedure_exists("main")){
+									Procedure * proc = program_object.get_procedure_prototype("main");
+									if(!proc->is_proc_defined()){
+										printf("\ncs316: Error %d,  Main not defined Error \n", yylineno);
+										exit(0);
+									}
+									if(proc->get_return_type()!=void_data_type){
+										printf("\ncs316: Error %d,  Main Data_Type has to be void \n", yylineno);
+										exit(0);
+									}
+								}
+								else{
+									printf("\ncs316: Error %d,  Main not found \n", yylineno);
+									exit(0);
+								}
 							}
 
 INITIALIZATION			: /* epsilon */
