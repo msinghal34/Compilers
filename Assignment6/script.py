@@ -50,7 +50,7 @@ def foo(mainDirectory):
         print('')
         os.system('tail -n 1 givensclp.out')
         print('')
-        os.system("diff -w sclp.spim givensclp.spim")
+        # os.system("diff -w sclp.spim givensclp.spim")
         print("-------------------")
 
         print("\nDIFF\n")
@@ -66,7 +66,7 @@ def foo(mainDirectory):
     print("\n")
 
 os.system("make")
-directories = ["testing"]#, "testing", "mytesting"]
+directories = ["Error-Testcases"]#, "testing", "mytesting"]
 for dir in directories:
     foo(dir)
 os.system("rm *.out")

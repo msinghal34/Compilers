@@ -586,14 +586,14 @@ void Call_Ast::check_actual_formal_param(Symbol_Table & formal_param_list){
 
 	if (l.size() != actual_param_list.size())
 	{
-		printf("\ncs316: Error %d,  Improper argumnets passed \n", lineno);
+		printf("\ncs316: Error %d,  Improper arguments passed \n", lineno);
 		exit(0);
 	}
 	for (; it != actual_param_list.end(); ++it,++it_l)
 	{
-		// cout<<formal_param_list.get_symbol_table_entry_by_index(i).get_data_type()<<"\n";
-		if(!(*it)->get_data_type()==(*it_l)->get_data_type()){
-			printf("\ncs316: Error %d,  Func arg mistmatch Error \n", lineno);
+		// cout<<(*it_l)->get_data_type()<<"\n";
+		if((*it)->get_data_type()!=(*it_l)->get_data_type()){
+			printf("\ncs316: Error %d,  Func arg mismatch Error \n", lineno);
 			exit(0);
 		}
 	}

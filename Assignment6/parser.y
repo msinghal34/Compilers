@@ -48,6 +48,7 @@ void checkSignatures(Symbol_Table s1, Symbol_Table s2)
 	Procedure * procedure;
 	Relational_Op relop_value; 
 	Sequence_Ast * seq_ast;
+	Call_Ast * call_ast;
 };
 %token <string_value> INTEGER FLOAT VOID NAME IF ELSE DO WHILE AND OR NOT PRINT RETURN
 %token <double_value> DOUBLE_NUMBER
@@ -69,7 +70,8 @@ void checkSignatures(Symbol_Table s1, Symbol_Table s2)
 %nterm <ast_list> STATEMENT_LIST ARGUMENTS
 %nterm <ast> STATEMENT ASSIGN_STATEMENT ARITH_EXP COND_EXP IF_STATEMENT PRINT_STATEMENT
 %nterm <ast> DO_WHILE_STATEMENT WHILE_STATEMENT IF_ELSE_STATEMENT BALANCED_IF_STATEMENT
-%nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED FUNCTIONCALL RETURN_STATEMENT
+%nterm <ast>  ASSIGN_STATEMENT_VERIFIED COND_EXP_VERIFIED RETURN_STATEMENT
+%nterm <call_ast> FUNCTIONCALL
 %nterm <seq_ast> SEQUENCE_STATEMENT_LIST  
 %nterm <symbol_entry> ARG 
 %%
@@ -92,6 +94,8 @@ PROGRAM					: INITIALIZATION GLOBAL_DECLARATIONS
 									printf("\ncs316: Error %d,  Main not found \n", yylineno);
 									exit(0);
 								}
+								program_object.called_proc_are_defined_check();
+
 							}
 
 INITIALIZATION			: /* epsilon */
@@ -246,10 +250,12 @@ FUNCTIONDECLR1 			: DEF '(' ARGLIST ')'
 							{
 								$$ = program_object.get_procedure_prototype(curr_proc_name);
 								Symbol_Table st = $$->get_formal_param_list();
-								// Checking sigmmatures
-								// Symbol_Table *l = new Symbol_Table();
-								// l->append_list(*$3,yylineno);
-								Procedure *proc = new Procedure(curr_return_type, curr_proc_name, yylineno);
+								if($$->get_return_type()!=curr_return_type){
+									printf("\ncs316: Error %d,  Re-Declaration Error \n", yylineno);
+									exit(0);
+								}
+								Symbol_Table *l = new Symbol_Table();
+								l->append_list(*$3,yylineno);
 								checkSignatures(st, *$3);
 								if($$->is_proc_defined())
 								{
@@ -303,10 +309,6 @@ FUNCTIONCALL 			: NAME '(' ARGUMENTS ')'
 							}
 							cst->set_actual_param_list(*$3);
 							Procedure *proc = program_object.get_procedure_prototype(*$1);
-							if(!proc->is_proc_defined()){
-								printf("\ncs316: Error %d,  Use before Definition Error \n", yylineno);
-								exit(0);
-							}
 							proc->set_proc_is_called();
 							cst->set_data_type(proc->get_return_type());
 							cst->check_actual_formal_param(proc->get_formal_param_list());
@@ -351,7 +353,7 @@ STATEMENT 				: ASSIGN_STATEMENT_VERIFIED
 						| DO_WHILE_STATEMENT
 						| PRINT_STATEMENT
 						| RETURN_STATEMENT
-						| FUNCTIONCALL ';'
+						| FUNCTIONCALL ';' {$$ = $1;}
 
 RETURN_STATEMENT		: RETURN ';'
 						{
@@ -376,7 +378,7 @@ RETURN_STATEMENT		: RETURN ';'
 							}
 							else
 							{
-								printf("\ncs316: Error %d,  Rerurn type mismatch Error \n", yylineno);
+								printf("\ncs316: Error %d,  Return type mismatch Error \n", yylineno);
 								exit(0);
 							}
 						}
@@ -388,6 +390,9 @@ PRINT_STATEMENT 		: PRINT NAME ';'
 							if (local_symbol_table->variable_in_symbol_list_check(*$2))
 							{
 								v = &(local_symbol_table->get_symbol_table_entry(*$2));
+							}
+							else if(formal_symbol_table->variable_in_symbol_list_check(*$2)){
+								v = &(formal_symbol_table->get_symbol_table_entry(*$2));
 							}
 							else if (global_symbol_table->variable_in_symbol_list_check(*$2))
 							{
@@ -434,7 +439,7 @@ BALANCED_IF_STATEMENT 	: ASSIGN_STATEMENT_VERIFIED
 						| DO_WHILE_STATEMENT
 						| PRINT_STATEMENT
 						| RETURN_STATEMENT
-						| FUNCTIONCALL ';'
+						| FUNCTIONCALL ';' {$$ = $1;}
 						| WHILE '(' COND_EXP_VERIFIED ')' '{' SEQUENCE_STATEMENT_LIST '}'
 						{
 							$$ = new Iteration_Statement_Ast($3,$6,yylineno,false);
@@ -693,6 +698,7 @@ ARITH_EXP 				: INTEGER_NUMBER
 							}
 						| FUNCTIONCALL 
 						{
+							$1->set_register(new Register_Descriptor());
 							$$ = $1;
 						}
 %%

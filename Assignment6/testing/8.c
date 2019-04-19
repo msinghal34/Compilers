@@ -1,4 +1,3 @@
-int a,b;
 void main()
 {
 	int a;

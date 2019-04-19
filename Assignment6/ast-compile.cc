@@ -703,11 +703,10 @@ Code_For_Ast &Return_Ast::compile_and_optimize_ast(Lra_Outcome &lra)
 ///////////////////////// Call_Ast ////////////////////////
 
 void Call_Ast::set_register(Register_Descriptor * reg){
+	// Using it just as a flag
 	return_value_reg = reg;
 }
 Code_For_Ast & Call_Ast::compile(){
-	// cout<<"compiling\n";
-	// exit(0);
 	list<Icode_Stmt *> ilist;
 	Code_For_Ast func_icode;
 	Register_Descriptor *arg;
@@ -749,19 +748,22 @@ Code_For_Ast & Call_Ast::compile(){
 	ilist.push_back(new Control_Flow_IC_Stmt(jal,NULL,NULL,procedure_name));
 	if(offset!=0)
 		ilist.push_back(new Compute_IC_Stmt(add,new Register_Addr_Opd(arg), new Const_Opd<int> (offset),new Register_Addr_Opd(arg)));
+	if(return_value_reg!=NULL){
+		if (node_data_type == int_data_type)
+		{
+			arg = machine_desc_object.get_new_register<int_reg>();
+			ilist.push_back(new Move_IC_Stmt(mov,new Register_Addr_Opd(machine_desc_object.spim_register_table[v1]),new Register_Addr_Opd(arg)));
+		}
+		else if (node_data_type == double_data_type)
+		{
+			arg = machine_desc_object.get_new_register<float_reg>();
+			ilist.push_back(new Move_IC_Stmt(move_d,new Register_Addr_Opd(machine_desc_object.spim_register_table[f0]),new Register_Addr_Opd(arg)));
+		}
+		arg->set_use_for_expr_result(); 
+		return *new Code_For_Ast(ilist, arg);
+	}
+	return *new Code_For_Ast(ilist, NULL);
 	
-	if (node_data_type == int_data_type)
-	{
-		arg = machine_desc_object.get_new_register<int_reg>();
-		ilist.push_back(new Move_IC_Stmt(mov,new Register_Addr_Opd(machine_desc_object.spim_register_table[v1]),new Register_Addr_Opd(arg)));
-	}
-	else if (node_data_type == double_data_type)
-	{
-		arg = machine_desc_object.get_new_register<float_reg>();
-		ilist.push_back(new Move_IC_Stmt(move_d,new Register_Addr_Opd(machine_desc_object.spim_register_table[f0]),new Register_Addr_Opd(arg)));
-	}
-	arg->set_use_for_expr_result(); 
-	return *new Code_For_Ast(ilist,arg);
 }
 Code_For_Ast & Call_Ast::compile_and_optimize_ast(Lra_Outcome & lra){
 }
